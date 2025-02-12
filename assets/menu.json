@@ -1,0 +1,581 @@
+[
+	{
+      "name": "Owsianka z bananem",
+      "mealType": "breakfast",
+      "recipe": "Wlać wodę, dodać płatki, gotować na małym ogniu przez około 2-3 minuty. Zostawić na noc. Rano dodać mleko, można podgrzać razem z mlekiem. Banana obrać, pokroić lub zblendować. Owsiankę przelać do miseczki, dodać skyr i banana.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Banan", "quantity": 1, "unit": "unit"},
+        {"name": "Mleko spożywcze, 2% tłuszczu", "quantity": 230.0, "unit": "ml"},
+        {"name": "Płatki owsiane", "quantity": 60.0, "unit": "g"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 160.0, "unit": "g"}
+      ]
+
+	},
+	{
+      "name": "Indyk z warzywami i kaszą jaglaną",
+      "mealType": "lunch",
+      "recipe": "Warzywa umyć i osuszyć. Marchew i cukinię pokroić w słupki. Mięso umyć, osuszyć i ugotować. Mięso przełożyć na patelnię z dodatkiem niewielkiej ilości wody, do mięsa dodać pokrojone warzywa, doprawić i dusić przez kilka minut. Gotowe danie podawać z ugotowaną kaszą jaglaną. Całość polać oliwą z oliwek.",
+	  "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Cukinia", "quantity": 120.0, "unit": "g"},
+        {"name": "Mięso z piersi indyka, bez skóry", "quantity": 250.0, "unit": "g"},
+        {"name": "Kasza jaglana", "quantity": 70.0, "unit": "g"},
+        {"name": "Marchew", "quantity": 90.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 25.0, "unit": "ml"}
+      ]
+
+	},
+	{
+      "name": "Sałatka ryżowa",
+      "mealType": "dinner",
+      "recipe": "Ryż ugotuj. Szpinak sparz, aby liście lekko uwiędły. Pomidora obierz i pokrój. Wszystkie składniki dokładnie wymieszaj i dopraw do smaku.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Kefir, 2% tłuszczu", "quantity": 150.0, "unit": "ml"},
+        {"name": "Pomidor", "quantity": 1, "unit": "unit"},
+        {"name": "Ryż biały", "quantity": 70.0, "unit": "g"},
+        {"name": "Szpinak", "quantity": 50.0, "unit": "g"},
+        {"name": "Tuńczyk w sosie własnym", "quantity": 100.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Kanapka z jajkiem na miękko",
+      "mealType": "breakfast",
+      "recipe": "Ugotować jajka na miękko (ok 5 min). Na chleb położyć posiekany szpinak, wędlinę i obranego pomidora.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Jaja kurze, całe", "quantity": 2, "unit": "unit"},
+        {"name": "Chleb orkiszowy", "quantity": 3, "unit": "unit"},
+        {"name": "Pomidor", "quantity": 1, "unit": "unit"},
+        {"name": "Szpinak", "quantity": 50.0, "unit": "g"},
+        {"name": "Szynka z indyka", "quantity": 45.0, "unit": "g"}
+      ]
+
+	},
+	{
+      "name": "Dorsz z puree",
+      "mealType": "lunch",
+      "recipe": "Do garnka z wodą wrzucamy obrane ziemniaki. Gotujemy, aż zrobią się miękkie. Piekarnik rozgrzewamy do temperatury 200 stopni Celsjusza. Dorsza myjemy, a następnie smarujemy ziołami. Gotowego dorsza wkładamy do piekarnika na 20 min. Ziemniaki odcedzamy i rozdrabniamy (np. widelcem, blenderem) na gładką masę razem z oliwą. Dorsza kładziemy na talerzu z puree i tartą marchewką.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Dorsz, świeży", "quantity": 250.0, "unit": "g"},
+        {"name": "Marchew", "quantity": 135.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 10.0, "unit": "ml"},
+        {"name": "Ziemniaki, późne", "quantity": 280.0, "unit": "g"},
+        {"name": "Jogurt pitny, truskawkowy - Skyr", "quantity": 300, "unit": "ml"}
+      ]
+
+	},
+	{
+      "name": "Sałatka szpinakowa z makaronem",
+      "mealType": "dinner",
+      "recipe": "Mięso z kurczaka ugotować. Oddzielnie ugotować makaron. Wrzucić do miski, dodać zioła. Szpinak poszatkować, sparzyć, aby lekko zwiądł. Paprykę obrać, pokroić. Całość wymieszać i polać olejem lnianym.",
+	  "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Mięso z piersi kurczaka, bez skóry", "quantity": 70.0, "unit": "g"},
+        {"name": "Makaron spaghetti", "quantity": 70.0, "unit": "g"},
+        {"name": "Olej lniany", "quantity": 10.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 100.0, "unit": "g"},
+        {"name": "Szpinak", "quantity": 50.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Malinowa jaglanka",
+      "mealType": "breakfast",
+      "recipe": "Kaszę jaglaną ugotować tak, jak jest napisane na opakowaniu. Następnie chwilę podgotować ją w mleku, dodając maliny i cynamon. Na koniec dodać Skyr i banana.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Banan", "quantity": 0.5, "unit": "unit"},
+        {"name": "Kasza jaglana", "quantity": 60.0, "unit": "g"},
+        {"name": "Maliny, mrożone", "quantity": 100.0, "unit": "g"},
+        {"name": "Cynamon, mielony", "quantity": 2.0, "unit": "g"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 160.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Kurczak caprese z piekarnika",
+      "mealType": "lunch",
+      "recipe": "Piekarnik nagrzać do 190 stopni C. Filety naciąć w 4 - 5 miejscach na głębokość ok. 2 cm, nie przecinając mięsa do końca, w nacięcia włożyć kawałki pomidora. Doprawić ziołami, natrzeć oliwą. Na dnie dużego żaroodpornego naczynia ułożyć filety. Mozzarellę pokroić na cienkie plasterki (tyle plasterków ile nacięć) i włożyć ją w nacięcia w filetach razem z pomidorami. Wstawić do piekarnika i piec bez przykrycia przez ok. 35 minut. Podawać z uprzednio ugotowanym ryżem i poszatkownym szpinakiem.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Mięso z piersi kurczaka, bez skóry", "quantity": 200.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 12.0, "unit": "ml"},
+        {"name": "Pomidor", "quantity": 1, "unit": "unit"},
+        {"name": "Ryż biały", "quantity": 80.0, "unit": "g"},
+        {"name": "Szpinak", "quantity": 75.0, "unit": "g"},
+        {"name": "Ser mozzarella, bez tłuszczu", "quantity": 50.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Pancakes a la leśny mech",
+      "mealType": "dinner",
+      "recipe": "Płatki zmielić w blenderze kielichowym na mąkę. Następnie dodać resztę składników (prócz skyru i borówek) i wszystko razem zblendować na gęstą, zieloną masę. Pozostawić ją na 5 minut. Na nieprzywierającej patelni lub na parze, smażyć placki na wolnym ogniu około 2 minut z każdej strony. Przełożyć placki serkiem skyr i posypać borówkami.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Jaja kurze, całe", "quantity": 1, "unit": "unit"},
+        {"name": "Borówka amerykańska, surowa", "quantity": 50.0, "unit": "g"},
+        {"name": "Ksylitol", "quantity": 14.0, "unit": "g"},
+        {"name": "Mleko spożywcze, 2% tłuszczu", "quantity": 25.0, "unit": "ml"},
+        {"name": "Płatki owsiane", "quantity": 50.0, "unit": "g"},
+        {"name": "Proszek do pieczenia", "quantity": 2.0, "unit": "g"},
+        {"name": "Szpinak", "quantity": 40.0, "unit": "g"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 160.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Kanapka z twarogiem, koperkiem, szynką i olejem lnianym",
+      "mealType": "breakfast",
+      "recipe": "Twaróg wymieszać z jogurtem, olejem lnianym i koperkiem. Twarożkiem posmarować chleb, na kanapkę położyć szynkę.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Chleb orkiszowy", "quantity": 3, "unit": "unit"},
+        {"name": "Olej lniany", "quantity": 10.0, "unit": "ml"},
+        {"name": "Ser twarogowy, chudy", "quantity": 90.0, "unit": "g"},
+        {"name": "Szynka z indyka", "quantity": 45.0, "unit": "g"},
+        {"name": "Koper, świeży", "quantity": 4.0, "unit": "g"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 40.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Makaron z bakłażanem, pomidorami i natką",
+      "mealType": "lunch",
+      "recipe": "Ugotować makaron wg przepisu na opakowaniu. Bakłażana pokroić w słupki, posolić i odstawić na 5-6 minut. Przygotować warzywa: pomidory pokroić w plasterki lub kostkę, natkę drobno posiekać. Bakłażana ugotować w wodzie i odłożyć. Wrzucić na chwilę na patelnię pomidory i trzymać 2-3 minuty. Dodać bakłażana, posiekana natkę i makaron. Chwilę gotować, wymieszać, doprawić do smaku.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Bakłażan", "quantity": 350.0, "unit": "g"},
+        {"name": "Makaron spaghetti", "quantity": 100.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 10.0, "unit": "ml"},
+        {"name": "Pietruszka, liście", "quantity": 12.0, "unit": "g"},
+        {"name": "Pomidor", "quantity": 2, "unit": "unit"},
+        {"name": "Jogurt pitny, waniliowy - Skyr", "quantity": 150.0, "unit": "ml"}
+      ]
+	},
+	{
+      "name": "Chrupiąca sałatka z tuńczykiem",
+      "mealType": "dinner",
+      "recipe": "Ugotować makaron, ostudzić i przełożyć do misy. Umytą i osuszoną sałatę poszarpać na małe kawałki, ogórka obrać i drobno pokroić, dodać tuńczyka i olej lniany.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Makaron spaghetti", "quantity": 40.0, "unit": "g"},
+        {"name": "Ogórek", "quantity": 90.0, "unit": "g"},
+        {"name": "Olej lniany", "quantity": 10.0, "unit": "ml"},
+        {"name": "Sałata lodowa", "quantity": 120.0, "unit": "g"},
+        {"name": "Tuńczyk w sosie własnym", "quantity": 150.0, "unit": "g"},
+        {"name": "Jogurt pitny, waniliowy - Skyr", "quantity": 100.0, "unit": "ml"}
+      ]
+	},
+	{
+      "name": "Koktajl jagodowy",
+      "mealType": "breakfast",
+      "recipe": "Wszystkie składniki zmiksować i przelać do szklanki.",
+      "tags": ["jadłospis", "part1", "small portion"],
+      "ingredients": [
+        {"name": "Len, nasiona", "quantity": 5.0, "unit": "g"},
+        {"name": "Banan", "quantity": 0.5, "unit": "unit"},
+        {"name": "Borówka amerykańska, surowa", "quantity": 60.0, "unit": "g"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 80.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Klasyczny tost z serem",
+      "mealType": "breakfast",
+      "recipe": "Na kanapkę ułożyć plastry sera i przykryć drugą kromką. Włożyć do tostera do momentu aż chleb się zarumieni. Podawać z pomidorem z koperkiem.",
+      "tags": ["jadłospis", "part1", "small portion"],
+      "ingredients": [
+        {"name": "Chleb orkiszowy", "quantity": 2, "unit": "unit"},
+        {"name": "Pomidor", "quantity": 1, "unit": "unit"},
+        {"name": "Ser mozzarella, bez tłuszczu", "quantity": 100.0, "unit": "g"},
+        {"name": "Koper, świeży", "quantity": 4.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Dorsz zapiekany w ziołach",
+      "mealType": "lunch",
+      "recipe": "Filet z dorsza i obraną, pokrojoną paprykę natrzeć oliwą (10 ml), przyprawić ziołami. Następnie piec na folii aluminiowej lub w naczyniu żaroodpornym przez 20 min. w temperaturze do 180 C. Upieczoną w ziołach rybę podawać z tartą marchewką i ugotowaną kaszą. Całość polać resztą oliwy.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Dorsz, świeży", "quantity": 200.0, "unit": "g"},
+        {"name": "Kasza jaglana", "quantity": 70.0, "unit": "g"},
+        {"name": "Marchew", "quantity": 135.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 25.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 230.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Kanapki z mozzarellą i pomidorem",
+      "mealType": "dinner",
+      "recipe": "Na chlebie ułożyć plastry pomidora, sera mozzarella i posypać ziołami.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Chleb orkiszowy", "quantity": 3, "unit": "unit"},
+        {"name": "Pomidor", "quantity": 1, "unit": "unit"},
+        {"name": "Ser mozzarella, bez tłuszczu", "quantity": 90.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Owsianka z borówkami",
+      "mealType": "breakfast",
+      "recipe": "Płatki ugotować dzień wcześniej. Do płatków dolać mleko i podgrzać. Dodać jogurt, a następnie borówki.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Borówka amerykańska, surowa", "quantity": 150.0, "unit": "g"},
+        {"name": "Mleko spożywcze, 2% tłuszczu", "quantity": 230.0, "unit": "ml"},
+        {"name": "Płatki owsiane", "quantity": 50.0, "unit": "g"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 160.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Wegańskie spaghetti bolognese z tofu",
+      "mealType": "lunch",
+      "recipe": "Marchew zetrzeć na tarce i zalać lekko wodą, a następnie ugotować. Tofu rozgnieść widelcem. Do garnka przełożyć marchewkę, tofu, przyprawy, odrobinę oliwy. Gotować wszystko około 10-12 minut. Pod koniec dodać koncentrat pomidorowy — dokładnie wymieszać i zagotować. Sos bolognese podawać z makaronem (ugotowanym według przepisu).",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Ser sojowy, tofu", "quantity": 150.0, "unit": "g"},
+        {"name": "Koncentrat pomidorowy 30%", "quantity": 50.0, "unit": "g"},
+        {"name": "Makaron spaghetti", "quantity": 90.0, "unit": "g"},
+        {"name": "Marchew", "quantity": 135.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 8.0, "unit": "ml"}
+      ]
+	},
+	{
+      "name": "Shake proteinowy z bananem i twarogiem",
+      "mealType": "dinner",
+      "recipe": "Twaróg, banana pokroić na mniejsze kawałki i wrzucić do blendera. Wlać mleko, jogurt i blendować do uzyskania płynnej konsystencji.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Banan", "quantity": 1, "unit": "unit"},
+        {"name": "Mleko spożywcze, 2% tłuszczu", "quantity": 250.0, "unit": "ml"},
+        {"name": "Ser twarogowy, chudy", "quantity": 150.0, "unit": "g"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 160.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Twaróg z tuńczykiem",
+      "mealType": "breakfast",
+      "recipe": "Twaróg rozdrobnić i wymieszać z kawałkami tuńczyka. Można zblendować. Dodać natkę, jogurt, doprawić i wymieszać. Podawać z pieczywem.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Chleb orkiszowy", "quantity": 3, "unit": "unit"},
+        {"name": "Pietruszka, liście", "quantity": 5.0, "unit": "g"},
+        {"name": "Ser twarogowy, chudy", "quantity": 100.0, "unit": "g"},
+        {"name": "Tuńczyk w sosie własnym", "quantity": 85.0, "unit": "g"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 40.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Lekkostrawna potrawka z indyka",
+      "mealType": "lunch",
+      "recipe": "Pierś pokroić na kawałeczki i podsmażyć na teflonowej patelni bez tłuszczu, jak z mięsa wyjdzie sos wrzucić pokrojoną marchewkę, paprykę i cukinię, całość doprawić do smaku. Wlać pół szklanki wody i dusić pod przykryciem pół godziny. Przełożyć na talerz. Podawać z ugotowanym ryżem. Całość polać oliwą z oliwek.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Cukinia", "quantity": 120.0, "unit": "g"},
+        {"name": "Mięso z piersi indyka, bez skóry", "quantity": 150.0, "unit": "g"},
+        {"name": "Marchew", "quantity": 90.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 20.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 150.0, "unit": "g"},
+        {"name": "Ryż biały", "quantity": 80.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Sałatka z dyni i twarogu",
+      "mealType": "dinner",
+      "recipe": "Obraną dynię pokroić w dużą kostkę. Foremkę wyłożyć papierem do pieczenia. Położyć dynię i posypać ziołami. Piec w nagrzanym piekarniku przez 15-20 minut w 180 stopniach. Szpinak wyłożyć na talerz i dodać upieczoną dynię. Na wierzchu posypać pokruszonym serem i skropić olejem lnianym. Chleb upiec w tosterze. Podawać z sałatką.",
+      "tags": ["jadłospis", "part1"],
+      "ingredients": [
+        {"name": "Chleb orkiszowy", "quantity": 2, "unit": "unit"},
+        {"name": "Dynia", "quantity": 200.0, "unit": "g"},
+        {"name": "Olej lniany", "quantity": 10.0, "unit": "ml"},
+        {"name": "Ser twarogowy, chudy", "quantity": 120.0, "unit": "g"},
+        {"name": "Szpinak", "quantity": 50.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Ryż z bananem",
+      "mealType": "breakfast",
+      "recipe": "Ryż ugotować na mleku. Następnie dodać banana pokrojonego w plasterki i łyżkę oleju lnianego.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Banan", "quantity": 1, "unit": "unit"},
+        {"name": "Mleko spożywcze, 2% tłuszczu", "quantity": 230.0, "unit": "ml"},
+        {"name": "Olej lniany", "quantity": 10.0, "unit": "ml"},
+        {"name": "Ryż basmati", "quantity": 60.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Kasza jaglana z truskawkami i twarogiem",
+      "mealType": "lunch",
+      "recipe": "Kaszę jaglaną ugotować według wskazówek na opakowaniu. Kaszę zostawić do wystygnięcia. Truskawki umyć, pozbawić szypułek i rozgnieść widelcem. Kaszę wymieszać z truskawkami i serem. Całość polać oliwą i wymieszać raz jeszcze.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Truskawki", "quantity": 150.0, "unit": "g"},
+        {"name": "Ser twarogowy, chudy", "quantity": 150.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 20.0, "unit": "ml"},
+        {"name": "Kasza jaglana", "quantity": 70.0, "unit": "g"},
+        {"name": "Jogurt pitny, jagodowy - Skyr", "quantity": 200.0, "unit": "ml"}
+      ]
+	},
+	{
+      "name": "SAŁATKA Z MAKARONEM",
+      "mealType": "dinner",
+      "recipe": "Makaron ugotować. Mięso pokroić na kawałki, przyprawić ulubionymi ziołami i poddusić na wodzie. Do makaronu dodać pomidorki koktajlowe, salatę, mięso oraz oliwę. Całość wymieszać.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Mięso z piersi kurczaka, bez skóry", "quantity": 200.0, "unit": "g"},
+        {"name": "Makaron spaghetti", "quantity": 50.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 7.0, "unit": "ml"},
+        {"name": "Pomidor koktajlowy", "quantity": 5, "unit": "unit"},
+        {"name": "Sałata lodowa", "quantity": 60.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Kanapka z szynką i papryką",
+      "mealType": "breakfast",
+      "recipe": "Na chlebie skropionym oliwą ułożyć szynkę i paprykę.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Chleb orkiszowy", "quantity": 3, "unit": "unit"},
+        {"name": "Szynka delikatesowa z kurczaka", "quantity": 90.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 10.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 140.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Dorsz z warzywami na parze w sosie koperkowym",
+      "mealType": "lunch",
+      "recipe": "Rybę umyć i osuszyć. Natrzeć ziołami, skropić sokiem z cytryny. Odstawić na 30 minut. Warzywa umyć i pokroić. W pojemniku do gotowania na parze ułożyć warzywa, a na nich położyć rybę. Gotować 10-15 minut (parowar można zastąpić głęboką patelnią i dusić z niewielką ilością wody). W tym czasie przygotować sos: w rondelku podgrzać oliwę, dodać zioła oraz drobno posiekany koperek. Ugotowane warzywa wraz z rybą przełożyć na talerz i polać sosem koperkowym. Danie podawać z ryżem.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Cukinia", "quantity": 250.0, "unit": "g"},
+        {"name": "Cytryna", "quantity": 20.0, "unit": "g"},
+        {"name": "Marchew", "quantity": 45.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 15.0, "unit": "ml"},
+        {"name": "Papryka żółta", "quantity": 140.0, "unit": "g"},
+        {"name": "Ryż basmati", "quantity": 50.0, "unit": "g"},
+        {"name": "Dorsz świeży, filety bez skóry", "quantity": 200.0, "unit": "g"},
+        {"name": "Koper, świeży", "quantity": 12.0, "unit": "g"},
+        {"name": "Jogurt pitny, jagodowy - Skyr", "quantity": 300.0, "unit": "ml"}
+      ]
+	},
+	{
+      "name": "SAŁATKA OGRODOWA",
+      "mealType": "dinner",
+      "recipe": "Sałatę opłukać, porozrywać na małe kawałki, umieścić w dużej misie. Paprykę pokroić w grubą kostkę. Dodać do sałaty. Na końcu dodać pomidorki i ser. Całość delikatnie wymieszać i przyprawić. Spożywać z pieczywem.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Chleb orkiszowy", "quantity": 2, "unit": "unit"},
+        {"name": "Papryka czerwona", "quantity": 70.0, "unit": "g"},
+        {"name": "Pomidor koktajlowy", "quantity": 5, "unit": "unit"},
+        {"name": "Sałata lodowa", "quantity": 50.0, "unit": "g"},
+        {"name": "Ser feta", "quantity": 80.0, "unit": "g"},
+        {"name": "Jogurt pitny, jagodowy - Skyr", "quantity": 300.0, "unit": "ml"}
+      ]
+	},
+	{
+      "name": "Kanapka z szynką i surówką z pomidorów",
+      "mealType": "breakfast",
+      "recipe": "Pomidory i paprykę pokroić, sałatę poszarpać. Dodać oliwę z ziołami Dokładnie wymieszać. Na chlebie położyć szynkę. Podawać z sałatką.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Chleb orkiszowy", "quantity": 3, "unit": "unit"},
+        {"name": "Szynka delikatesowa z kurczaka", "quantity": 90.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 10.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 120.0, "unit": "g"},
+        {"name": "Pomidor", "quantity": 1, "unit": "unit"},
+        {"name": "Sałata lodowa", "quantity": 50.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Sałatka z makaronem i tuńczykiem",
+      "mealType": "lunch",
+      "recipe": "Makaron ugotować, przełożyć do miski, dodać tuńczyka, ogórka, paprykę, oliwę. Wszystko razem wymieszać.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Makaron spaghetti", "quantity": 120.0, "unit": "g"},
+        {"name": "Ogórek", "quantity": 100.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 10.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 150.0, "unit": "g"},
+        {"name": "Tuńczyk w sosie własnym", "quantity": 100.0, "unit": "g"},
+        {"name": "Jogurt pitny, jagodowy - Skyr", "quantity": 100.0, "unit": "ml"}
+      ]
+	},
+	{
+      "name": "Pierś kurczaka z pomidorami",
+      "mealType": "dinner",
+      "recipe": "W piersi kurczaka zrób dziurę w kształcie kieszonki. Pomidory pokrój w plastry i włóż do środka kurczaka. Wszystko zamarynuj w oleju z dodatkiem ziół. Pierś z kurczaka upiecz na grillu w piekarniku. Podawaj z papryką. Jedz z chlebem/ w formie grzanki.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Mięso z piersi kurczaka, bez skóry", "quantity": 200.0, "unit": "g"},
+        {"name": "Chleb orkiszowy", "quantity":1, "unit": "unit"},
+        {"name": "Olej lniany", "quantity": 10.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 120.0, "unit": "g"},
+        {"name": "Pomidor", "quantity": 1, "unit": "unit"}
+      ]
+	},
+	{
+      "name": "Ryż na mleku z cynamonem i bananem",
+      "mealType": "breakfast",
+      "recipe": "Ryż przygotować zgodnie z instrukcją na opakowaniu. Do ugotowanego ryżu, wlać od razu mleko i zaczekać aż się całość zagotuje. Gotować jeszcze chwilę do uzyskania pożądanej konsystencji. Wyłączyć ognień pod garnkiem, dodać\ncynamon, wymieszać i przełożyć do miski. Na koniec pokroić banana i dodać zmielone siemię lniane.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Len, nasiona", "quantity": 20.0, "unit": "g"},
+        {"name": "Banan", "quantity":1, "unit": "unit"},
+        {"name": "Mleko spożywcze, 2% tłuszczu", "quantity": 230.0, "unit": "ml"},
+        {"name": "Cynamon, mielony", "quantity": 4.0, "unit": "g"},
+        {"name": "Ryż basmati", "quantity": 60.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Makaron z tuńczykiem i oliwkami",
+      "mealType": "lunch",
+      "recipe": "Makaron ugotować. Ser mozzarella zetrzeć na tarce o średnich oczkach. Oliwki odsączyć z zalewy i pokroić w plasterki. Dodać pomidory, mozzarellę, tuńczyka. Wsypać zioła i pokrojone w plasterki oliwki. Wszystko gotować na średnim ogniu około 10 minut. Przyprawić do smaku. Wymieszać z ugotowanym makaronem i olejem.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Makaron spaghetti", "quantity": 100.0, "unit": "g"},
+        {"name": "Olej lniany", "quantity":15.0, "unit": "ml"},
+        {"name": "Pomidory całe bez skórki, puszka", "quantity": 200.0, "unit": "g"},
+        {"name": "Tuńczyk w sosie własnym", "quantity": 100.0, "unit": "g"},
+        {"name": "Ser mozzarella, bez tłuszczu", "quantity": 70.0, "unit": "g"},
+        {"name": "Oliwki zielone, marynowane", "quantity": 20.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Kurczak w warzywach",
+      "mealType": "dinner",
+      "recipe": "Paprykę pokroić w paski. Mięso pokroić na bardzo cienkie paseczki, doprawić. Ugotować mięso w wodzie, następnie włożyć je do miski. Paprykę pokroić, sałatę poszarpać. Dodać mięso do warzyw, doprawić przyprawami. Podawać z ugotowanym ryżem.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Mięso z piersi kurczaka, bez skóry", "quantity": 200.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 10.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 115.0, "unit": "g"},
+        {"name": "Ryż basmati", "quantity": 40.0, "unit": "g"},
+        {"name": "Sałata lodowa", "quantity": 50.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Sałatka z tuńczykiem i warzywami",
+      "mealType": "breakfast",
+      "recipe": "Paprykę i pomidora pokroić na małe kawałki. Tuńczyka połączyć z jogurtem oraz doprawić. Na talerzach ułożyć sałatę wraz z pomidorami oraz papryką. Na wierzch rozłożyć rozdrobnionego tuńczyka. Całość skropić olejem lnianym. Spożywać z pieczywem.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Chleb orkiszowy", "quantity": 2, "unit": "unit"},
+        {"name": "Olej lniany", "quantity": 15.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 100.0, "unit": "g"},
+        {"name": "Pomidor", "quantity": 0.666, "unit": "unit"},
+        {"name": "Sałata lodowa", "quantity": 70.0, "unit": "g"},
+        {"name": "Tuńczyk w sosie własnym", "quantity": 120.0, "unit": "g"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 60.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Kurczak z kaszą",
+      "mealType": "lunch",
+      "recipe": "Ugotować kaszę. Kurczaka pokroić w kostkę i obtoczyć w przyprawach, następnie ugotować. Ugotować cukinię i dodać kurczaka. Wszystko wymieszać z ugotowaną kaszą i pokrojoną natką pietruszki. Podawać z pomidorem skropionym olejem lnianym.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Mięso z piersi kurczaka, bez skóry", "quantity": 200.0, "unit": "g"},
+        {"name": "Cukinia", "quantity":120.0, "unit": "g"},
+        {"name": "Kasza jaglana", "quantity": 70.0, "unit": "g"},
+        {"name": "Olej lniany", "quantity": 10.0, "unit": "ml"},
+        {"name": "Pietruszka, liście", "quantity": 12.0, "unit": "g"},
+        {"name": "Pomidor", "quantity": 1, "unit": "unit"},
+        {"name": "Jogurt pitny, waniliowy - Skyr", "quantity": 200.0, "unit": "ml"}
+      ]
+	},
+	{
+      "name": "Ryż ze szpinakiem",
+      "mealType": "dinner",
+      "recipe": "Ryż ugotować zgodnie z instrukcją na opakowaniu. Szpinak bardzo dokładnie wypłukać, posiekać. W rondlu lub dużej patelni zagotować 1/2 szklanki wody. Dodać szpinak, paprykę, ogórka i zioła. Dusić na wolnym ogniu pod przykryciem do miękkości około 5 minut. Doprawić do smaku. Gotowy szpinak wymieszać z ugotowanym ryżem. Wymieszać z oliwą.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Ogórek", "quantity": 180.0, "unit": "g"},
+        {"name": "Olej lniany", "quantity":15.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 150.0, "unit": "g"},
+        {"name": "Ryż basmati", "quantity": 60.0, "unit": "g"},
+        {"name": "Szpinak", "quantity": 125.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Owsianka z musem malinowym",
+      "mealType": "breakfast",
+      "recipe": "Mleko ugotować z płatkami owsianymi, maliny rozgnieść i podgrzać, aż będą miękkie. Owsiankę podać z ciepłym musem, skyrem i zmielonymi nasionami lnu.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Len, nasiona", "quantity": 20.0, "unit": "g"},
+        {"name": "Maliny", "quantity": 120.0, "unit": "g"},
+        {"name": "Mleko spożywcze, 2% tłuszczu", "quantity": 230.0, "unit": "ml"},
+        {"name": "Płatki owsiane", "quantity": 50.0, "unit": "g"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 160.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Pieczony dorsz i frytki z batatów",
+      "mealType": "lunch",
+      "recipe": "Bataty obrać i pokroić jak frytki. Dać je do miski, dodać oliwę z oliwek, przyprawy, wymieszać. Wyłożyć na papier do pieczenia i piec w 180 stopniach przez 30-40 minut. Rybę przyprawić i włożyć do piekarnika po 20-25 min od pieczenia się batatów. Warzywa pokroić i podawać wraz z rybą i frytkami.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Ogórek", "quantity": 100.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 15.0, "unit": "ml"},
+        {"name": "Pomidor", "quantity": 1, "unit": "unit"},
+        {"name": "Sałata lodowa", "quantity": 10.0, "unit": "g"},
+        {"name": "Dorsz świeży, filety bez skóry", "quantity": 200.0, "unit": "g"},
+        {"name": "Batat", "quantity": 470.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Kanapka z twarożkiem, koperkiem i papryką",
+      "mealType": "dinner",
+      "recipe": "Bułkę skropić olejem lnianym. Ułożyć na nią twarożek, sałatę i paprykę. Posypać koperkiem.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Bułki grahamki", "quantity": 80.0, "unit": "g"},
+        {"name": "Olej lniany", "quantity":15.0, "unit": "ml"},
+        {"name": "Papryka czerwona", "quantity": 60.0, "unit": "g"},
+        {"name": "Sałata lodowa", "quantity": 30.0, "unit": "g"},
+        {"name": "Ser twarogowy, chudy", "quantity": 90.0, "unit": "g"},
+        {"name": "Koper, świeży", "quantity": 8.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Kanapka z pastą jajeczną",
+      "mealType": "breakfast",
+      "recipe": "Jajko ugotować na twardo i zmiksować z posiekanym ogórkiem, oliwą i jogurtem naturalnym. Tak przygotowaną pastę rozsmarować na kanapce.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Jaja kurze, całe", "quantity": 2, "unit": "unit"},
+        {"name": "Chleb orkiszowy", "quantity": 3, "unit": "unit"},
+        {"name": "Ogórek", "quantity": 120.0, "unit": "g"},
+        {"name": "Oliwa z oliwek", "quantity": 10.0, "unit": "ml"},
+        {"name": "Jogurt naturalny - Skyr", "quantity": 40.0, "unit": "g"}
+      ]
+	},
+	{
+      "name": "Wege quesadilla",
+      "mealType": "lunch",
+      "recipe": "Cukinię pokroić w słupki, chwilę podsmażyć na suchej patelni, na końcu dodać odrobinę wody, aby całość lekko się poddusiła. Po kilku minutach dodać pokrojone na kawałki tofu. Doprawić i odparować wodę z cukinii. W międzyczasie pokroić paprykę i pomidora na mniejsze kawałki. Na rozgrzanej patelni położyć placek tortilli, ułożyć na nim plastry sera, a następnie na jedną połowę wyłożyć wszystkie pozostałe składniki. Gdy ser zacznie się lekko topić, złożyć placek na pół. Trzymać jeszcze chwilę na ogniu, a następnie przewrócić na drugą stronę. Gotową quesadillę przełożyć na deskę lub talerz i pokroić na 4–6 trójkątów.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Cukinia", "quantity": 125.0, "unit": "g"},
+        {"name": "Papryka żółta", "quantity": 100.0, "unit": "g"},
+        {"name": "Pomidor", "quantity": 0.67, "unit": "unit"},
+        {"name": "Pomidor koktajlowy", "quantity": 2, "unit": "unit"},
+        {"name": "Ser tofu, wędzony", "quantity": 150.0, "unit": "g"},
+        {"name": "Ser mozzarella, bez tłuszczu", "quantity": 50.0, "unit": "g"},
+        {"name": "Tortilla pszenna", "quantity": 2, "unit": "unit"}
+      ]
+	},
+	{
+      "name": "Leśny koktajl",
+      "mealType": "dinner",
+      "recipe": "Wszystkie składniki ze sobą zmiksować.",
+      "tags": ["jadłospis", "part2"],
+      "ingredients": [
+        {"name": "Banan", "quantity": 0.5, "unit": "unit"},
+        {"name": "Borówka amerykańska, mrożona", "quantity": 50.0, "unit": "g"},
+        {"name": "Maliny", "quantity": 60.0, "unit": "g"},
+        {"name": "Olej lniany", "quantity": 10.0, "unit": "ml"},
+        {"name": "Płatki owsiane", "quantity": 20.0, "unit": "g"},
+        {"name": "Ser twarogowy, chudy", "quantity": 200.0, "unit": "g"}
+      ]
+	}
+]

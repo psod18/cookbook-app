@@ -1,0 +1,76 @@
+import 'package:flutter/services.dart';
+
+
+Future<String> readJsonFile(String filePath) async {
+  String jsonString = await rootBundle.loadString(filePath);
+  return jsonString;
+}
+
+class Ingredient{
+    Ingredient({required this.name, required this.quantity, required this.unit});
+    final String name;
+    dynamic quantity;
+    final String unit;
+
+    Ingredient operator +(Ingredient other){
+        if (name == other.name && unit == other.unit){
+            return Ingredient(
+                name: name,
+                quantity: quantity + other.quantity,
+                unit: unit,
+            );
+        }
+        return this;
+    }
+
+    Ingredient operator *(int multiplier){
+        return Ingredient(
+            name: name,
+            quantity: quantity * multiplier,
+            unit: unit,
+        );
+    }
+
+    @override
+    String toString(){
+        return '$name: $quantity ($unit)';
+    }
+}
+
+class Dish{
+    Dish({required this.name, required this.mealType, required this.recipe, this.tags = const [], required this.ingredients});
+    final String name;
+    final String mealType;
+    final String recipe;
+    final List<String> tags;
+    final List<Ingredient> ingredients;
+    bool visible = true;
+    bool selected = false;
+    int quantity = 1;
+
+    factory Dish.fromJson(Map<String, dynamic> json){
+        List<Ingredient> ingredients_ = [];
+        for (var ing in json['ingredients']){
+            ingredients_.add(Ingredient(
+                name: ing['name'],
+                quantity: ing['amount'],
+                unit: ing['units'],
+            ));
+        }
+        List<String> tags_ = [];
+        for (var tag in json['tags']){
+            tags_.add(tag.toLowerCase());
+        }
+        return Dish(
+            name: json['name'],
+            mealType: json['meal_type'],
+            recipe: json['recipe'],
+            tags: tags_,
+            ingredients: ingredients_,
+        );
+    }
+    @override
+    String toString(){
+        return 'Dish: $name';
+    }
+}
