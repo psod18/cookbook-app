@@ -1,22 +1,26 @@
 import 'package:cookery_book/widgets/product_form.dart';
+import 'package:cookery_book/widgets/filename_dialog.dart';
 import 'package:cookery_book/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:cookery_book/utils/db_helper.dart';
+import 'package:cookery_book/utils/filemanager.dart';
 import 'package:cookery_book/models/data.dart';
 import 'package:cookery_book/widgets/card.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:collection/collection.dart';
+import 'dart:convert';
 
 
 
-  Map<String, bool> mealTypeFilter = {
-    'breakfast': true,
-    'lunch': true,
-    'dinner': true,
-    'dessert': true,
-  };
-  String filterQuery = '';
+Map<String, bool> mealTypeFilter = {
+  'breakfast': true,
+  'lunch': true,
+  'dinner': true,
+  'dessert': true,
+};
+String filterQuery = '';
 
+final dbHelper = DatabaseHelper();
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +39,6 @@ class _MyAppState extends State<MyApp> {
   
   @override
   Widget build(BuildContext context) {
-    // final ThemeData theme =  Theme.of(context);
     return MaterialApp(
       title: 'Cookery Book!',
       theme: ThemeData(
@@ -72,10 +75,6 @@ class _MyAppState extends State<MyApp> {
           icon: Icon(Icons.shopping_basket),
           label: 'Shop List',
         ),
-        // NavigationDestination(
-        //   icon: Icon(Icons.filter_alt),
-        //   label: 'Filter by',
-        // ),
       ],
     backgroundColor: const Color.fromARGB(255, 114, 189, 108),
     ),
@@ -87,10 +86,7 @@ class _MyAppState extends State<MyApp> {
       // Add Dish Page
       Text("Add New Dish"),
       // Shopping list Page
-      // ShoppingListPage(),
-      Text("Shop List"),
-      // Filter Page
-      // FilterDishWidget(mealTypeFilter: mealTypeFilter, filters: filters),
+      ShoppingListPage(),
     ]
       [currentPageIndex],
     )
@@ -109,8 +105,6 @@ class MyMenuPage extends StatefulWidget {
 
 class _MyMenuPageState extends State<MyMenuPage> {
 
-    // Global variables
-  final dbHelper = DatabaseHelper();
   List<Dish> dishes = []; // List to store the dishes
 
 
@@ -197,8 +191,6 @@ class SelectedMenuPage extends StatefulWidget {
 
 class _SelectedMenuPageState extends State<SelectedMenuPage> {
 
-  final dbHelper = DatabaseHelper();
-  // List of lists [Dish, quantity], 
   List<List<dynamic>> selectedDishes = []; // List to store the dishes
 
   @override
@@ -215,10 +207,53 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
     });
   }
 
+  (List<String>, List<Ingredient>) getProductList(){
+    List<Ingredient> products = [];
+    List<String> dishes = [];
+    for (var dish in selectedDishes){
+      dishes.add(dish[0].name);
+      for (var ing in dish[0].ingredients){
+        if (products.isEmpty){
+          products.add(ing * dish[1]);
+        }
+        else {
+          final thisIng = products.firstWhereOrNull((Ingredient element) => element.name == ing.name);
+          if (thisIng != null){
+            ing = ing * dish[1] + thisIng;
+            products.remove(thisIng);
+            products.add(ing);
+          } else {
+            products.add(ing * dish[1]);
+          }
+        }
+      }
+    }
+    return (dishes, products);
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton.extended(
+        label: const Text("Build\nShoplist", textAlign: TextAlign.center,),
+        onPressed: () async {
+          var fname = await showDialog(
+            context: context,
+            builder: (BuildContext context) => FileNameDialog(),
+          );
+          if (fname != null){
+            // Generate product list and save it to a file
+            var (List<String> dishes, List<Ingredient> products) = getProductList();
+            Map<String, dynamic> shopList = {
+              'dishes': dishes,
+              // convert the list of ingredients to a list of maps
+              'products': products.map((ing) => ing.toMap()).toList(),
+            };
+            writeShopList(fname, shopList);
+          }
+        },
+        ),
       body: ListView.builder(
           itemCount: selectedDishes.length,
           itemBuilder: (BuildContext context, int index) {
@@ -251,98 +286,193 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
   }
 }
 // ------------------------ Shopping List -----------------------
-// class ShoppingListPage extends StatefulWidget {
-//   ShoppingListPage({super.key});
+class ShoppingListPage extends StatefulWidget {
+  ShoppingListPage({super.key});
 
 
-//   @override
-//   State<ShoppingListPage> createState() => _ShoppingListPageState();
-// }
+  @override
+  State<ShoppingListPage> createState() => _ShoppingListPageState();
+}
 
-// class _ShoppingListPageState extends State<ShoppingListPage> {
+class _ShoppingListPageState extends State<ShoppingListPage> {
+  List<String> shopLists = <String>[];
 
-//   List<Ingredient> products = [];
+  @override
+  void initState() {
+    super.initState();
+    loadShopList();
+    }
 
-//   List<Ingredient> getProductList(){
-//     List<Ingredient> products = [];
-//     for (var dish in widget.dishes){
-//       if (dish.selected){
-//         for (var ing in dish.ingredients){
-//           if (products.isEmpty){
-//             products.add(ing * dish.quantity);
-//           }
-//           else {
-//             final thisIng = products.firstWhereOrNull((Ingredient element) => element.name == ing.name);
-//             if (thisIng != null){
-//               ing = ing * dish.quantity + thisIng;
-//               products.remove(thisIng);
-//               products.add(ing);
-//             } else {
-//               products.add(ing * dish.quantity);
-//             }
-//           }
-//         }
-//       }
-//     }
-//     return products;
-//   }
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     products = getProductList();
-//   }
+  void loadShopList () async {
+    List<String> data = await listShopLists();
+    setState(() {
+      shopLists = data;
+    });
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () async {
-//           var prod = await showDialog(
-//             context: context,
-//             builder: (BuildContext context) => AddProduct(),
-//           );
-//           if (prod != null){
-//             setState(() {
-//               products.add(Ingredient(name: prod['name'], quantity: prod['quantity'], unit: prod['unit']));
-//             });
-//           }
-//         },
-//         child: const Icon(Icons.add_shopping_cart),
-//       ),
-//       body: ListView.builder(
-//           itemCount: products.length,
-//           itemBuilder: (BuildContext context, int index) {
-//             return ListTile(
-//                 leading: const Icon(Icons.shopping_cart, color: Colors.green,),
-//                 trailing: Row(
-//                   mainAxisAlignment: MainAxisAlignment.start,
-//                   spacing: 2, 
-//                   mainAxisSize: MainAxisSize.min,      
-//                   children: <Widget>[
-//                   IconButton(onPressed: (){
-//                     setState(() {
-//                       products.removeAt(index);
-//                     });
-//                   }, icon:  Icon(
-//                     Icons.delete,
-//                     color: Colors.red,  )
-//                     ),
-//                     InputQty(
-//                       initVal: products[index].quantity,
-//                       minVal: 0,
-//                       steps: 1,
-//                       onQtyChanged: (val) {
-//                         products[index].quantity = val;
-//                       },
-//                     ),
-//                     Text(products[index].unit),
-//                   ]
-//                 ),
-//               title: Text(products[index].name),
-//             );
-//           }),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.builder(
+          itemCount: shopLists.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+                leading: const Icon(Icons.list),
+                trailing: Row(    
+                  mainAxisSize: MainAxisSize.min,      
+                  children: <Widget>[
+                  IconButton(onPressed: (){
+                    deleteShopList(shopLists[index]);
+                    setState(() {
+                      shopLists.removeAt(index);
+                    });
+                  }, icon:  Icon(
+                    Icons.delete,
+                    color: Colors.red,  )
+                    ),
+                  ]
+                ),
+                title: Text(shopLists[index]),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ViewShoppingList(fileName: shopLists[index],)),
+                  );
+                },
+                );
+          }),
+    );
+  }
+
+}
+
+
+class ViewShoppingList extends StatefulWidget {
+  ViewShoppingList({super.key, required this.fileName});
+  final String fileName;
+
+
+  @override
+  State<ViewShoppingList> createState() => _ViewShoppingList();
+}
+
+class _ViewShoppingList extends State<ViewShoppingList> {
+
+  // read product list from file
+  List<Ingredient> products = [];
+  List<String> dishes = [];
+
+  void getProductList() async {
+    List<Ingredient> _products = [];
+    List<String> _dishes = [];
+    String value = await readShopList(widget.fileName);
+    var data = json.decode(value);
+    for(var dish in data['dishes']){
+      _dishes.add(dish);
+    }
+
+    for(var ing in data['products']){
+      _products.add(Ingredient(
+        name: ing['name'] as String,
+        quantity: ing['quantity'],
+        unit: ing['unit'] as String,
+      ));
+    }
+    setState(() {
+      products = _products;
+      dishes = _dishes;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProductList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(children: [
+            IconButton(
+              onPressed: (){
+                showDialog <void> (
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Menu:", textAlign: TextAlign.center,),
+                      content: Text(dishes.join(", "), textAlign: TextAlign.center,),
+                      actions: [
+                        TextButton(
+                          child: const Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },  
+              icon: Icon(Icons.info),
+            ),
+            Text(widget.fileName),
+          ],
+        ) ,
+        backgroundColor: const Color.fromARGB(255, 114, 189, 108),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          var prod = await showDialog(
+            context: context,
+            builder: (BuildContext context) => AddProduct(),
+          );
+          if (prod != null){
+            setState(() {
+              products.add(Ingredient(name: prod['name'], quantity: prod['quantity'], unit: prod['unit']));
+            });
+          }
+        },
+        child: const Icon(Icons.add_shopping_cart),
+      ),
+      body: ListView.builder(
+          itemCount: products.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              // replace Icon with checkbox: https://api.flutter.dev/flutter/material/Checkbox-class.html
+              // move checked/unchecked product to the buttom/top of the list and make it gray/black
+                leading: const Icon(Icons.shopping_cart, color: Colors.green,),
+                trailing: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  spacing: 2, 
+                  mainAxisSize: MainAxisSize.min,      
+                  children: <Widget>[
+                  IconButton(onPressed: (){
+                    setState(() {
+                      products.removeAt(index);
+                    });
+                  }, icon:  Icon(
+                    Icons.delete,
+                    color: Colors.red,  )
+                    ),
+                    InputQty(
+                      initVal: products[index].quantity,
+                      minVal: 0,
+                      steps: 1,
+                      onQtyChanged: (val) {
+                        products[index].quantity = val;
+                      },
+                    ),
+                    Text(products[index].unit),
+                  ]
+                ),
+              title: Text(products[index].name),
+            );
+          }),
+    );
+  }
+}
 // ----------------------------------------------------------

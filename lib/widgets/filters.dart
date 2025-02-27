@@ -1,6 +1,20 @@
 
 import 'package:flutter/material.dart';
 
+// Create Singleton class to store the filter state
+// class FilterState {
+//   static final FilterState _instance = FilterState._internal();
+//   factory FilterState() => _instance;
+//   FilterState._internal();
+
+//   Map<String, bool> mealTypeFilter = {
+//     'breakfast': false,
+//     'lunch': false,
+//     'dinner': false,
+//     'snack': false,
+//   };
+//   String filterQuery = '';
+// }
 
 class SetFilterDialog extends StatefulWidget{
   SetFilterDialog({required this.mealTypeFilter, required this.filterQuery});
