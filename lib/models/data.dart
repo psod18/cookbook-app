@@ -3,10 +3,12 @@ import 'dart:convert';
 
 // Ingredient class
 class Ingredient{
-    Ingredient({required this.name, required this.quantity, required this.unit});
-    final String name;
+    String name;
     num quantity;
-    final String unit;
+    String unit;
+    bool checked;
+    
+    Ingredient({required this.name, required this.quantity, required this.unit, this.checked = false});
 
     // Convert to a map
     Map<String, dynamic> toMap(){
@@ -14,6 +16,7 @@ class Ingredient{
             'name': name,
             'quantity': quantity,
             'unit': unit,
+            'checked': checked ? 1 : 0
         };
     }
 
@@ -21,9 +24,9 @@ class Ingredient{
     Ingredient operator +(Ingredient other){
         if (name == other.name && unit == other.unit){
             return Ingredient(
-                name: name,
-                quantity: quantity + other.quantity,
-                unit: unit,
+              name: name,
+              quantity: quantity + other.quantity,
+              unit: unit,
             );
         }
         return this;

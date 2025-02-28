@@ -364,7 +364,8 @@ class _ViewShoppingList extends State<ViewShoppingList> {
   List<String> dishes = [];
 
   void getProductList() async {
-    List<Ingredient> _products = [];
+    List<Ingredient> prod_t = [];
+    List<Ingredient> prod_f = [];
     List<String> _dishes = [];
     String value = await readShopList(widget.fileName);
     var data = json.decode(value);
@@ -373,14 +374,20 @@ class _ViewShoppingList extends State<ViewShoppingList> {
     }
 
     for(var ing in data['products']){
-      _products.add(Ingredient(
+      Ingredient prod = Ingredient(
         name: ing['name'] as String,
         quantity: ing['quantity'],
         unit: ing['unit'] as String,
-      ));
+        checked: ing['checked'] == 1 ? true : false,
+      );
+      if (prod.checked){
+        prod_t.add(prod);
+      } else {
+        prod_f.add(prod);
+      }
     }
     setState(() {
-      products = _products;
+      products = List.from(prod_f)..addAll(prod_t);
       dishes = _dishes;
     });
   }
@@ -442,9 +449,24 @@ class _ViewShoppingList extends State<ViewShoppingList> {
           itemCount: products.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-              // replace Icon with checkbox: https://api.flutter.dev/flutter/material/Checkbox-class.html
-              // move checked/unchecked product to the buttom/top of the list and make it gray/black
-                leading: const Icon(Icons.shopping_cart, color: Colors.green,),
+                leading: IconButton(
+                  icon: Icon(products[index].checked ? Icons.shopping_cart : Icons.check_box_outline_blank),
+                  onPressed: ()
+                    {
+                      setState(() {
+                        products[index].checked = !products[index].checked;
+
+                        if (products[index].checked){
+
+                          products.add(products[index]);
+                          products.removeAt(index);
+                        } else {
+                          products.insert(0, products[index]);
+                          products.removeAt(index + 1);
+                        }
+                      });
+                    },
+                  ),
                 trailing: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   spacing: 2, 
