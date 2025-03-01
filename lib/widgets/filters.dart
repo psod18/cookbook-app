@@ -22,6 +22,8 @@ class SetFilterDialog extends StatefulWidget{
   Map<String, bool> mealTypeFilter;
   String filterQuery;
 
+  var _swithcValue = true;
+
   @override
   State<StatefulWidget> createState() => _SetFilterDialog();
 }
@@ -30,6 +32,7 @@ class _SetFilterDialog extends State<SetFilterDialog>  {
   @override
   Widget build(BuildContext context) {
     var _controller = TextEditingController(text: widget.filterQuery);
+    
   
     return Dialog(
       backgroundColor: Colors.grey[200],
@@ -44,12 +47,25 @@ class _SetFilterDialog extends State<SetFilterDialog>  {
             TextField(
               controller: _controller,
               decoration: InputDecoration(
-                hintText: 'filter by name',
+                hintText: 'filter query',
                  suffixIcon: IconButton(
                   onPressed: _controller.clear,
                   icon: Icon(Icons.clear),
                 ),
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Switch(
+                  value: widget._swithcValue,
+                  onChanged: (bool value){
+                  setState(() {
+                    widget._swithcValue = value;
+                    widget.mealTypeFilter.updateAll((key, value) => value = widget._swithcValue);
+                  });
+                })
+              ],
             ),
             // Meal type filter
             for (var mealType in widget.mealTypeFilter.keys)
