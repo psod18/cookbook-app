@@ -6,6 +6,7 @@ import 'package:cookery_book/utils/db_helper.dart';
 import 'package:cookery_book/utils/filemanager.dart';
 import 'package:cookery_book/models/data.dart';
 import 'package:cookery_book/widgets/card.dart';
+import 'package:flutter/services.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:collection/collection.dart';
 import 'dart:convert';
@@ -337,8 +338,11 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ViewShoppingList(fileName: shopLists[index],)),
+                    MaterialPageRoute(builder: (context){
+                      return ViewShoppingList(fileName: shopLists[index],);
+                      }),
                   );
+                  loadShopList();
                 },
                 );
           }),
@@ -351,7 +355,6 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
 class ViewShoppingList extends StatefulWidget {
   ViewShoppingList({super.key, required this.fileName});
   final String fileName;
-
 
   @override
   State<ViewShoppingList> createState() => _ViewShoppingList();
@@ -398,102 +401,146 @@ class _ViewShoppingList extends State<ViewShoppingList> {
     getProductList();
   }
 
+  void _onBackPressed() async {
+    // save the product list to the file
+    Map<String, dynamic> shopList = {
+      'dishes': dishes,
+      'products': products.map((ing) => ing.toMap()).toList(),
+    };
+    await writeShopList(widget.fileName, shopList);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(children: [
-            IconButton(
-              onPressed: (){
-                showDialog <void> (
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text("Menu:", textAlign: TextAlign.center,),
-                      content: Text(dishes.join(", "), textAlign: TextAlign.center,),
-                      actions: [
-                        TextButton(
-                          child: const Text("OK"),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },  
-              icon: Icon(Icons.info),
-            ),
-            Text(widget.fileName),
-          ],
-        ) ,
-        backgroundColor: const Color.fromARGB(255, 114, 189, 108),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var prod = await showDialog(
-            context: context,
-            builder: (BuildContext context) => AddProduct(),
-          );
-          if (prod != null){
-            setState(() {
-              products.add(Ingredient(name: prod['name'], quantity: prod['quantity'], unit: prod['unit']));
-            });
-          }
-        },
-        child: const Icon(Icons.add_shopping_cart),
-      ),
-      body: ListView.builder(
-          itemCount: products.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-                leading: IconButton(
-                  icon: Icon(products[index].checked ? Icons.shopping_cart : Icons.check_box_outline_blank),
-                  onPressed: ()
-                    {
-                      setState(() {
-                        products[index].checked = !products[index].checked;
-
-                        if (products[index].checked){
-
-                          products.add(products[index]);
-                          products.removeAt(index);
-                        } else {
-                          products.insert(0, products[index]);
-                          products.removeAt(index + 1);
-                        }
-                      });
+    return PopScope(
+      onPopInvokedWithResult: (result, resultData) {
+        print('Pop invoked with result: $result, data: $resultData');
+        _onBackPressed();
+        Navigator.maybePop(context);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(children: [
+              IconButton(
+                onPressed: (){
+                  showDialog <void> (
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Menu:", textAlign: TextAlign.center,),
+                        content: Text(dishes.join(", "), textAlign: TextAlign.center,),
+                        actions: [
+                          TextButton(
+                            child: const Text("OK"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
                     },
-                  ),
-                trailing: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  spacing: 2, 
-                  mainAxisSize: MainAxisSize.min,      
-                  children: <Widget>[
-                  IconButton(onPressed: (){
-                    setState(() {
-                      products.removeAt(index);
-                    });
-                  }, icon:  Icon(
-                    Icons.delete,
-                    color: Colors.red,  )
-                    ),
-                    InputQty(
-                      initVal: products[index].quantity,
-                      minVal: 0,
-                      steps: 1,
-                      onQtyChanged: (val) {
-                        products[index].quantity = val;
-                      },
-                    ),
-                    Text(products[index].unit),
-                  ]
-                ),
-              title: Text(products[index].name),
+                  );
+                },  
+                icon: Icon(Icons.info),
+              ),
+              Text(widget.fileName),
+            ],
+          ) ,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              _onBackPressed();
+              Navigator.maybePop(context);
+            },
+          ),
+          backgroundColor: const Color.fromARGB(255, 114, 189, 108),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            var prod = await showDialog(
+              context: context,
+              builder: (BuildContext context) => AddProduct(),
             );
-          }),
+            if (prod != null){
+              setState(() {
+                products.add(Ingredient(name: prod['name'], quantity: prod['quantity'], unit: prod['unit']));
+              });
+            }
+          },
+          child: const Icon(Icons.add_shopping_cart),
+        ),
+        body: ListView.builder(
+            itemCount: products.length,
+            itemBuilder: (BuildContext context, int index) {
+              return  ListTile(
+                  horizontalTitleGap: 0,
+                  contentPadding: const EdgeInsets.fromLTRB(4, 0, 6, 0),
+                  dense: true,
+                  visualDensity: const VisualDensity(horizontal: -3, vertical: 1),
+                    leading: IconButton(
+                      icon: Icon(products[index].checked ? Icons.shopping_cart : Icons.check_box_outline_blank),
+                      onPressed: ()
+                        {
+                          setState(() {
+                            products[index].checked = !products[index].checked;
+
+                            if (products[index].checked){
+
+                              products.add(products[index]);
+                              products.removeAt(index);
+                            } else {
+                              products.insert(0, products[index]);
+                              products.removeAt(index + 1);
+                            }
+                          });
+                        },
+                      ),
+                    trailing: Row(
+                      spacing: 2, 
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                      IconButton(onPressed: (){
+                        setState(() {
+                          products.removeAt(index);
+                        });
+                      }, icon:  Icon(
+                        Icons.delete,
+                        color: Colors.red,  )
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: InputQty(
+                            qtyFormProps: QtyFormProps(
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              enableTyping: true,
+                            ),
+                            decoration: QtyDecorationProps(
+                              // qtyStyle: QtyStyle.btnOnRight,
+                              fillColor: Colors.grey[200],
+                              orientation: ButtonOrientation.vertical,
+                              isBordered: true,
+                            ),
+                            initVal: products[index].quantity,
+                            minVal: 0,
+                            steps: 1,
+                            onQtyChanged: (val) {
+                              products[index].quantity = val;
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 30,
+                          child: Text(products[index].unit.padRight(4, ' '), style: const TextStyle(fontSize: 12),),
+                        ),
+                      ]
+                    ),
+                  title: Text(products[index].name, textAlign: TextAlign.start, style: TextStyle(fontSize: 14, fontWeight: products[index].checked ? FontWeight.normal : FontWeight.bold ),),
+              );
+            }),
+      ),
     );
   }
 }
