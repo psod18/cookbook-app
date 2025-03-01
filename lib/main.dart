@@ -6,7 +6,6 @@ import 'package:cookery_book/utils/db_helper.dart';
 import 'package:cookery_book/utils/filemanager.dart';
 import 'package:cookery_book/models/data.dart';
 import 'package:cookery_book/widgets/card.dart';
-import 'package:flutter/services.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:collection/collection.dart';
 import 'dart:convert';
@@ -107,6 +106,7 @@ class MyMenuPage extends StatefulWidget {
 class _MyMenuPageState extends State<MyMenuPage> {
 
   List<Dish> dishes = []; // List to store the dishes
+  FilterState filterState = FilterState();
 
 
   
@@ -121,7 +121,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
     List<Dish> data = await dbHelper.dishes();
     List<Dish> dishes = [];
     for (var dish in data){
-      if (filterDishes(dish, filterQuery, mealTypeFilter)){
+      if (filterDishes(dish)){
         dishes.add(dish);
       }
     }
@@ -141,11 +141,11 @@ class _MyMenuPageState extends State<MyMenuPage> {
 
 
   // Getter for dishes
-  bool filterDishes(Dish dish, String filterQuery, Map<String, bool> mealTypeFilter){
+  bool filterDishes(Dish dish){
       bool selected = true;
-      selected = mealTypeFilter[dish.mealType] == true;
-      if (filterQuery.isNotEmpty) {
-        selected = selected & containsSubstring(dish, filterQuery);
+      selected = filterState.mealTypeFilter[dish.mealType] == true;
+      if (filterState.filterQuery.isNotEmpty) {
+        selected = selected & containsSubstring(dish, filterState.filterQuery);
       }
       return selected;
   }
@@ -158,12 +158,13 @@ class _MyMenuPageState extends State<MyMenuPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.filter_alt),
         onPressed: () async {
-          filterQuery = await showDialog(
+          await showDialog(
             context: context,
-            builder: (BuildContext context) => SetFilterDialog(mealTypeFilter: mealTypeFilter, filterQuery: filterQuery),
+            builder: (BuildContext context) => SetFilterDialog(),
           );
-          loadUserMenu();
-          // loadUserMenute(() => _MyMenuPageState());
+          setState(() {
+            loadUserMenu();
+          });
         },
       ),
       body: SingleChildScrollView(
