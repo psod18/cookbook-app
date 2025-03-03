@@ -83,7 +83,6 @@ class _DishCardState extends State<DishCard> {
         ),
       body:        
         Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Align(
               alignment: Alignment.topLeft,
@@ -101,14 +100,53 @@ class _DishCardState extends State<DishCard> {
             Align(
               alignment: Alignment.center,
               child:Center(
-                child: Text(
-                  widget.dish.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24.0,
-                  ),
-                )
+                child: TextButton(
+                  onPressed: (){
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(widget.dish.name),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text("How to cook:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                              Text(widget.dish.recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
+                              SizedBox(height: 15.0,),
+                              Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                              for (var i in widget.dish.ingredients)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(i.toString(), style: TextStyle(fontStyle: FontStyle.italic),),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Close'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    widget.dish.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24.0,
+                    ),
+                  )
+
+                ),
               ),
             ),
             SizedBox(

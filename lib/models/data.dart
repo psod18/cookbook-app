@@ -20,6 +20,11 @@ class Ingredient{
         };
     }
 
+    @override
+    String toString(){
+        return '$name - $quantity ($unit)';
+    }
+
 
     Ingredient operator +(Ingredient other){
         if (name == other.name && unit == other.unit){
