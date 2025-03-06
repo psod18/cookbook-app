@@ -48,8 +48,8 @@ class Ingredient{
 }
 
 class Dish{
-    Dish({required this.id, required this.name, required this.mealType, required this.recipe, this.tags = const [], required this.ingredients});
-    final int id;
+    Dish({this.id, required this.name, required this.mealType, required this.recipe, this.tags = const [], required this.ingredients});
+    int? id;
     final String name;
     final String mealType;
     final String recipe;
@@ -60,7 +60,7 @@ class Dish{
 // Convert the class into a Map. The key must corrspond to the names of the columns in the DB
     Map<String, dynamic> toMap(){
         return {
-            'id': id,
+            // 'id': id,
             'name': name,
             'mealType': mealType,
             'recipe': recipe,
