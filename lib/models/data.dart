@@ -60,7 +60,6 @@ class Dish{
 // Convert the class into a Map. The key must corrspond to the names of the columns in the DB
     Map<String, dynamic> toMap(){
         return {
-            // 'id': id,
             'name': name,
             'mealType': mealType,
             'recipe': recipe,

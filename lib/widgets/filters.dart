@@ -11,7 +11,7 @@ class FilterState {
     'breakfast': true,
     'lunch': true,
     'dinner': true,
-    'snack': true,
+    'dessert': true,
   };
   String filterQuery = '';
 

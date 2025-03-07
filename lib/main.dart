@@ -35,52 +35,51 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
     home: Scaffold(
-    appBar: AppBar(
-        title: const Text('Cookery Book'),
+      appBar: AppBar(
+          title: const Text('Cookery Book'),
+          backgroundColor: const Color.fromARGB(255, 114, 189, 108),
+          ),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        indicatorColor: Colors.amber,
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            icon: Icon(Icons.menu_book),
+            label: 'CookBook',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.restaurant_menu),
+            label: 'Menu',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.note_add),
+            label: 'New Dish',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.shopping_basket),
+            label: 'Shop List',
+          ),
+        ],
         backgroundColor: const Color.fromARGB(255, 114, 189, 108),
-        ),
-    bottomNavigationBar: NavigationBar(
-      onDestinationSelected: (int index) {
-        setState(() {
-          currentPageIndex = index;
-        });
-      },
-      indicatorColor: Colors.amber,
-      selectedIndex: currentPageIndex,
-      destinations: const <Widget>[
-
-        NavigationDestination(
-          icon: Icon(Icons.menu_book),
-          label: 'CookBook',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.restaurant_menu),
-          label: 'Menu',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.note_add),
-          label: 'New Dish',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.shopping_basket),
-          label: 'Shop List',
-        ),
-      ],
-    backgroundColor: const Color.fromARGB(255, 114, 189, 108),
-    ),
-    body: <Widget>[
-      // CookBook Page
-      MyMenuPage(),
-      // Selected Menu Page
-      SelectedMenuPage(),
-      // Add Dish Page
-      DishForm(),
-      // Shopping list Page
-      ShoppingListPage(),
-    ]
-      [currentPageIndex],
-    )
-  );
+      ),
+      body: <Widget>[
+        // CookBook Page
+        MyMenuPage(),
+        // Selected Menu Page
+        SelectedMenuPage(),
+        // Add Dish Page
+        DishForm(),
+        // Shopping list Page
+        ShoppingListPage(),
+      ]
+        [currentPageIndex],
+      )
+    );
   }
 }
 
@@ -736,7 +735,10 @@ class DishForm extends StatefulWidget {
 }
 
 class _DishFormState extends State<DishForm>{
+  int pageIndex = 0;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyIngs = GlobalKey<FormState>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController recipeController = TextEditingController();
@@ -745,7 +747,7 @@ class _DishFormState extends State<DishForm>{
   
   // for add ingredients form
   TextEditingController newIngredientNameController = TextEditingController();
-  int newIngredientQuantity = 1;
+  TextEditingController newIngredientQuantityController = TextEditingController();
   TextEditingController newIngredientUnitControler = TextEditingController();
   
 
@@ -770,7 +772,7 @@ class _DishFormState extends State<DishForm>{
       tagsController.text = dish?.tags.join(' ,') ?? '';
       dropdownValue = dish?.mealType ?? 'breakfast';
       newIngredientUnitControler.text = 'g';
-      newIngredientQuantity = 1;
+      newIngredientQuantityController.text = '1';
       // extend ingredients with dish ingredients if dish is not null
       List<Ingredient> _ingredients = dish?.ingredients ?? <Ingredient>[];
       ingredients = List.from(_ingredients)..addAll(ingredients);
@@ -826,8 +828,6 @@ class _DishFormState extends State<DishForm>{
               ),
               SizedBox(height: 10),
               TextFormField(
-                
-
                 controller: recipeController,
                 minLines: 10,
                 maxLines: 10,
@@ -892,103 +892,120 @@ class _DishFormState extends State<DishForm>{
               Text('Add Ingredients:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
               SizedBox(height: 10,),
           //  add ingerdient part
-              TextFormField(
-                controller: newIngredientNameController,
-                decoration: InputDecoration(
-                  labelText: 'Add new ingredient',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 3, color: Colors.grey),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                // Set border for focused state
-                focusedBorder: OutlineInputBorder(
-                  borderSide:  BorderSide(width: 3, color: Colors.green),
-                  borderRadius: BorderRadius.circular(15),
-                )
+              Form(
+                key: _formKeyIngs,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: newIngredientNameController,
+                      decoration: InputDecoration(
+                        labelText: 'Add new ingredient',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 3, color: Colors.grey),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      // Set border for focused state
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:  BorderSide(width: 3, color: Colors.green),
+                        borderRadius: BorderRadius.circular(15),
+                      )
 
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Provide ingredient name';
-                  }
-                  return null;
-                },
-              ),
-          SizedBox(height: 10,),
-          IntrinsicHeight(
-           child:Row(
-            spacing: 4,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.grey[400],
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: InputQty.int(
-                  decoration: QtyDecorationProps(
-                    qtyStyle: QtyStyle.btnOnRight,
-                    isBordered: false,
-                  ),
-                  initVal: newIngredientQuantity,
-                  minVal: 1,
-                  steps: 1,
-                  onQtyChanged: (val) {
-                    setState(() {
-                      newIngredientQuantity = val;
-                    });
-                  },
-                ),
-              ),
-              DropdownMenu<String>(
-                initialSelection: newIngredientUnitControler.text,
-                controller: newIngredientUnitControler,
-                requestFocusOnTap: true,
-                label: const Text('Unit'),
-                onSelected: (String? value) {
-                  setState(() {
-                    newIngredientUnitControler.text = value!;
-                  });
-                },
-                dropdownMenuEntries: entries,
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, // background color
-                    backgroundColor: Colors.green, // text color
-                    // padding: EdgeInsets.all(10.0),
-                    side: BorderSide(color: Colors.orange, width: 2),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Provide ingredient name';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      if (newIngredientNameController.text.isNotEmpty){
-                        ingredients.add(Ingredient(
-                          name: newIngredientNameController.text,
-                          quantity: newIngredientQuantity,
-                          unit: newIngredientUnitControler.text,
-                        ));
-                      newIngredientNameController.clear();
-                      newIngredientQuantity = 1;
-                      newIngredientUnitControler.text = 'g';
-                      }
-                    });
-                  },
-                  child: Text(
-                    "Add",
-                    style: TextStyle(fontSize: 15),
-                  ),
+                    SizedBox(height: 10,),
+                  IntrinsicHeight(
+                    child: Row(
+                        spacing: 4,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: newIngredientQuantityController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: 'Quantity',
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 3, color: Colors.grey),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              // Set border for focused state
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:  BorderSide(width: 3, color: Colors.green),
+                                borderRadius: BorderRadius.circular(4),
+                              )
+
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Quantity is required';
+                                }
+                                if (double.tryParse(value) == null && int.tryParse(value) == null){
+                                  return 'Provide a number';
+                                }
+                                if (double.tryParse(value)! <= 0 && int.tryParse(value)! <= 0){
+                                  return 'Should be positive';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          DropdownMenu<String>(
+                            initialSelection: newIngredientUnitControler.text,
+                            controller: newIngredientUnitControler,
+                            requestFocusOnTap: true,
+                            label: const Text('Unit'),
+                            onSelected: (String? value) {
+                              setState(() {
+                                newIngredientUnitControler.text = value!;
+                              });
+                            },
+                            dropdownMenuEntries: entries,
+                          ),
+                          Expanded(
+                            child: 
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white, // background color
+                                backgroundColor: Colors.green, // text color
+                                // padding: EdgeInsets.all(10.0),
+                                side: BorderSide(color: Colors.orange, width: 2),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  if (_formKeyIngs.currentState!.validate()){
+                                    ingredients.add(Ingredient(
+                                      name: newIngredientNameController.text,
+                                      quantity: int.tryParse(newIngredientQuantityController.text) ?? double.tryParse(newIngredientQuantityController.text)!,
+                                      unit: newIngredientUnitControler.text,
+                                    ));
+                                  newIngredientNameController.clear();
+                                  newIngredientQuantityController.text = '1';
+                                  newIngredientUnitControler.text = 'g';
+                                  }
+                                });
+                              },
+                              child: Text(
+                                "Add",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-          ),
             
             // list all products (add delet/edit button)
             for (var ingredient in ingredients)
@@ -1018,23 +1035,41 @@ class _DishFormState extends State<DishForm>{
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
             final dish = Dish(
-              // id: widget.dish?.id,
               id: widget.dishId,
               name: nameController.text,
               mealType: dropdownValue!,
               recipe: recipeController.text,
               tags: tagsController.text.split(',').map((e) => e.trim()).toList(),
-              ingredients: <Ingredient>[],
+              ingredients: ingredients,
             );
-            // if (widget.dish != null){
+            String message = 'Dish saved!';
             if (widget.dishId != null){
-              // await dbHelper.updateDish(dish);
-              print('Update Dish $dish');
+              int id = await dbHelper.updateDish(dish);
+              if (id == 0) {
+                message = 'Dish not found!';
+              }
             } else {
-              // await dbHelper.insertDish(dish);
-              print('Insert Dish $dish');
+                int id = await dbHelper.insertDish(dish);
+                if (id == 0) {
+                  message = 'Something went wrong!';
+                }
             }
-            Navigator.pop(context);
+            setState(() {
+              pageIndex = 1;
+            
+              // clean up the form
+              nameController.clear();
+              recipeController.clear();
+              tagsController.clear();
+              ingredients.clear();
+              newIngredientNameController.clear();
+              newIngredientQuantityController.text = '1';
+              newIngredientUnitControler.text = 'g';
+              // show upd success message
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(message)),
+              );
+            });
           }
         },
         child: const Icon(Icons.save),

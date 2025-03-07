@@ -19,6 +19,8 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();
+    // workaround to delete the last row in the database
+    // _database!.execute("""DELETE FROM dishes WHERE id = (SELECT MAX(id) FROM dishes);""");s
     return _database!;
   }
   
@@ -81,9 +83,19 @@ class DatabaseHelper {
   // CRUD operations for dishes
   Future<int> insertDish(Dish dish) async {
     final db = await database;
-    return await db.insert('dishes', dish.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    // return await db.insert('dishes', dish.toMap(),
+    // conflictAlgorithm: ConflictAlgorithm.replace,
+    final _dish = dish.toMap();
+    return await db.rawInsert('''
+          INSERT INTO dishes (name, mealType, recipe, tags, ingredients)
+          VALUES (?, ?, ?, ?, ?);
+        ''', [
+          _dish['name'],
+          _dish['mealType'],
+          _dish['recipe'],
+          _dish['tags'],
+          _dish['ingredients'],
+        ]);
   }
 
   Future<Dish> dish(int id) async {
@@ -148,14 +160,15 @@ class DatabaseHelper {
     return dishes;
   }
 
-  Future<void> updateDish(Dish dish) async {
+  Future<int> updateDish(Dish dish) async {
     final db = await database;
-    await db.update(
+    int count = await db.update(
       'dishes',
       dish.toMap(),
       where: 'id = ?',
       whereArgs: [dish.id],
     );
+    return count;
   }
 
   Future<void> deleteDish(int id) async {
