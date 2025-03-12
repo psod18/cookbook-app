@@ -94,77 +94,51 @@ class MyMenuPage extends StatefulWidget {
 
 class _MyMenuPageState extends State<MyMenuPage> {
 
-  List<Dish> dishes = []; // List to store the dishes
   FilterState filterState = FilterState();
 
-
-  
-  @override
-  void initState() {
-    super.initState();
-    loadUserMenu();
-    }
-
+  List<Dish> dishes = [];
 
   Future<List<Dish>> loadUserMenu () async {
-    List<Dish> data = await dbHelper.dishes();
-    List<Dish> dishes = [];
-    for (var dish in data){
-      if (filterDishes(dish)){
-        dishes.add(dish);
-      }
+    final data = await dbHelper.filterDishes(filterState.mealTypeFilter.keys.where((key) => filterState.mealTypeFilter[key] == true).toList() , filterState.filterQuery);
+
+    for(var dish in data){
+      dishes.add(dish);
     }
-    setState(() {
-      this.dishes = dishes;
-    });
-    return dishes;
-  }
 
-
-  
-  bool containsSubstring(Dish dish, String query){
-    return dish.name.toLowerCase().contains(query.toLowerCase()) | 
-    dish.ingredients.any((ing) => ing.name.toLowerCase().contains(query.toLowerCase()) |
-    dish.tags.any((tag) => tag.toLowerCase().contains(query.toLowerCase())));
-  }
-
-
-  // Getter for dishes
-  bool filterDishes(Dish dish){
-      bool selected = true;
-      selected = filterState.mealTypeFilter[dish.mealType] == true;
-      if (filterState.filterQuery.isNotEmpty) {
-        selected = selected & containsSubstring(dish, filterState.filterQuery);
-      }
-      return selected;
+    return data;
   }
 
   @override
   Widget build(BuildContext context) {
-    var numOfVisibleDishes = dishes.length;
-    var cardCount = 0;
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.filter_alt),
-        onPressed: () async {
-          await showDialog(
-            context: context,
-            builder: (BuildContext context) => SetFilterDialog(),
-          );
-          setState(() {
-            loadUserMenu();
-          });
-        },
-      ),
-      body: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              for (var dish in dishes)
-                DishCard(dish: dish, cardIndex: ++cardCount, cardsTotal: numOfVisibleDishes),
-            ],
+
+    return FutureBuilder(
+      future: loadUserMenu(),
+      builder: (BuildContext context, AsyncSnapshot<List<Dish>> snapshot) {
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.filter_alt),
+            onPressed: () 
+              async {
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) => SetFilterDialog(),
+                );
+              setState(() {
+                dishes.clear();
+              });
+            },
           ),
-        )
+          body: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(               
+                children: [
+                  for (var i = 0; i < dishes.length; i++)
+                    DishCard(dish: dishes[i], cardIndex: i + 1, cardsTotal: dishes.length),
+                ],              
+              ),
+            )
+        );
+      }
     );
   }
 }
@@ -357,13 +331,13 @@ class _ViewShoppingList extends State<ViewShoppingList> {
   List<String> dishes = [];
 
   void getProductList() async {
-    List<Ingredient> prod_t = [];
-    List<Ingredient> prod_f = [];
-    List<String> _dishes = [];
+    List<Ingredient> prodTrue = [];
+    List<Ingredient> prodFalse = [];
+    List<String> tempDishes = [];
     String value = await readShopList(widget.fileName);
     var data = json.decode(value);
     for(var dish in data['dishes']){
-      _dishes.add(dish);
+      tempDishes.add(dish);
     }
 
     for(var ing in data['products']){
@@ -374,14 +348,14 @@ class _ViewShoppingList extends State<ViewShoppingList> {
         checked: ing['checked'] == 1 ? true : false,
       );
       if (prod.checked){
-        prod_t.add(prod);
+        prodTrue.add(prod);
       } else {
-        prod_f.add(prod);
+        prodFalse.add(prod);
       }
     }
     setState(() {
-      products = List.from(prod_f)..addAll(prod_t);
-      dishes = _dishes;
+      products = List.from(prodFalse)..addAll(prodTrue);
+      dishes = tempDishes;
     });
   }
 
@@ -550,8 +524,7 @@ State<StatefulWidget> createState() => _DishCardState();
 
 
 class _DishCardState extends State<DishCard> {
-
-  final dbHelper = DatabaseHelper();
+  Dish? dish;
   List<int> menuIdxs = [];
 
   Color mealTypeColor(String mealType){
@@ -569,10 +542,11 @@ class _DishCardState extends State<DishCard> {
     }
   }
 
-    @override
+  @override
   void initState() {
     super.initState();
     loadMenuIdxs();
+    dish = widget.dish;
     }
 
 
@@ -588,7 +562,7 @@ class _DishCardState extends State<DishCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: mealTypeColor(widget.dish.mealType), width: 8.0),
+        border: Border.all(color: mealTypeColor(dish!.mealType), width: 8.0),
         color: Color.fromARGB(255, 243, 213, 148),
         borderRadius: BorderRadius.all(Radius.circular(12.0)),
         boxShadow: [
@@ -609,11 +583,11 @@ class _DishCardState extends State<DishCard> {
           onPressed: (){
             setState(() {
                 // add or remove to menu table in db
-                menuIdxs.contains(widget.dish.id) ? {menuIdxs.remove(widget.dish.id), dbHelper.deleteMenu(widget.dish.id!) }: {menuIdxs.add(widget.dish.id!), dbHelper.insertMenu(widget.dish.id!, 1)};                
+                menuIdxs.contains(dish!.id) ? {menuIdxs.remove(dish!.id), dbHelper.deleteMenu(dish!.id!) }: {menuIdxs.add(dish!.id!), dbHelper.insertMenu(dish!.id!, 1)};                
             });
           },
-          backgroundColor: menuIdxs.contains(widget.dish.id)  ? Colors.green : const Color.fromARGB(255, 245, 175, 175),
-          child: menuIdxs.contains(widget.dish.id) ? Icon(Icons.done) : Icon(Icons.add),
+          backgroundColor: menuIdxs.contains(dish!.id)  ? Colors.green : const Color.fromARGB(255, 245, 175, 175),
+          child: menuIdxs.contains(dish!.id) ? Icon(Icons.done) : Icon(Icons.add),
         ),
       body:        
         Column(
@@ -640,15 +614,15 @@ class _DishCardState extends State<DishCard> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text(widget.dish.name),
+                          title: Text(dish!.name),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text("How to cook:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                              Text(widget.dish.recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
+                              Text(dish!.recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
                               SizedBox(height: 15.0,),
                               Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                              for (var i in widget.dish.ingredients)
+                              for (var i in dish!.ingredients)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -672,24 +646,83 @@ class _DishCardState extends State<DishCard> {
                     );
                   },
                   child: Text(
-                    widget.dish.name,
+                    dish!.name,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24.0,
                     ),
                   )
-
                 ),
               ),
             ),
-            SizedBox(
-              height: 150.0,
+            Row(
+              spacing: 4,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, // background color
+                    backgroundColor: Colors.green, // text color
+                    side: BorderSide(color: Colors.grey, width: 2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
+                  onPressed: (){
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context){
+                      return DishForm(dishId: dish!.id);
+                      }),
+                    );
+                  },
+                  child: Text('Edit'),
+                  ),
+                // ----------------------------------
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, // background color
+                    backgroundColor: Colors.red, // text color
+                    side: BorderSide(color: Colors.grey, width: 2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
+                  onPressed: (){
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Please Confirm'),
+                          content: Text("Do you want to delete '$dish!.name' completely?"),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                // Remove the box
+                                setState(() {
+                                  dbHelper.deleteDish(dish!.id!);
+                                });
+                              },
+                              child: const Text('Yes')),
+                            TextButton(
+                              onPressed: () {
+                                // Close the dialog
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('No')),
+                          ],  
+                        );
+                    });
+                  },
+                  child: Text('Delete'),
+                ),
+              ],
             ),
             Align(
               alignment: Alignment.center,
               child: Text(
-                widget.dish.mealType,
+                dish!.mealType,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -698,18 +731,18 @@ class _DishCardState extends State<DishCard> {
               ),
             ),
             SizedBox(
-              height: 20.0,
+              height: 10.0,
             ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  for(var t in widget.dish.tags)
-                      Chip(
-                        label: Text(t),
-                        backgroundColor: Colors.lightGreen[500],
-                      ),
+                  for(var t in dish!.tags)
+                    Chip(
+                      label: Text(t),
+                      backgroundColor: Colors.lightGreen[500],
+                    ),
                 ],
               )
             ),
@@ -774,8 +807,8 @@ class _DishFormState extends State<DishForm>{
       newIngredientUnitControler.text = 'g';
       newIngredientQuantityController.text = '1';
       // extend ingredients with dish ingredients if dish is not null
-      List<Ingredient> _ingredients = dish?.ingredients ?? <Ingredient>[];
-      ingredients = List.from(_ingredients)..addAll(ingredients);
+      List<Ingredient> tempIngredients = dish?.ingredients ?? <Ingredient>[];
+      ingredients = List.from(tempIngredients)..addAll(ingredients);
     });
   }
 
@@ -1026,55 +1059,68 @@ class _DishFormState extends State<DishForm>{
                 ],
             ),
 
+          // ----------------------
+          Expanded(
+            child: 
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white, // background color
+                backgroundColor: Colors.orange, // text color
+              ),
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  final dish = Dish(
+                    id: widget.dishId,
+                    name: nameController.text,
+                    mealType: dropdownValue!,
+                    recipe: recipeController.text,
+                    tags: tagsController.text.split(',').map((e) => e.trim()).toList(),
+                    ingredients: ingredients,
+                  );
+                  String message = 'Dish saved!';
+                  if (widget.dishId != null){
+                    final id = await dbHelper.updateDish(dish);
+                    if (id == 0) {
+                      message = 'Dish not found!';
+                    }
+                    if (context.mounted){Navigator.of(context).pop();}
+                  } else {
+                      final id = await dbHelper.insertDish(dish);
+                      if (id == 0) {
+                        message = 'Something went wrong!';
+                      }
+                  }
+                  setState(() {
+                    pageIndex = 1;
+                  
+                    // clean up the form
+                    nameController.clear();
+                    recipeController.clear();
+                    tagsController.clear();
+                    ingredients.clear();
+                    newIngredientNameController.clear();
+                    newIngredientQuantityController.text = '1';
+                    newIngredientUnitControler.text = 'g';
+                    // show upd success message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(message)),
+                    );
+                  });
+                }
+              },
+              child: Text(
+                "Save Dish",
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
+          // ----------------------
+
 
           ],
           ), 
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          if (_formKey.currentState!.validate()) {
-            final dish = Dish(
-              id: widget.dishId,
-              name: nameController.text,
-              mealType: dropdownValue!,
-              recipe: recipeController.text,
-              tags: tagsController.text.split(',').map((e) => e.trim()).toList(),
-              ingredients: ingredients,
-            );
-            String message = 'Dish saved!';
-            if (widget.dishId != null){
-              int id = await dbHelper.updateDish(dish);
-              if (id == 0) {
-                message = 'Dish not found!';
-              }
-            } else {
-                int id = await dbHelper.insertDish(dish);
-                if (id == 0) {
-                  message = 'Something went wrong!';
-                }
-            }
-            setState(() {
-              pageIndex = 1;
-            
-              // clean up the form
-              nameController.clear();
-              recipeController.clear();
-              tagsController.clear();
-              ingredients.clear();
-              newIngredientNameController.clear();
-              newIngredientQuantityController.text = '1';
-              newIngredientUnitControler.text = 'g';
-              // show upd success message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(message)),
-              );
-            });
-          }
-        },
-        child: const Icon(Icons.save),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 }

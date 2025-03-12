@@ -56,6 +56,10 @@ class Dish{
     final List<String> tags;
     final List<Ingredient> ingredients;
 
+  @override
+  toString() {
+    return 'Dish $id: $name';
+  }
 
 // Convert the class into a Map. The key must corrspond to the names of the columns in the DB
     Map<String, dynamic> toMap(){
@@ -66,6 +70,17 @@ class Dish{
             'tags': jsonEncode(tags),
             'ingredients': jsonEncode(ingredients.map((ing) => ing.toMap()).toList())
         };
+    }
+
+    factory Dish.fromMap(Map<String, dynamic> map){
+        return Dish(
+            id: map['id'],
+            name: map['name'],
+            mealType: map['mealType'],
+            recipe: map['recipe'],
+            tags: jsonDecode(map['tags']),
+            ingredients: jsonDecode(map['ingredients']),
+        );
     }
 
 }

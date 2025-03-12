@@ -99,7 +99,7 @@ class _SetFilterDialog extends State<SetFilterDialog>  {
               child: const Text("Ok"),
               onPressed: () {
                 filterState.setFilterQuery(_controller.text);
-              Navigator.pop(context);
+              Navigator.of(context).pop(filterState);
           },
           ),
           ],

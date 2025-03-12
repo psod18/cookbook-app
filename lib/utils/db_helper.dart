@@ -98,6 +98,41 @@ class DatabaseHelper {
         ]);
   }
 
+  Future<List<Dish>> filterDishes(List<String> mealTypes, String query) async {
+    List<Dish> dishes = [];
+    final db = await database;
+    String mts = mealTypes.map((e) => "'$e'").join(',');
+    final cursor = await db.rawQuery(
+      """SELECT * FROM dishes WHERE mealType IN ($mts)
+        AND (name LIKE '%$query%' OR tags LIKE '%$query%' OR ingredients LIKE '%$query%')"""
+);
+
+    for (var dishMap in cursor){
+      List<Ingredient> ingredients = [];
+      for (var ing in jsonDecode(dishMap['ingredients'] as String)){
+        Ingredient _ing = Ingredient(
+          name: ing['name'] as String,
+          quantity: ing['quantity'] as num,
+          unit: ing['unit'] as String,
+        );
+        ingredients.add(_ing);
+      }
+      List<String> tags = [];
+        for (var tag in jsonDecode(dishMap['tags'] as String)){
+            tags.add(tag.toLowerCase());
+        }  
+      dishes.add(Dish(
+        id: dishMap['id'] as int,
+        name: dishMap['name'] as String,
+        mealType: dishMap['mealType'] as String,
+        recipe: dishMap['recipe'] as String,
+        tags: tags,
+        ingredients: ingredients,
+      ));
+    }
+    return dishes;
+  }
+
   Future<Dish> dish(int id) async {
     final db = await database;
     final List<Map<String, Object?>> dishMaps = await db.query(
