@@ -30,7 +30,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cookery Book!',
       theme: ThemeData(
         useMaterial3: true,
       ),
@@ -94,9 +93,26 @@ class MyMenuPage extends StatefulWidget {
 
 class _MyMenuPageState extends State<MyMenuPage> {
 
+    Color mealTypeColor(String mealType){
+    switch(mealType){
+      case 'breakfast':
+        return Colors.orange;
+      case 'lunch':
+        return Colors.green;
+      case 'dinner':
+        return Colors.red;
+        case 'dessert':
+        return Colors.purple;
+      default:
+        return Colors.black;
+    }
+  }
+
   FilterState filterState = FilterState();
 
   List<Dish> dishes = [];
+  List<int> menuIdxs = [];
+
 
   Future<List<Dish>> loadUserMenu () async {
     final data = await dbHelper.filterDishes(filterState.mealTypeFilter.keys.where((key) => filterState.mealTypeFilter[key] == true).toList() , filterState.filterQuery);
@@ -104,6 +120,9 @@ class _MyMenuPageState extends State<MyMenuPage> {
     for(var dish in data){
       dishes.add(dish);
     }
+
+    final menu = await dbHelper.menuIds();
+    menuIdxs = menu;
 
     return data;
   }
@@ -128,23 +147,197 @@ class _MyMenuPageState extends State<MyMenuPage> {
               });
             },
           ),
-          body: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(               
-                children: [
-                  for (var i = 0; i < dishes.length; i++)
-                    DishCard(dish: dishes[i], cardIndex: i + 1, cardsTotal: dishes.length),
-                ],              
+          body: GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            scrollDirection: Axis.vertical,
+            children: [
+            for (var i = 0; i < dishes.length; i++)
+              Container(
+                  decoration: BoxDecoration(
+                  border: Border.all(color: mealTypeColor(dishes[i].mealType), width: 4.0),
+                  color: Color.fromARGB(255, 243, 213, 148),
+                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade400,
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                margin: EdgeInsets.all(8),
+                padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('${i+1} / ${dishes.length}', style: TextStyle(color: Colors.grey), ), // index of the dish
+                        IconButton(
+                          onPressed: (){
+                            setState((){
+                              menuIdxs.contains(dishes[i].id) ? {menuIdxs.remove(dishes[i].id), dbHelper.deleteMenu(dishes[i].id!) }: {menuIdxs.add(dishes[i].id!), dbHelper.insertMenu(dishes[i].id!, 1)};
+                            });
+                          },
+                          icon: menuIdxs.contains(dishes[i].id) ? Icon(Icons.done) : Icon(Icons.add),
+                          color: menuIdxs.contains(dishes[i].id)  ? const Color.fromARGB(255, 5, 117, 9) : Colors.black,
+                        ),
+                      ],
+                    ), // add/remove to/from selected menu
+                    Align(
+                      alignment: Alignment.center,
+                      child: TextButton(
+                        onPressed: (){
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(dishes[i].name,),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text("How to cook:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                    Text(dishes[i].recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
+                                    SizedBox(height: 15.0,),
+                                    Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                    for (var i in dishes[i].ingredients)
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Text(i.toString(), style: TextStyle(fontStyle: FontStyle.italic),),
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('Close'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          dishes[i].name,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.0,
+                            color: mealTypeColor(dishes[i].mealType),
+                          ),
+                        )
+                      ),
+                    ), // dish name with button function to show recipe
+                    
+                    Wrap(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for(var t in dishes[i].tags)
+                            Chip(
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              label: Text('#$t', style: TextStyle(fontSize: 10),),
+                              backgroundColor: Colors.lightGreen[500],
+                              padding: EdgeInsets.all(0),
+                            ),
+                        ],
+                    ), // tags
+                    Row(
+                      spacing: 2,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(.0),
+                            foregroundColor: Colors.white, // background color
+                            backgroundColor: Colors.green, // text color
+                            side: BorderSide(color: Colors.grey, width: 2),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                          ),
+                          onPressed: () async {
+                            await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context){
+                              return Scaffold(
+                                appBar: AppBar(
+                                  title: Text('Edit Dish'),
+                                  backgroundColor: const Color.fromARGB(255, 114, 189, 108),
+                                ),
+                                body: DishForm(dishId: dishes[i].id)
+                              );
+                              }),
+                            );
+                            setState(() {
+                              dishes.clear();
+                            });
+                          },
+                          child: Text('Edit'),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white, // background color
+                            backgroundColor: Colors.red, // text color
+                            side: BorderSide(color: Colors.grey, width: 2),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                          ),
+                          onPressed: (){
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Please Confirm'),
+                                  content: Text("Do you want to delete '${dishes[i].name}' completely?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          dbHelper.deleteDish(dishes[i].id!);
+                                        });
+                                      },
+                                      child: const Text('Yes')),
+                                    TextButton(
+                                      onPressed: () {
+                                        // Close the dialog
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('No')),
+                                  ],  
+                                );
+                            });
+                          },
+                          child: Text('Delete'),
+                        ),
+                      ],
+                    ),
+                  ]
+                )
               ),
-            )
+            ],
+          ),
+
+
+
         );
       }
     );
   }
 }
-// ----------------------------------------------------------
 
 // ----------- Selected Menu --------------------------------
+
 class SelectedMenuPage extends StatefulWidget {
   SelectedMenuPage({super.key});
 
@@ -509,250 +702,6 @@ class _ViewShoppingList extends State<ViewShoppingList> {
   }
 }
 
-// ----------- Dish card --------------------------------
-
-class DishCard extends StatefulWidget {
-  DishCard({required this.dish, required this.cardIndex, required this.cardsTotal});
-  final Dish dish;
-  final int cardIndex;
-  final int cardsTotal;
-
-@override
-State<StatefulWidget> createState() => _DishCardState();
-
-}
-
-
-class _DishCardState extends State<DishCard> {
-  Dish? dish;
-  List<int> menuIdxs = [];
-
-  Color mealTypeColor(String mealType){
-    switch(mealType){
-      case 'breakfast':
-        return Colors.orange;
-      case 'lunch':
-        return Colors.green;
-      case 'dinner':
-        return Colors.red;
-        case 'dessert':
-        return Colors.purple;
-      default:
-        return Colors.black;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadMenuIdxs();
-    dish = widget.dish;
-    }
-
-
-  void loadMenuIdxs () async {
-    final data = await dbHelper.menuIds();
-    setState(() {
-      menuIdxs = data;
-    });
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: mealTypeColor(dish!.mealType), width: 8.0),
-        color: Color.fromARGB(255, 243, 213, 148),
-        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade400,
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      margin: EdgeInsets.all(12),
-      height: 450,
-      width: 300,
-      child: Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        floatingActionButton:  FloatingActionButton.small(
-          onPressed: (){
-            setState(() {
-                // add or remove to menu table in db
-                menuIdxs.contains(dish!.id) ? {menuIdxs.remove(dish!.id), dbHelper.deleteMenu(dish!.id!) }: {menuIdxs.add(dish!.id!), dbHelper.insertMenu(dish!.id!, 1)};                
-            });
-          },
-          backgroundColor: menuIdxs.contains(dish!.id)  ? Colors.green : const Color.fromARGB(255, 245, 175, 175),
-          child: menuIdxs.contains(dish!.id) ? Icon(Icons.done) : Icon(Icons.add),
-        ),
-      body:        
-        Column(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.topLeft,
-              child: 
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('${widget.cardIndex} / ${widget.cardsTotal}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Align(
-              alignment: Alignment.center,
-              child:Center(
-                child: TextButton(
-                  onPressed: (){
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text(dish!.name),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text("How to cook:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                              Text(dish!.recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
-                              SizedBox(height: 15.0,),
-                              Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                              for (var i in dish!.ingredients)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Text(i.toString(), style: TextStyle(fontStyle: FontStyle.italic),),
-                                    ),
-                                  ],
-                                ),
-                            ],
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('Close'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  child: Text(
-                    dish!.name,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24.0,
-                    ),
-                  )
-                ),
-              ),
-            ),
-            Row(
-              spacing: 4,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, // background color
-                    backgroundColor: Colors.green, // text color
-                    side: BorderSide(color: Colors.grey, width: 2),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  onPressed: (){
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context){
-                      return DishForm(dishId: dish!.id);
-                      }),
-                    );
-                  },
-                  child: Text('Edit'),
-                  ),
-                // ----------------------------------
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, // background color
-                    backgroundColor: Colors.red, // text color
-                    side: BorderSide(color: Colors.grey, width: 2),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  onPressed: (){
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Please Confirm'),
-                          content: Text("Do you want to delete '$dish!.name' completely?"),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                // Remove the box
-                                setState(() {
-                                  dbHelper.deleteDish(dish!.id!);
-                                });
-                              },
-                              child: const Text('Yes')),
-                            TextButton(
-                              onPressed: () {
-                                // Close the dialog
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('No')),
-                          ],  
-                        );
-                    });
-                  },
-                  child: Text('Delete'),
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                dish!.mealType,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for(var t in dish!.tags)
-                    Chip(
-                      label: Text(t),
-                      backgroundColor: Colors.lightGreen[500],
-                    ),
-                ],
-              )
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 // -------------------------- Edit Dish -------------------------
 
 class DishForm extends StatefulWidget {
@@ -827,12 +776,7 @@ class _DishFormState extends State<DishForm>{
       ),
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: dish != null ? Text('Edit Dish') : Text('Add New Dish'),
-        backgroundColor: const Color.fromARGB(255, 114, 189, 108),
-      ),
-      body: Padding(
+    return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -1001,36 +945,33 @@ class _DishFormState extends State<DishForm>{
                             },
                             dropdownMenuEntries: entries,
                           ),
-                          Expanded(
-                            child: 
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.white, // background color
-                                backgroundColor: Colors.green, // text color
-                                // padding: EdgeInsets.all(10.0),
-                                side: BorderSide(color: Colors.orange, width: 2),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white, // background color
+                              backgroundColor: Colors.green, // text color
+                              // padding: EdgeInsets.all(10.0),
+                              side: BorderSide(color: Colors.orange, width: 2),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0),
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  if (_formKeyIngs.currentState!.validate()){
-                                    ingredients.add(Ingredient(
-                                      name: newIngredientNameController.text,
-                                      quantity: int.tryParse(newIngredientQuantityController.text) ?? double.tryParse(newIngredientQuantityController.text)!,
-                                      unit: newIngredientUnitControler.text,
-                                    ));
-                                  newIngredientNameController.clear();
-                                  newIngredientQuantityController.text = '1';
-                                  newIngredientUnitControler.text = 'g';
-                                  }
-                                });
-                              },
-                              child: Text(
-                                "Add",
-                                style: TextStyle(fontSize: 15),
-                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                if (_formKeyIngs.currentState!.validate()){
+                                  ingredients.add(Ingredient(
+                                    name: newIngredientNameController.text,
+                                    quantity: int.tryParse(newIngredientQuantityController.text) ?? double.tryParse(newIngredientQuantityController.text)!,
+                                    unit: newIngredientUnitControler.text,
+                                  ));
+                                newIngredientNameController.clear();
+                                newIngredientQuantityController.text = '1';
+                                newIngredientUnitControler.text = 'g';
+                                }
+                              });
+                            },
+                            child: Text(
+                              "Add",
+                              style: TextStyle(fontSize: 15),
                             ),
                           ),
                         ],
@@ -1042,84 +983,78 @@ class _DishFormState extends State<DishForm>{
             
             // list all products (add delet/edit button)
             for (var ingredient in ingredients)
-              Row(
-                children: [
-                  // replace with tail listview
-                  IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red[400],),
-                    onPressed: () {
-                      setState(() {
-                        ingredients.remove(ingredient);
-                      });
-                    },
-                  ),
-                  Expanded(
-                    child: Text(ingredient.toString(), style: TextStyle(fontSize: 16),),
-                  ),
-                ],
+            Row(
+              children: [
+                // replace with tail listview
+                IconButton(
+                  icon: Icon(Icons.delete, color: Colors.red[400],),
+                  onPressed: () {
+                    setState(() {
+                      ingredients.remove(ingredient);
+                    });
+                  },
+                ),
+                Text(ingredient.toString(), style: TextStyle(fontSize: 16),),
+              ],
             ),
 
           // ----------------------
-          Expanded(
-            child: 
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, // background color
-                backgroundColor: Colors.orange, // text color
-              ),
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  final dish = Dish(
-                    id: widget.dishId,
-                    name: nameController.text,
-                    mealType: dropdownValue!,
-                    recipe: recipeController.text,
-                    tags: tagsController.text.split(',').map((e) => e.trim()).toList(),
-                    ingredients: ingredients,
-                  );
-                  String message = 'Dish saved!';
-                  if (widget.dishId != null){
-                    final id = await dbHelper.updateDish(dish);
-                    if (id == 0) {
-                      message = 'Dish not found!';
-                    }
-                    if (context.mounted){Navigator.of(context).pop();}
-                  } else {
-                      final id = await dbHelper.insertDish(dish);
-                      if (id == 0) {
-                        message = 'Something went wrong!';
-                      }
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white, // background color
+              backgroundColor: Colors.orange, // text color
+            ),
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                final dish = Dish(
+                  id: widget.dishId,
+                  name: nameController.text,
+                  mealType: dropdownValue!,
+                  recipe: recipeController.text,
+                  tags: tagsController.text.split(',').map((e) => e.trim()).toList(),
+                  ingredients: ingredients,
+                );
+                String message = 'Dish saved!';
+                if (widget.dishId != null){
+                  final id = await dbHelper.updateDish(dish);
+                  if (id == 0) {
+                    message = 'Dish not found!';
                   }
-                  setState(() {
-                    pageIndex = 1;
-                  
-                    // clean up the form
-                    nameController.clear();
-                    recipeController.clear();
-                    tagsController.clear();
-                    ingredients.clear();
-                    newIngredientNameController.clear();
-                    newIngredientQuantityController.text = '1';
-                    newIngredientUnitControler.text = 'g';
-                    // show upd success message
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(message)),
-                    );
-                  });
+                  if (context.mounted){Navigator.of(context).pop(widget.dishId);}
+                } else {
+                    final id = await dbHelper.insertDish(dish);
+                    if (id == 0) {
+                      message = 'Something went wrong!';
+                    }
                 }
-              },
-              child: Text(
-                "Save Dish",
-                style: TextStyle(fontSize: 20),
-              ),
+                setState(() {
+                  pageIndex = 1;
+                
+                  // clean up the form
+                  nameController.clear();
+                  recipeController.clear();
+                  tagsController.clear();
+                  ingredients.clear();
+                  newIngredientNameController.clear();
+                  newIngredientQuantityController.text = '1';
+                  newIngredientUnitControler.text = 'g';
+                  // show upd success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(message)),
+                  );
+                });
+              }
+            },
+            child: Text(
+              "Save Dish",
+              style: TextStyle(fontSize: 20),
             ),
           ),
           // ----------------------
 
 
           ],
-          ), 
-        ),
+        ), 
       ),
     );
   }
