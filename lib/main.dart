@@ -12,6 +12,35 @@ import 'dart:convert';
 
 final dbHelper = DatabaseHelper();
 
+class QuickFilter {
+  static final QuickFilter _instance = QuickFilter._internal();
+  factory QuickFilter() => _instance;
+  QuickFilter._internal();
+  
+  final values = ["all", "selected", "unselected"];
+  int currentIndex = 0;
+
+  get current => values.elementAt(currentIndex);
+
+  get currenIcon{
+    switch(current){
+      case "all":
+        return Icon(Icons.list_alt);
+      case "selected":
+        return Icon(Icons.done_all);
+      case "unselected":
+        return Icon(Icons.remove_done);
+      default:
+        return Icon(Icons.all_inclusive);
+    }
+  }
+  
+  void step(){
+    currentIndex = (currentIndex + 1) % values.length;
+  }
+}
+
+
 void main() {
   runApp(const MyApp());
 }
@@ -109,6 +138,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
   }
 
   FilterState filterState = FilterState();
+  QuickFilter quickFilter = QuickFilter();
 
   List<Dish> dishes = [];
   List<int> menuIdxs = [];
@@ -117,12 +147,26 @@ class _MyMenuPageState extends State<MyMenuPage> {
   Future<List<Dish>> loadUserMenu () async {
     final data = await dbHelper.filterDishes(filterState.mealTypeFilter.keys.where((key) => filterState.mealTypeFilter[key] == true).toList() , filterState.filterQuery);
 
-    for(var dish in data){
-      dishes.add(dish);
-    }
-
     final menu = await dbHelper.menuIds();
     menuIdxs = menu;
+
+    if (quickFilter.current == "all") {
+      for (var dish in data){
+        dishes.add(dish);
+      }
+    } else if (quickFilter.current == "unselected") {
+      for(var dish in data){
+        if (!menuIdxs.contains(dish.id)){
+          dishes.add(dish);
+        }
+      }
+    } else if (quickFilter.current == "selected") {
+      for(var dish in data){
+        if (menuIdxs.contains(dish.id)){
+          dishes.add(dish);
+        }
+      }
+    }
 
     return data;
   }
@@ -134,19 +178,37 @@ class _MyMenuPageState extends State<MyMenuPage> {
       future: loadUserMenu(),
       builder: (BuildContext context, AsyncSnapshot<List<Dish>> snapshot) {
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.filter_alt),
-            onPressed: () 
-              async {
-                await showDialog(
-                  context: context,
-                  builder: (BuildContext context) => SetFilterDialog(),
-                );
-              setState(() {
-                dishes.clear();
-              });
-            },
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          floatingActionButton: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FloatingActionButton(
+                child: quickFilter.currenIcon,
+                onPressed: () {
+                  setState(() {
+                    dishes.clear();
+                  });
+                  quickFilter.step();
+                }
+              ),
+              SizedBox(height: 5.0,),
+              FloatingActionButton(
+                child: const Icon(Icons.filter_alt),
+                onPressed: () 
+                  async {
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) => SetFilterDialog(),
+                    );
+                  setState(() {
+                    dishes.clear();
+                  });
+                },
+              ),
+            ]        
           ),
+
+
           body: GridView.count(
             shrinkWrap: true,
             crossAxisCount: 2,
@@ -188,59 +250,56 @@ class _MyMenuPageState extends State<MyMenuPage> {
                         ),
                       ],
                     ), // add/remove to/from selected menu
-                    Align(
-                      alignment: Alignment.center,
-                      child: TextButton(
-                        onPressed: (){
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text(dishes[i].name,),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Text("How to cook:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                                    Text(dishes[i].recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
-                                    SizedBox(height: 15.0,),
-                                    Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                                    for (var i in dishes[i].ingredients)
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Text(i.toString(), style: TextStyle(fontStyle: FontStyle.italic),),
-                                          ),
-                                        ],
-                                      ),
-                                  ],
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text('Close'),
-                                  ),
+                    TextButton(
+                      onPressed: (){
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(dishes[i].name,),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text("How to cook:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                  Text(dishes[i].recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
+                                  SizedBox(height: 15.0,),
+                                  Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                  for (var i in dishes[i].ingredients)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: Text(i.toString(), style: TextStyle(fontStyle: FontStyle.italic),),
+                                        ),
+                                      ],
+                                    ),
                                 ],
-                              );
-                            },
-                          );
-                        },
-                        child: Text(
-                          dishes[i].name,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14.0,
-                            color: mealTypeColor(dishes[i].mealType),
-                          ),
-                        )
-                      ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Close'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        dishes[i].name,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0,
+                          color: mealTypeColor(dishes[i].mealType),
+                        ),
+                      )
                     ), // dish name with button function to show recipe
                     
                     Wrap(
-                        // mainAxisAlignment: MainAxisAlignment.center,
+                        // if len > 3 then add three dot to pop up all tags
                         children: [
                           for(var t in dishes[i].tags)
                             Chip(
