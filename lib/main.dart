@@ -233,23 +233,25 @@ class _MyMenuPageState extends State<MyMenuPage> {
                 margin: EdgeInsets.all(8),
                 padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('${i+1} / ${dishes.length}', style: TextStyle(color: Colors.grey), ), // index of the dish
-                        IconButton(
-                          onPressed: (){
-                            setState((){
-                              menuIdxs.contains(dishes[i].id) ? {menuIdxs.remove(dishes[i].id), dbHelper.deleteMenu(dishes[i].id!) }: {menuIdxs.add(dishes[i].id!), dbHelper.insertMenu(dishes[i].id!, 1)};
-                            });
-                          },
-                          icon: menuIdxs.contains(dishes[i].id) ? Icon(Icons.done) : Icon(Icons.add),
-                          color: menuIdxs.contains(dishes[i].id)  ? const Color.fromARGB(255, 5, 117, 9) : Colors.black,
-                        ),
-                      ],
-                    ), // add/remove to/from selected menu
+                    SizedBox(
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${i+1} / ${dishes.length}', style: TextStyle(color: Colors.grey), ), // index of the dish
+                          IconButton(
+                            onPressed: (){
+                              setState((){
+                                menuIdxs.contains(dishes[i].id) ? {menuIdxs.remove(dishes[i].id), dbHelper.deleteMenu(dishes[i].id!) }: {menuIdxs.add(dishes[i].id!), dbHelper.insertMenu(dishes[i].id!, 1)};
+                              });
+                            },
+                            icon: menuIdxs.contains(dishes[i].id) ? Icon(Icons.done) : Icon(Icons.add),
+                            color: menuIdxs.contains(dishes[i].id)  ? const Color.fromARGB(255, 5, 117, 9) : Colors.black,
+                          ),
+                        ],
+                      ), // add/remove to/from selected menu
+                    ),
                     TextButton(
                       onPressed: (){
                         showDialog(
@@ -297,19 +299,69 @@ class _MyMenuPageState extends State<MyMenuPage> {
                         ),
                       )
                     ), // dish name with button function to show recipe
-                    
+                    SizedBox(
+                    height: 40,
+                      child: TextButton(
+                        child: Text(dishes[i].mealType, style: TextStyle(fontSize: 12, color: Colors.black),),
+                        onPressed: (){
+                          // set filter to show only this meal type
+                          filterState.mealTypeFilter.updateAll((name, value) => value = false);
+                          filterState.mealTypeFilter[dishes[i].mealType] = true;
+                          setState(() {
+                            dishes.clear();
+                          });
+                        },
+                      ),
+                    ),
                     Wrap(
-                        // if len > 3 then add three dot to pop up all tags
-                        children: [
-                          for(var t in dishes[i].tags)
+                        children: (dishes[i].tags.length > 3)
+                        ? [
+                            for (var t in dishes[i].tags.getRange(0, 3))
+                              Chip(
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                label: Text('#$t', style: TextStyle(fontSize: 10),),
+                                backgroundColor: Colors.lightGreen[500],
+                                padding: EdgeInsets.all(0),
+                              ),
+                            ActionChip(
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              label: Text('...', style: TextStyle(fontSize: 10),),
+                              backgroundColor: Colors.lightGreen[500],
+                              padding: EdgeInsets.all(0),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Tags:', textAlign: TextAlign.center,),
+                                      content: Wrap(
+                                        children: [
+                                          for (var t in dishes[i].tags)
+                                            Chip(
+                                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              label: Text('#$t', style: TextStyle(fontSize: 10),),
+                                              backgroundColor: Colors.lightGreen[500],
+                                              padding: EdgeInsets.all(0),
+                                            ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                );
+                              },
+                            )
+                          ] 
+                        : [
+                        for (var t in dishes[i].tags)
                             Chip(
                               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               label: Text('#$t', style: TextStyle(fontSize: 10),),
                               backgroundColor: Colors.lightGreen[500],
                               padding: EdgeInsets.all(0),
-                            ),
-                        ],
+                          ),
+                        ]
                     ), // tags
+                    Spacer(),
                     Row(
                       spacing: 2,
                       mainAxisAlignment: MainAxisAlignment.center,
