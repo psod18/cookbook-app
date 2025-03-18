@@ -5,22 +5,41 @@ import 'package:flutter/material.dart';
 import 'package:cookery_book/utils/db_helper.dart';
 import 'package:cookery_book/utils/filemanager.dart';
 import 'package:cookery_book/models/data.dart';
-import 'package:cookery_book/widgets/card.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:collection/collection.dart';
 import 'dart:convert';
 
 
-
-Map<String, bool> mealTypeFilter = {
-  'breakfast': true,
-  'lunch': true,
-  'dinner': true,
-  'dessert': true,
-};
-String filterQuery = '';
-
 final dbHelper = DatabaseHelper();
+
+class QuickFilter {
+  static final QuickFilter _instance = QuickFilter._internal();
+  factory QuickFilter() => _instance;
+  QuickFilter._internal();
+  
+  final values = ["all", "selected", "unselected"];
+  int currentIndex = 0;
+
+  get current => values.elementAt(currentIndex);
+
+  get currenIcon{
+    switch(current){
+      case "all":
+        return Icon(Icons.list_alt);
+      case "selected":
+        return Icon(Icons.done_all);
+      case "unselected":
+        return Icon(Icons.remove_done);
+      default:
+        return Icon(Icons.all_inclusive);
+    }
+  }
+  
+  void step(){
+    currentIndex = (currentIndex + 1) % values.length;
+  }
+}
+
 
 void main() {
   runApp(const MyApp());
@@ -40,57 +59,55 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cookery Book!',
       theme: ThemeData(
         useMaterial3: true,
       ),
     home: Scaffold(
-    appBar: AppBar(
-        title: const Text('Cookery Book'),
+      appBar: AppBar(
+          title: const Text('Cookery Book'),
+          backgroundColor: const Color.fromARGB(255, 114, 189, 108),
+          ),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        indicatorColor: Colors.amber,
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            icon: Icon(Icons.menu_book),
+            label: 'CookBook',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.restaurant_menu),
+            label: 'Menu',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.note_add),
+            label: 'New Dish',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.shopping_basket),
+            label: 'Shop List',
+          ),
+        ],
         backgroundColor: const Color.fromARGB(255, 114, 189, 108),
-        ),
-    bottomNavigationBar: NavigationBar(
-      onDestinationSelected: (int index) {
-        setState(() {
-          currentPageIndex = index;
-        });
-      },
-      indicatorColor: Colors.amber,
-      selectedIndex: currentPageIndex,
-      destinations: const <Widget>[
-
-        NavigationDestination(
-          icon: Icon(Icons.menu_book),
-          label: 'CookBook',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.restaurant_menu),
-          label: 'Menu',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.note_add),
-          label: 'New Dish',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.shopping_basket),
-          label: 'Shop List',
-        ),
-      ],
-    backgroundColor: const Color.fromARGB(255, 114, 189, 108),
-    ),
-    body: <Widget>[
-      // CookBook Page
-      MyMenuPage(),
-      // Selected Menu Page
-      SelectedMenuPage(),
-      // Add Dish Page
-      Text("Add New Dish"),
-      // Shopping list Page
-      ShoppingListPage(),
-    ]
-      [currentPageIndex],
-    )
-  );
+      ),
+      body: <Widget>[
+        // CookBook Page
+        MyMenuPage(),
+        // Selected Menu Page
+        SelectedMenuPage(),
+        // Add Dish Page
+        DishForm(),
+        // Shopping list Page
+        ShoppingListPage(),
+      ]
+        [currentPageIndex],
+      )
+    );
   }
 }
 
@@ -105,81 +122,333 @@ class MyMenuPage extends StatefulWidget {
 
 class _MyMenuPageState extends State<MyMenuPage> {
 
-  List<Dish> dishes = []; // List to store the dishes
-
-
-  
-  @override
-  void initState() {
-    super.initState();
-    loadUserMenu();
+    Color mealTypeColor(String mealType){
+    switch(mealType){
+      case 'breakfast':
+        return Colors.orange;
+      case 'lunch':
+        return Colors.green;
+      case 'dinner':
+        return Colors.red;
+        case 'dessert':
+        return Colors.purple;
+      default:
+        return Colors.black;
     }
+  }
+
+  FilterState filterState = FilterState();
+  QuickFilter quickFilter = QuickFilter();
+
+  List<Dish> dishes = [];
+  List<int> menuIdxs = [];
 
 
   Future<List<Dish>> loadUserMenu () async {
-    List<Dish> data = await dbHelper.dishes();
-    List<Dish> dishes = [];
-    for (var dish in data){
-      if (filterDishes(dish, filterQuery, mealTypeFilter)){
+    final data = await dbHelper.filterDishes(filterState.mealTypeFilter.keys.where((key) => filterState.mealTypeFilter[key] == true).toList() , filterState.filterQuery);
+
+    final menu = await dbHelper.menuIds();
+    menuIdxs = menu;
+
+    if (quickFilter.current == "all") {
+      for (var dish in data){
         dishes.add(dish);
       }
-    }
-    setState(() {
-      this.dishes = dishes;
-    });
-    return dishes;
-  }
-
-
-  
-  bool containsSubstring(Dish dish, String query){
-    return dish.name.toLowerCase().contains(query.toLowerCase()) | 
-    dish.ingredients.any((ing) => ing.name.toLowerCase().contains(query.toLowerCase()) |
-    dish.tags.any((tag) => tag.toLowerCase().contains(query.toLowerCase())));
-  }
-
-
-  // Getter for dishes
-  bool filterDishes(Dish dish, String filterQuery, Map<String, bool> mealTypeFilter){
-      bool selected = true;
-      selected = mealTypeFilter[dish.mealType] == true;
-      if (filterQuery.isNotEmpty) {
-        selected = selected & containsSubstring(dish, filterQuery);
+    } else if (quickFilter.current == "unselected") {
+      for(var dish in data){
+        if (!menuIdxs.contains(dish.id)){
+          dishes.add(dish);
+        }
       }
-      return selected;
+    } else if (quickFilter.current == "selected") {
+      for(var dish in data){
+        if (menuIdxs.contains(dish.id)){
+          dishes.add(dish);
+        }
+      }
+    }
+
+    return data;
   }
 
   @override
   Widget build(BuildContext context) {
-    var numOfVisibleDishes = dishes.length;
-    var cardCount = 0;
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.filter_alt),
-        onPressed: () async {
-          filterQuery = await showDialog(
-            context: context,
-            builder: (BuildContext context) => SetFilterDialog(mealTypeFilter: mealTypeFilter, filterQuery: filterQuery),
-          );
-          loadUserMenu();
-          // loadUserMenute(() => _MyMenuPageState());
-        },
-      ),
-      body: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
+
+    return FutureBuilder(
+      future: loadUserMenu(),
+      builder: (BuildContext context, AsyncSnapshot<List<Dish>> snapshot) {
+        return Scaffold(
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          floatingActionButton: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              for (var dish in dishes)
-                DishCard(dish: dish, cardIndex: ++cardCount, cardsTotal: numOfVisibleDishes),
+              FloatingActionButton(
+                child: quickFilter.currenIcon,
+                onPressed: () {
+                  setState(() {
+                    dishes.clear();
+                  });
+                  quickFilter.step();
+                }
+              ),
+              SizedBox(height: 5.0,),
+              FloatingActionButton(
+                child: const Icon(Icons.filter_alt),
+                onPressed: () 
+                  async {
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) => SetFilterDialog(),
+                    );
+                  setState(() {
+                    dishes.clear();
+                  });
+                },
+              ),
+            ]        
+          ),
+
+
+          body: GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            scrollDirection: Axis.vertical,
+            children: [
+            for (var i = 0; i < dishes.length; i++)
+              Container(
+                  decoration: BoxDecoration(
+                  border: Border.all(color: mealTypeColor(dishes[i].mealType), width: 4.0),
+                  color: Color.fromARGB(255, 243, 213, 148),
+                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade400,
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                margin: EdgeInsets.all(8),
+                padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${i+1} / ${dishes.length}', style: TextStyle(color: Colors.grey), ), // index of the dish
+                          IconButton(
+                            onPressed: (){
+                              setState((){
+                                menuIdxs.contains(dishes[i].id) ? {menuIdxs.remove(dishes[i].id), dbHelper.deleteMenu(dishes[i].id!) }: {menuIdxs.add(dishes[i].id!), dbHelper.insertMenu(dishes[i].id!, 1)};
+                              });
+                            },
+                            icon: menuIdxs.contains(dishes[i].id) ? Icon(Icons.done) : Icon(Icons.add),
+                            color: menuIdxs.contains(dishes[i].id)  ? const Color.fromARGB(255, 5, 117, 9) : Colors.black,
+                          ),
+                        ],
+                      ), // add/remove to/from selected menu
+                    ),
+                    TextButton(
+                      onPressed: (){
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(dishes[i].name,),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text("How to cook:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                  Text(dishes[i].recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
+                                  SizedBox(height: 15.0,),
+                                  Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                  for (var i in dishes[i].ingredients)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: Text(i.toString(), style: TextStyle(fontStyle: FontStyle.italic),),
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Close'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        dishes[i].name,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0,
+                          color: mealTypeColor(dishes[i].mealType),
+                        ),
+                      )
+                    ), // dish name with button function to show recipe
+                    SizedBox(
+                    height: 40,
+                      child: TextButton(
+                        child: Text(dishes[i].mealType, style: TextStyle(fontSize: 12, color: Colors.black),),
+                        onPressed: (){
+                          // set filter to show only this meal type
+                          filterState.mealTypeFilter.updateAll((name, value) => value = false);
+                          filterState.mealTypeFilter[dishes[i].mealType] = true;
+                          setState(() {
+                            dishes.clear();
+                          });
+                        },
+                      ),
+                    ),
+                    Wrap(
+                        children: (dishes[i].tags.length > 3)
+                        ? [
+                            for (var t in dishes[i].tags.getRange(0, 3))
+                              Chip(
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                label: Text('#$t', style: TextStyle(fontSize: 10),),
+                                backgroundColor: Colors.lightGreen[500],
+                                padding: EdgeInsets.all(0),
+                              ),
+                            ActionChip(
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              label: Text('...', style: TextStyle(fontSize: 10),),
+                              backgroundColor: Colors.lightGreen[500],
+                              padding: EdgeInsets.all(0),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Tags:', textAlign: TextAlign.center,),
+                                      content: Wrap(
+                                        children: [
+                                          for (var t in dishes[i].tags)
+                                            Chip(
+                                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              label: Text('#$t', style: TextStyle(fontSize: 10),),
+                                              backgroundColor: Colors.lightGreen[500],
+                                              padding: EdgeInsets.all(0),
+                                            ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                );
+                              },
+                            )
+                          ] 
+                        : [
+                        for (var t in dishes[i].tags)
+                            Chip(
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              label: Text('#$t', style: TextStyle(fontSize: 10),),
+                              backgroundColor: Colors.lightGreen[500],
+                              padding: EdgeInsets.all(0),
+                          ),
+                        ]
+                    ), // tags
+                    Spacer(),
+                    Row(
+                      spacing: 2,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(.0),
+                            foregroundColor: Colors.white, // background color
+                            backgroundColor: Colors.green, // text color
+                            side: BorderSide(color: Colors.grey, width: 2),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                          ),
+                          onPressed: () async {
+                            await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context){
+                              return Scaffold(
+                                appBar: AppBar(
+                                  title: Text('Edit Dish'),
+                                  backgroundColor: const Color.fromARGB(255, 114, 189, 108),
+                                ),
+                                body: DishForm(dishId: dishes[i].id)
+                              );
+                              }),
+                            );
+                            setState(() {
+                              dishes.clear();
+                            });
+                          },
+                          child: Text('Edit'),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white, // background color
+                            backgroundColor: Colors.red, // text color
+                            side: BorderSide(color: Colors.grey, width: 2),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                          ),
+                          onPressed: (){
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Please Confirm'),
+                                  content: Text("Do you want to delete '${dishes[i].name}' completely?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          dbHelper.deleteDish(dishes[i].id!);
+                                        });
+                                      },
+                                      child: const Text('Yes')),
+                                    TextButton(
+                                      onPressed: () {
+                                        // Close the dialog
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('No')),
+                                  ],  
+                                );
+                            });
+                          },
+                          child: Text('Delete'),
+                        ),
+                      ],
+                    ),
+                  ]
+                )
+              ),
             ],
           ),
-        )
+
+
+
+        );
+      }
     );
   }
 }
-// ----------------------------------------------------------
 
 // ----------- Selected Menu --------------------------------
+
 class SelectedMenuPage extends StatefulWidget {
   SelectedMenuPage({super.key});
 
@@ -337,8 +606,11 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ViewShoppingList(fileName: shopLists[index],)),
+                    MaterialPageRoute(builder: (context){
+                      return ViewShoppingList(fileName: shopLists[index],);
+                      }),
                   );
+                  loadShopList();
                 },
                 );
           }),
@@ -352,7 +624,6 @@ class ViewShoppingList extends StatefulWidget {
   ViewShoppingList({super.key, required this.fileName});
   final String fileName;
 
-
   @override
   State<ViewShoppingList> createState() => _ViewShoppingList();
 }
@@ -364,24 +635,31 @@ class _ViewShoppingList extends State<ViewShoppingList> {
   List<String> dishes = [];
 
   void getProductList() async {
-    List<Ingredient> _products = [];
-    List<String> _dishes = [];
+    List<Ingredient> prodTrue = [];
+    List<Ingredient> prodFalse = [];
+    List<String> tempDishes = [];
     String value = await readShopList(widget.fileName);
     var data = json.decode(value);
     for(var dish in data['dishes']){
-      _dishes.add(dish);
+      tempDishes.add(dish);
     }
 
     for(var ing in data['products']){
-      _products.add(Ingredient(
+      Ingredient prod = Ingredient(
         name: ing['name'] as String,
         quantity: ing['quantity'],
         unit: ing['unit'] as String,
-      ));
+        checked: ing['checked'] == 1 ? true : false,
+      );
+      if (prod.checked){
+        prodTrue.add(prod);
+      } else {
+        prodFalse.add(prod);
+      }
     }
     setState(() {
-      products = _products;
-      dishes = _dishes;
+      products = List.from(prodFalse)..addAll(prodTrue);
+      dishes = tempDishes;
     });
   }
 
@@ -391,88 +669,502 @@ class _ViewShoppingList extends State<ViewShoppingList> {
     getProductList();
   }
 
+  void _onBackPressed() async {
+    // save the product list to the file
+    Map<String, dynamic> shopList = {
+      'dishes': dishes,
+      'products': products.map((ing) => ing.toMap()).toList(),
+    };
+    await writeShopList(widget.fileName, shopList);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(children: [
-            IconButton(
-              onPressed: (){
-                showDialog <void> (
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text("Menu:", textAlign: TextAlign.center,),
-                      content: Text(dishes.join(", "), textAlign: TextAlign.center,),
-                      actions: [
-                        TextButton(
-                          child: const Text("OK"),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },  
-              icon: Icon(Icons.info),
-            ),
-            Text(widget.fileName),
-          ],
-        ) ,
-        backgroundColor: const Color.fromARGB(255, 114, 189, 108),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var prod = await showDialog(
-            context: context,
-            builder: (BuildContext context) => AddProduct(),
-          );
-          if (prod != null){
-            setState(() {
-              products.add(Ingredient(name: prod['name'], quantity: prod['quantity'], unit: prod['unit']));
-            });
-          }
-        },
-        child: const Icon(Icons.add_shopping_cart),
-      ),
-      body: ListView.builder(
-          itemCount: products.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              // replace Icon with checkbox: https://api.flutter.dev/flutter/material/Checkbox-class.html
-              // move checked/unchecked product to the buttom/top of the list and make it gray/black
-                leading: const Icon(Icons.shopping_cart, color: Colors.green,),
-                trailing: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  spacing: 2, 
-                  mainAxisSize: MainAxisSize.min,      
-                  children: <Widget>[
-                  IconButton(onPressed: (){
-                    setState(() {
-                      products.removeAt(index);
-                    });
-                  }, icon:  Icon(
-                    Icons.delete,
-                    color: Colors.red,  )
-                    ),
-                    InputQty(
-                      initVal: products[index].quantity,
-                      minVal: 0,
-                      steps: 1,
-                      onQtyChanged: (val) {
-                        products[index].quantity = val;
-                      },
-                    ),
-                    Text(products[index].unit),
-                  ]
-                ),
-              title: Text(products[index].name),
+    return PopScope(
+      onPopInvokedWithResult: (result, resultData) {
+        print('Pop invoked with result: $result, data: $resultData');
+        _onBackPressed();
+        Navigator.maybePop(context);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(children: [
+              IconButton(
+                onPressed: (){
+                  showDialog <void> (
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Menu:", textAlign: TextAlign.center,),
+                        content: Text(dishes.join(", "), textAlign: TextAlign.center,),
+                        actions: [
+                          TextButton(
+                            child: const Text("OK"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },  
+                icon: Icon(Icons.info),
+              ),
+              Text(widget.fileName),
+            ],
+          ) ,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              _onBackPressed();
+              Navigator.maybePop(context);
+            },
+          ),
+          backgroundColor: const Color.fromARGB(255, 114, 189, 108),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            var prod = await showDialog(
+              context: context,
+              builder: (BuildContext context) => AddProduct(),
             );
-          }),
+            if (prod != null){
+              setState(() {
+                products.add(Ingredient(name: prod['name'], quantity: prod['quantity'], unit: prod['unit']));
+              });
+            }
+          },
+          child: const Icon(Icons.add_shopping_cart),
+        ),
+        body: ListView.builder(
+            itemCount: products.length,
+            itemBuilder: (BuildContext context, int index) {
+              return  ListTile(
+                  horizontalTitleGap: 0,
+                  contentPadding: const EdgeInsets.fromLTRB(4, 0, 6, 0),
+                  dense: true,
+                  visualDensity: const VisualDensity(horizontal: -3, vertical: 1),
+                    leading: IconButton(
+                      icon: Icon(products[index].checked ? Icons.shopping_cart : Icons.check_box_outline_blank),
+                      onPressed: ()
+                        {
+                          setState(() {
+                            products[index].checked = !products[index].checked;
+
+                            if (products[index].checked){
+
+                              products.add(products[index]);
+                              products.removeAt(index);
+                            } else {
+                              products.insert(0, products[index]);
+                              products.removeAt(index + 1);
+                            }
+                          });
+                        },
+                      ),
+                    trailing: Row(
+                      spacing: 2, 
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                      IconButton(onPressed: (){
+                        setState(() {
+                          products.removeAt(index);
+                        });
+                      }, icon:  Icon(
+                        Icons.delete,
+                        color: Colors.red,  )
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: InputQty(
+                            qtyFormProps: QtyFormProps(
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              enableTyping: true,
+                            ),
+                            decoration: QtyDecorationProps(
+                              // qtyStyle: QtyStyle.btnOnRight,
+                              fillColor: Colors.grey[200],
+                              orientation: ButtonOrientation.vertical,
+                              isBordered: true,
+                            ),
+                            initVal: products[index].quantity,
+                            minVal: 0,
+                            steps: 1,
+                            onQtyChanged: (val) {
+                              products[index].quantity = val;
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 30,
+                          child: Text(products[index].unit.padRight(4, ' '), style: const TextStyle(fontSize: 12),),
+                        ),
+                      ]
+                    ),
+                  title: Text(products[index].name, textAlign: TextAlign.start, style: TextStyle(fontSize: 14, fontWeight: products[index].checked ? FontWeight.normal : FontWeight.bold ),),
+              );
+            }),
+      ),
     );
   }
 }
-// ----------------------------------------------------------
+
+// -------------------------- Edit Dish -------------------------
+
+class DishForm extends StatefulWidget {
+  // Dish? dish;
+  final int? dishId;
+
+  // DishForm({super.key, this.dish});
+  DishForm({super.key, this.dishId});
+
+
+  @override
+  State<DishForm> createState() => _DishFormState();
+}
+
+class _DishFormState extends State<DishForm>{
+  int pageIndex = 0;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyIngs = GlobalKey<FormState>();
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController recipeController = TextEditingController();
+  final TextEditingController tagsController = TextEditingController();
+  List<Ingredient> ingredients = <Ingredient>[];
+  
+  // for add ingredients form
+  TextEditingController newIngredientNameController = TextEditingController();
+  TextEditingController newIngredientQuantityController = TextEditingController();
+  TextEditingController newIngredientUnitControler = TextEditingController();
+  
+
+  static final List<DropdownMenuEntry<String>> entries = UnmodifiableListView<DropdownMenuEntry<String>>(
+    ['g', 'ml', 'unit'].map<DropdownMenuEntry<String>>(
+      (String unit) => DropdownMenuEntry(value: unit, label: unit),
+    ),
+  );
+
+  static const mealTypes = ['breakfast', 'lunch', 'dinner', 'dessert'];
+  String? dropdownValue;
+
+  Dish? dish;
+
+  getDish() async {
+    if (widget.dishId != null){
+      dish = await dbHelper.dish(widget.dishId!);
+    }
+    setState(() {
+      nameController.text = dish?.name ?? '';
+      recipeController.text = dish?.recipe ?? '';
+      tagsController.text = dish?.tags.join(' ,') ?? '';
+      dropdownValue = dish?.mealType ?? 'breakfast';
+      newIngredientUnitControler.text = 'g';
+      newIngredientQuantityController.text = '1';
+      // extend ingredients with dish ingredients if dish is not null
+      List<Ingredient> tempIngredients = dish?.ingredients ?? <Ingredient>[];
+      ingredients = List.from(tempIngredients)..addAll(ingredients);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDish();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    final List<DropdownMenuEntry<String>> options = UnmodifiableListView<DropdownMenuEntry<String>>(
+      mealTypes.map<DropdownMenuEntry<String>>(
+        (String name) => DropdownMenuEntry<String>(value: name, label: name)
+      ),
+    );
+
+    return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: <Widget>[
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 3, color: Colors.grey),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                // Set border for focused state
+                focusedBorder: OutlineInputBorder(
+                  borderSide:  BorderSide(width: 3, color: Colors.orange),
+                  borderRadius: BorderRadius.circular(15),
+                )
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a name';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                controller: tagsController,
+                decoration: InputDecoration(
+                  labelText: 'Tags',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 3, color: Colors.grey),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                // Set border for focused state
+                focusedBorder: OutlineInputBorder(
+                  borderSide:  BorderSide(width: 3, color: Colors.orange),
+                  borderRadius: BorderRadius.circular(15),
+                )
+
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter tags';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 10),
+              DropdownMenu<String>(
+                label: Text('Meal Type'),
+                expandedInsets: EdgeInsets.all(4),
+                initialSelection: dropdownValue,
+                onSelected: (String? value) {
+                  // This is called when the user selects an item.
+                  setState(() {
+                    dropdownValue = value!;
+                  });
+                },
+                dropdownMenuEntries: options,
+              ),
+              SizedBox(height: 10,),
+              TextFormField(
+                controller: recipeController,
+                minLines: 10,
+                maxLines: 10,
+                decoration: InputDecoration(
+                  labelText: 'Recipe',
+
+                 enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 3, color: Colors.grey),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:  BorderSide(width: 3, color: Colors.orange),
+                  borderRadius: BorderRadius.circular(15),
+                )
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a recipe';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 10),
+              Text('Add Ingredients:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+              SizedBox(height: 10,),
+          //  add ingerdient part
+              Form(
+                key: _formKeyIngs,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: newIngredientNameController,
+                      decoration: InputDecoration(
+                        labelText: 'Add new ingredient',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 3, color: Colors.grey),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      // Set border for focused state
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:  BorderSide(width: 3, color: Colors.green),
+                        borderRadius: BorderRadius.circular(15),
+                      )
+
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Provide ingredient name';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 10,),
+                  IntrinsicHeight(
+                    child: Row(
+                        spacing: 4,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: newIngredientQuantityController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: 'Quantity',
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 3, color: Colors.grey),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              // Set border for focused state
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:  BorderSide(width: 3, color: Colors.green),
+                                borderRadius: BorderRadius.circular(4),
+                              )
+
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Quantity is required';
+                                }
+                                if (double.tryParse(value) == null && int.tryParse(value) == null){
+                                  return 'Provide a number';
+                                }
+                                if (double.tryParse(value)! <= 0 && int.tryParse(value)! <= 0){
+                                  return 'Should be positive';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          DropdownMenu<String>(
+                            initialSelection: newIngredientUnitControler.text,
+                            controller: newIngredientUnitControler,
+                            requestFocusOnTap: true,
+                            label: const Text('Unit'),
+                            onSelected: (String? value) {
+                              setState(() {
+                                newIngredientUnitControler.text = value!;
+                              });
+                            },
+                            dropdownMenuEntries: entries,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white, // background color
+                              backgroundColor: Colors.green, // text color
+                              // padding: EdgeInsets.all(10.0),
+                              side: BorderSide(color: Colors.orange, width: 2),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                if (_formKeyIngs.currentState!.validate()){
+                                  ingredients.add(Ingredient(
+                                    name: newIngredientNameController.text,
+                                    quantity: int.tryParse(newIngredientQuantityController.text) ?? double.tryParse(newIngredientQuantityController.text)!,
+                                    unit: newIngredientUnitControler.text,
+                                  ));
+                                newIngredientNameController.clear();
+                                newIngredientQuantityController.text = '1';
+                                newIngredientUnitControler.text = 'g';
+                                }
+                              });
+                            },
+                            child: Text(
+                              "Add",
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            
+            // list all products (add delet/edit button)
+            for (var ingredient in ingredients)
+            Row(
+              children: [
+                // replace with tail listview
+                IconButton(
+                  icon: Icon(Icons.delete, color: Colors.red[400],),
+                  onPressed: () {
+                    setState(() {
+                      ingredients.remove(ingredient);
+                    });
+                  },
+                ),
+                Text(ingredient.toString(), style: TextStyle(fontSize: 16),),
+              ],
+            ),
+
+          // ----------------------
+            ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white, // background color
+              backgroundColor: Colors.orange, // text color
+            ),
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                final dish = Dish(
+                  id: widget.dishId,
+                  name: nameController.text,
+                  mealType: dropdownValue!,
+                  recipe: recipeController.text,
+                  tags: tagsController.text.split(',').map((e) => e.trim()).toList(),
+                  ingredients: ingredients,
+                );
+                String message = 'Dish saved!';
+                if (widget.dishId != null){
+                  final id = await dbHelper.updateDish(dish);
+                  if (id == 0) {
+                    message = 'Dish not found!';
+                  }
+                  if (context.mounted){Navigator.of(context).pop(widget.dishId);}
+                } else {
+                    final id = await dbHelper.insertDish(dish);
+                    if (id == 0) {
+                      message = 'Something went wrong!';
+                    }
+                }
+                setState(() {
+                  pageIndex = 1;
+                
+                  // clean up the form
+                  nameController.clear();
+                  recipeController.clear();
+                  tagsController.clear();
+                  ingredients.clear();
+                  newIngredientNameController.clear();
+                  newIngredientQuantityController.text = '1';
+                  newIngredientUnitControler.text = 'g';
+                  // show upd success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(message)),
+                  );
+                });
+              }
+            },
+            child: Text(
+              "Save Dish",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+          // ----------------------
+
+
+          ],
+        ), 
+      ),
+    );
+  }
+}

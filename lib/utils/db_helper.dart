@@ -19,6 +19,8 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();
+    // workaround to delete the last row in the database
+    // _database!.execute("""DELETE FROM dishes WHERE id = (SELECT MAX(id) FROM dishes);""");s
     return _database!;
   }
   
@@ -81,9 +83,54 @@ class DatabaseHelper {
   // CRUD operations for dishes
   Future<int> insertDish(Dish dish) async {
     final db = await database;
-    return await db.insert('dishes', dish.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    // return await db.insert('dishes', dish.toMap(),
+    // conflictAlgorithm: ConflictAlgorithm.replace,
+    final _dish = dish.toMap();
+    return await db.rawInsert('''
+          INSERT INTO dishes (name, mealType, recipe, tags, ingredients)
+          VALUES (?, ?, ?, ?, ?);
+        ''', [
+          _dish['name'],
+          _dish['mealType'],
+          _dish['recipe'],
+          _dish['tags'],
+          _dish['ingredients'],
+        ]);
+  }
+
+  Future<List<Dish>> filterDishes(List<String> mealTypes, String query) async {
+    List<Dish> dishes = [];
+    final db = await database;
+    String mts = mealTypes.map((e) => "'$e'").join(',');
+    final cursor = await db.rawQuery(
+      """SELECT * FROM dishes WHERE mealType IN ($mts)
+        AND (name LIKE '%$query%' OR tags LIKE '%$query%' OR ingredients LIKE '%$query%')"""
+);
+
+    for (var dishMap in cursor){
+      List<Ingredient> ingredients = [];
+      for (var ing in jsonDecode(dishMap['ingredients'] as String)){
+        Ingredient _ing = Ingredient(
+          name: ing['name'] as String,
+          quantity: ing['quantity'] as num,
+          unit: ing['unit'] as String,
+        );
+        ingredients.add(_ing);
+      }
+      List<String> tags = [];
+        for (var tag in jsonDecode(dishMap['tags'] as String)){
+            tags.add(tag.toLowerCase());
+        }  
+      dishes.add(Dish(
+        id: dishMap['id'] as int,
+        name: dishMap['name'] as String,
+        mealType: dishMap['mealType'] as String,
+        recipe: dishMap['recipe'] as String,
+        tags: tags,
+        ingredients: ingredients,
+      ));
+    }
+    return dishes;
   }
 
   Future<Dish> dish(int id) async {
@@ -148,14 +195,15 @@ class DatabaseHelper {
     return dishes;
   }
 
-  Future<void> updateDish(Dish dish) async {
+  Future<int> updateDish(Dish dish) async {
     final db = await database;
-    await db.update(
+    int count = await db.update(
       'dishes',
       dish.toMap(),
       where: 'id = ?',
       whereArgs: [dish.id],
     );
+    return count;
   }
 
   Future<void> deleteDish(int id) async {

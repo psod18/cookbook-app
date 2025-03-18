@@ -76,7 +76,7 @@ class _AddProductState extends State<AddProduct> {
                   newProduct['unit'] = value;
                 });
               },
-              items: <String>['kg', 'g', 'l', 'ml', 'pcs']
+              items: <String>['g', 'ml', 'unit']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,

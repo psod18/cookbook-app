@@ -2,34 +2,49 @@
 import 'package:flutter/material.dart';
 
 // Create Singleton class to store the filter state
-// class FilterState {
-//   static final FilterState _instance = FilterState._internal();
-//   factory FilterState() => _instance;
-//   FilterState._internal();
+class FilterState {
+  static final FilterState _instance = FilterState._internal();
+  factory FilterState() => _instance;
+  FilterState._internal();
 
-//   Map<String, bool> mealTypeFilter = {
-//     'breakfast': false,
-//     'lunch': false,
-//     'dinner': false,
-//     'snack': false,
-//   };
-//   String filterQuery = '';
-// }
+  Map<String, bool> mealTypeFilter = {
+    'breakfast': true,
+    'lunch': true,
+    'dinner': true,
+    'dessert': true,
+  };
+  String filterQuery = '';
+
+  bool switchValue = true;
+
+  void setFiltersFalse() {
+    mealTypeFilter.updateAll((key, value) => value = false);
+  }
+
+  void setFiltersTrue() {
+    mealTypeFilter.updateAll((key, value) => value = true);
+  }
+
+  setFilterQuery(String query) {
+    filterQuery = query;
+  }
+
+}
 
 class SetFilterDialog extends StatefulWidget{
-  SetFilterDialog({required this.mealTypeFilter, required this.filterQuery});
-
-  Map<String, bool> mealTypeFilter;
-  String filterQuery;
 
   @override
   State<StatefulWidget> createState() => _SetFilterDialog();
 }
 
 class _SetFilterDialog extends State<SetFilterDialog>  {
+  
+  FilterState filterState = FilterState();
+
   @override
   Widget build(BuildContext context) {
-    var _controller = TextEditingController(text: widget.filterQuery);
+    var _controller = TextEditingController(text: filterState.filterQuery);
+    
   
     return Dialog(
       backgroundColor: Colors.grey[200],
@@ -44,24 +59,37 @@ class _SetFilterDialog extends State<SetFilterDialog>  {
             TextField(
               controller: _controller,
               decoration: InputDecoration(
-                hintText: 'filter by name',
+                hintText: 'filter query',
                  suffixIcon: IconButton(
                   onPressed: _controller.clear,
                   icon: Icon(Icons.clear),
                 ),
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Switch(
+                  value: filterState.switchValue,
+                  onChanged: (bool value){
+                  setState(() {
+                    filterState.switchValue = value;
+                    value ? filterState.setFiltersTrue() : filterState.setFiltersFalse();
+                  });
+                })
+              ],
+            ),
             // Meal type filter
-            for (var mealType in widget.mealTypeFilter.keys)
+            for (var mealType in filterState.mealTypeFilter.keys)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(mealType),
                   Checkbox(
-                    value: widget.mealTypeFilter[mealType],
+                    value: filterState.mealTypeFilter[mealType],
                     onChanged: (value) {
                       setState(() {
-                        widget.mealTypeFilter[mealType] = value!;
+                        filterState.mealTypeFilter[mealType] = value!;
                       });
                     },
                   ),
@@ -70,7 +98,8 @@ class _SetFilterDialog extends State<SetFilterDialog>  {
             ElevatedButton(
               child: const Text("Ok"),
               onPressed: () {
-              Navigator.of(context).pop(_controller.text);
+                filterState.setFilterQuery(_controller.text);
+              Navigator.of(context).pop(filterState);
           },
           ),
           ],
