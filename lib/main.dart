@@ -7,6 +7,9 @@ import 'package:cookery_book/utils/filemanager.dart';
 import 'package:cookery_book/models/data.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:collection/collection.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'dart:async';
 import 'dart:convert';
 
 
@@ -828,7 +831,9 @@ class DishForm extends StatefulWidget {
 }
 
 class _DishFormState extends State<DishForm>{
-  int pageIndex = 0;
+
+  final ImagePicker _picker = ImagePicker();
+  final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyIngs = GlobalKey<FormState>();
@@ -888,8 +893,8 @@ class _DishFormState extends State<DishForm>{
     );
 
     return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
           key: _formKey,
           child: ListView(
             children: <Widget>[
@@ -951,6 +956,32 @@ class _DishFormState extends State<DishForm>{
                 dropdownMenuEntries: options,
               ),
               SizedBox(height: 10,),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.camera_enhance_outlined, color: Colors.green,),
+                    onPressed: ()async {
+                      final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+                      if (image == null) return;
+                      final InputImage inputImage = InputImage.fromFilePath(image.path);
+                      final RecognizedText recognisedText = await textRecognizer.processImage(inputImage);
+                      String text = '';
+                      for (TextBlock block in recognisedText.blocks) {
+                        for (TextLine line in block.lines) {
+                          for (TextElement element in line.elements) {
+                            text += "${element.text} ";
+                          }
+                        }
+                      }
+                      setState(() {
+                        recipeController.text = text;
+                      });
+                    },
+                    alignment: Alignment.centerLeft,
+                  ),
+                  Text("Scan recept via camera or from Image", style: TextStyle(fontSize: 14, color: Colors.green),),
+                ],
+              ),
               TextFormField(
                 controller: recipeController,
                 minLines: 10,
@@ -1108,7 +1139,7 @@ class _DishFormState extends State<DishForm>{
             ),
 
           // ----------------------
-            ElevatedButton(
+          ElevatedButton(
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white, // background color
               backgroundColor: Colors.orange, // text color
@@ -1137,7 +1168,6 @@ class _DishFormState extends State<DishForm>{
                     }
                 }
                 setState(() {
-                  pageIndex = 1;
                 
                   // clean up the form
                   nameController.clear();
@@ -1160,11 +1190,9 @@ class _DishFormState extends State<DishForm>{
             ),
           ),
           // ----------------------
-
-
-          ],
-        ), 
-      ),
+        ],
+      ), 
+    ),
     );
   }
 }
