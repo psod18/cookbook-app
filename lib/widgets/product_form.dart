@@ -20,19 +20,18 @@ class _AddProductState extends State<AddProduct> {
       backgroundColor: Colors.grey[200],
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16.0))),
-      child: Column(
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Column(
+        spacing: 6,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('Add Product to bin',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-              ),
-               Container(
+              const Text('Add Product to bin',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+              Container(
                 margin: const EdgeInsets.only(top: 18, right: 18, bottom: 10),
                 width: 18,
                 height: 18,
@@ -54,23 +53,45 @@ class _AddProductState extends State<AddProduct> {
             ]
           ),
           TextFormField(
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Product name",
               icon: Icon(Icons.post_add),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 3, color: Colors.grey),
+                borderRadius: BorderRadius.circular(15),
+              ),
+                // Set border for focused state
+            focusedBorder: OutlineInputBorder(
+              borderSide:  BorderSide(width: 3, color: Colors.orange),
+              borderRadius: BorderRadius.circular(15),
+              )
             ),
             onChanged: (value) => newProduct['name'] = value,
           ),
           TextFormField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: "Quantity",
                 icon: Icon(Icons.shopping_bag),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 3, color: Colors.grey),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                // Set border for focused state
+                focusedBorder: OutlineInputBorder(
+                  borderSide:  BorderSide(width: 3, color: Colors.orange),
+                  borderRadius: BorderRadius.circular(15),
+                )
               ),
-              onChanged: (value) => newProduct['quantity'] = int.parse(value),
+            onChanged: (value) => newProduct['quantity'] = int.parse(value),
           ),
-          ListTile(
-            title: const Text("Unit"),
-            trailing: DropdownButton<String>(
-              value: 'kg',
+          Row(
+            children: [
+            const Icon(Icons.production_quantity_limits_outlined),
+            SizedBox(width: 16,),
+            const Text("Unit", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange)),
+            Spacer(),
+             DropdownButton<String>(
+              value: 'g',
               onChanged: (String? value) {
                 setState(() {
                   newProduct['unit'] = value;
@@ -84,14 +105,25 @@ class _AddProductState extends State<AddProduct> {
                 );
               }).toList(),
             ),
+            ]
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(8),
+                            foregroundColor: Colors.white, // background color
+                            backgroundColor: Colors.green, // text color
+                            side: BorderSide(color: Colors.grey, width: 2),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                          ),
             child: const Text("Add Product"),
             onPressed: () {
               Navigator.of(context).pop(newProduct);
             },
           ),
         ],
+      ),
       ),
     );
   }

@@ -66,9 +66,18 @@ class _FileNameDialogState extends State<FileNameDialog> {
                 key: _formKey,
                 child: TextFormField(
                   controller: _fileName,
-                  decoration: const InputDecoration(
-                    labelText: "Save as ...",
-                  ),
+                  decoration: InputDecoration(
+                  labelText: "Save as ...",
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 3, color: Colors.grey),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                // Set border for focused state
+                focusedBorder: OutlineInputBorder(
+                  borderSide:  BorderSide(width: 3, color: Colors.orange),
+                  borderRadius: BorderRadius.circular(15),
+                )
+                ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a name';

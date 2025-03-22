@@ -1,4 +1,5 @@
 import 'package:cookery_book/widgets/product_form.dart';
+import 'package:flutter/services.dart';
 import 'package:cookery_book/widgets/filename_dialog.dart';
 import 'package:cookery_book/widgets/filters.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,12 @@ class QuickFilter {
 }
 
 
-void main() {
+void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+  // Force Portrait Mode
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]); // Normal Portrait
+
   runApp(const MyApp());
 }
 
@@ -62,6 +68,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
       ),
