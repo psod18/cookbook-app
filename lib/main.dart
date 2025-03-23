@@ -155,6 +155,8 @@ class _MyMenuPageState extends State<MyMenuPage> {
 
 
   Future<List<Dish>> loadUserMenu () async {
+    dishes.clear();
+
     final data = await dbHelper.filterDishes(filterState.mealTypeFilter.keys.where((key) => filterState.mealTypeFilter[key] == true).toList() , filterState.filterQuery);
 
     final menu = await dbHelper.menuIds();
@@ -268,7 +270,6 @@ class _MyMenuPageState extends State<MyMenuPage> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              // todo: limit number of characters in the title
                               title: Text(dishes[i].name,),
                               content:
                               SingleChildScrollView(
@@ -306,18 +307,20 @@ class _MyMenuPageState extends State<MyMenuPage> {
                       // todo: make the text looks like a button
                       child: Text(
                         dishes[i].name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14.0,
-                          color: mealTypeColor(dishes[i].mealType),
+                          color: Colors.black,
                         ),
                       )
                     ), // dish name with button function to show recipe
                     SizedBox(
                     height: 40,
                       child: TextButton(
-                        child: Text(dishes[i].mealType, style: TextStyle(fontSize: 12, color: Colors.black),),
+                        child: Text(dishes[i].mealType, style: TextStyle(fontSize: 14, color: mealTypeColor(dishes[i].mealType)),),
                         onPressed: (){
                           // set filter to show only this meal type
                           filterState.mealTypeFilter.updateAll((name, value) => value = false);
@@ -328,6 +331,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
                         },
                       ),
                     ),
+                    Spacer(),
                     Wrap(
                         children: (dishes[i].tags.length > 3)
                         ? [
@@ -377,7 +381,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
                           ),
                         ]
                     ), // tags
-                    Spacer(),
+                    // Spacer(),
                     Row(
                       spacing: 2,
                       mainAxisAlignment: MainAxisAlignment.center,
