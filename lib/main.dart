@@ -139,9 +139,9 @@ class _MyMenuPageState extends State<MyMenuPage> {
       case 'lunch':
         return Colors.green;
       case 'dinner':
-        return Colors.red;
+        return Colors.brown.shade300;
         case 'dessert':
-        return Colors.purple;
+        return Colors.purple.shade300;
       default:
         return Colors.black;
     }
@@ -222,7 +222,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
           body: GridView.count(
             shrinkWrap: true,
             crossAxisCount: 2,
-            childAspectRatio: 0.7,
+            childAspectRatio: 0.6,
             scrollDirection: Axis.vertical,
             children: [
             for (var i = 0; i < dishes.length; i++)
@@ -268,24 +268,28 @@ class _MyMenuPageState extends State<MyMenuPage> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
+                              // todo: limit number of characters in the title
                               title: Text(dishes[i].name,),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Text("How to cook:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                                  Text(dishes[i].recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
-                                  SizedBox(height: 15.0,),
-                                  Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                                  for (var i in dishes[i].ingredients)
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: Text(i.toString(), style: TextStyle(fontStyle: FontStyle.italic),),
-                                        ),
-                                      ],
-                                    ),
-                                ],
+                              content:
+                              SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text("How to cook:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                    Text(dishes[i].recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
+                                    SizedBox(height: 15.0,),
+                                    Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                    for (var i in dishes[i].ingredients)
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Text(i.toString(), style: TextStyle(fontStyle: FontStyle.italic),),
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
                               ),
                               actions: <Widget>[
                                 TextButton(
@@ -299,6 +303,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
                           },
                         );
                       },
+                      // todo: make the text looks like a button
                       child: Text(
                         dishes[i].name,
                         textAlign: TextAlign.center,
@@ -326,6 +331,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
                     Wrap(
                         children: (dishes[i].tags.length > 3)
                         ? [
+                          // todo: make tags look better (not like a button, or make it as an active filter)
                             for (var t in dishes[i].tags.getRange(0, 3))
                               Chip(
                                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -376,16 +382,8 @@ class _MyMenuPageState extends State<MyMenuPage> {
                       spacing: 2,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(.0),
-                            foregroundColor: Colors.white, // background color
-                            backgroundColor: Colors.green, // text color
-                            side: BorderSide(color: Colors.grey, width: 2),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                          ),
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.green,),
                           onPressed: () async {
                             await Navigator.push(
                             context,
@@ -403,17 +401,9 @@ class _MyMenuPageState extends State<MyMenuPage> {
                               dishes.clear();
                             });
                           },
-                          child: Text('Edit'),
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white, // background color
-                            backgroundColor: Colors.red, // text color
-                            side: BorderSide(color: Colors.grey, width: 2),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                          ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red,),
                           onPressed: (){
                             showDialog(
                               context: context,
@@ -424,6 +414,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
                                   actions: [
                                     TextButton(
                                       onPressed: () {
+                                        // navigaet pop
                                         setState(() {
                                           dbHelper.deleteDish(dishes[i].id!);
                                         });
@@ -439,7 +430,6 @@ class _MyMenuPageState extends State<MyMenuPage> {
                                 );
                             });
                           },
-                          child: Text('Delete'),
                         ),
                       ],
                     ),
@@ -515,7 +505,7 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton.extended(
-        label: const Text("Build\nShoplist", textAlign: TextAlign.center,),
+        label: const Text("Create\nShoplist", textAlign: TextAlign.center,),
         onPressed: () async {
           var fname = await showDialog(
             context: context,
@@ -537,6 +527,7 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
           itemCount: selectedDishes.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
+              // todo: add empty position at the end of list to prevent superimposing of the floating buttona and position counter 
                 leading: const Icon(Icons.dining),
                 trailing: Row(    
                   mainAxisSize: MainAxisSize.min,      
@@ -593,6 +584,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // todo: if shoplist is empty, show a message to add new shoplist
       body: ListView.builder(
           itemCount: shopLists.length,
           itemBuilder: (BuildContext context, int index) {
@@ -602,6 +594,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                   mainAxisSize: MainAxisSize.min,      
                   children: <Widget>[
                   IconButton(onPressed: (){
+                    // todo: show 'are you sure?' dialog
                     deleteShopList(shopLists[index]);
                     setState(() {
                       shopLists.removeAt(index);
@@ -692,7 +685,6 @@ class _ViewShoppingList extends State<ViewShoppingList> {
   Widget build(BuildContext context) {
     return PopScope(
       onPopInvokedWithResult: (result, resultData) {
-        print('Pop invoked with result: $result, data: $resultData');
         _onBackPressed();
         Navigator.maybePop(context);
       },
@@ -706,6 +698,7 @@ class _ViewShoppingList extends State<ViewShoppingList> {
                     barrierDismissible: false,
                     builder: (BuildContext context) {
                       return AlertDialog(
+                        // todo: transform to the list view
                         title: Text("Menu:", textAlign: TextAlign.center,),
                         content: Text(dishes.join(", "), textAlign: TextAlign.center,),
                         actions: [
@@ -742,6 +735,7 @@ class _ViewShoppingList extends State<ViewShoppingList> {
             );
             if (prod != null){
               setState(() {
+                // add new product to the end of not checked products
                 products.add(Ingredient(name: prod['name'], quantity: prod['quantity'], unit: prod['unit']));
               });
             }
@@ -749,6 +743,7 @@ class _ViewShoppingList extends State<ViewShoppingList> {
           child: const Icon(Icons.add_shopping_cart),
         ),
         body: ListView.builder(
+            // todo: add empty position at the end of list to prevent superimposing of the floating buttona and position counter
             itemCount: products.length,
             itemBuilder: (BuildContext context, int index) {
               return  ListTile(
@@ -780,6 +775,7 @@ class _ViewShoppingList extends State<ViewShoppingList> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                       IconButton(onPressed: (){
+                        // todo: show 'are you sure?' dialog
                         setState(() {
                           products.removeAt(index);
                         });
@@ -930,6 +926,7 @@ class _DishFormState extends State<DishForm>{
               TextFormField(
                 controller: tagsController,
                 decoration: InputDecoration(
+                  hintText: 'Separate tags with comma',
                   labelText: 'Tags',
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(width: 3, color: Colors.grey),
@@ -986,7 +983,7 @@ class _DishFormState extends State<DishForm>{
                     },
                     alignment: Alignment.centerLeft,
                   ),
-                  Text("Scan recept via camera or from Image", style: TextStyle(fontSize: 14, color: Colors.green),),
+                  Text("Scan recipe via camerae", style: TextStyle(fontSize: 14, color: Colors.green),),
                 ],
               ),
               TextFormField(

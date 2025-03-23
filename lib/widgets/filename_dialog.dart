@@ -83,7 +83,8 @@ class _FileNameDialogState extends State<FileNameDialog> {
                       return 'Please enter a name';
                     }
                     if (!validCharacters.hasMatch(value)) {
-                      return 'Invalid characters. Use only letters, numbers, - or _';
+                      // todo: show a whole message to the user
+                      return 'Invalid characters. Use only letters, numbers, dash or underscore';
                     }
                     return null;
                   },

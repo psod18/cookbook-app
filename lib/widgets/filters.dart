@@ -56,6 +56,8 @@ class _SetFilterDialog extends State<SetFilterDialog>  {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Search bar
+            // todo: replace wit textFieldForm and make the same style as other TextFieldForms
+            // todo: add close button and window name
             TextField(
               controller: _controller,
               decoration: InputDecoration(
@@ -69,6 +71,7 @@ class _SetFilterDialog extends State<SetFilterDialog>  {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                // todo: add text label "select/deselect all"
                 Switch(
                   value: filterState.switchValue,
                   onChanged: (bool value){

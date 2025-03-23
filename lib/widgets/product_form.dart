@@ -91,6 +91,7 @@ class _AddProductState extends State<AddProduct> {
             const Text("Unit", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange)),
             Spacer(),
              DropdownButton<String>(
+              // todo: bug - after selecting other units in widget the value is not updated
               value: 'g',
               onChanged: (String? value) {
                 setState(() {
