@@ -260,6 +260,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
                             },
                             icon: menuIdxs.contains(dishes[i].id) ? Icon(Icons.done) : Icon(Icons.add),
                             color: menuIdxs.contains(dishes[i].id)  ? const Color.fromARGB(255, 5, 117, 9) : Colors.black,
+                            
                           ),
                         ],
                       ), // add/remove to/from selected menu
@@ -320,6 +321,11 @@ class _MyMenuPageState extends State<MyMenuPage> {
                     SizedBox(
                     height: 40,
                       child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.grey[200],
+                          elevation: 1.5,
+                          shadowColor: Colors.grey[400],
+                        ),
                         child: Text(dishes[i].mealType, style: TextStyle(fontSize: 14, color: mealTypeColor(dishes[i].mealType)),),
                         onPressed: (){
                           // set filter to show only this meal type
@@ -702,9 +708,15 @@ class _ViewShoppingList extends State<ViewShoppingList> {
                     barrierDismissible: false,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        // todo: transform to the list view
                         title: Text("Menu:", textAlign: TextAlign.center,),
-                        content: Text(dishes.join(", "), textAlign: TextAlign.center,),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: [
+                              for (var dish in dishes)
+                              ListTile(title: Text("- $dish"),),
+                            ],
+                          ),
+                        ),
                         actions: [
                           TextButton(
                             child: const Text("OK"),
