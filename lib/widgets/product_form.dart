@@ -14,6 +14,8 @@ class _AddProductState extends State<AddProduct> {
     'unit': '',
   };
 
+  String unitsValue = 'g';
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -91,11 +93,11 @@ class _AddProductState extends State<AddProduct> {
             const Text("Unit", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange)),
             Spacer(),
              DropdownButton<String>(
-              // todo: bug - after selecting other units in widget the value is not updated
-              value: 'g',
+              value: unitsValue,
               onChanged: (String? value) {
                 setState(() {
-                  newProduct['unit'] = value;
+                  unitsValue = value!;
+                  newProduct['unit'] = unitsValue;
                 });
               },
               items: <String>['g', 'ml', 'unit']
