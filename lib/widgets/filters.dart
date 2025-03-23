@@ -55,23 +55,54 @@ class _SetFilterDialog extends State<SetFilterDialog>  {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Search bar
-            // todo: replace wit textFieldForm and make the same style as other TextFieldForms
-            // todo: add close button and window name
-            TextField(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Filters',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                Container(
+                  margin: const EdgeInsets.only(top: 10, right: 8, bottom: 20),
+                  width: 18,
+                  height: 18,
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: Colors.orange),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Center(
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 15.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ]
+            ),
+            TextFormField(
               controller: _controller,
               decoration: InputDecoration(
-                hintText: 'filter query',
-                 suffixIcon: IconButton(
+                labelText: 'Query text',
+                suffixIcon: IconButton(
                   onPressed: _controller.clear,
                   icon: Icon(Icons.clear),
                 ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 3, color: Colors.grey),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:  BorderSide(width: 3, color: Colors.orange),
+                  borderRadius: BorderRadius.circular(15),
+                )
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // todo: add text label "select/deselect all"
+                Text('Select/Deselect All',style: TextStyle(fontWeight: FontWeight.bold),),
                 Switch(
                   value: filterState.switchValue,
                   onChanged: (bool value){
@@ -82,6 +113,9 @@ class _SetFilterDialog extends State<SetFilterDialog>  {
                 })
               ],
             ),
+            Divider(
+                  color: Colors.black,
+                ),
             // Meal type filter
             for (var mealType in filterState.mealTypeFilter.keys)
               Row(
