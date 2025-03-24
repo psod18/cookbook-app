@@ -132,7 +132,7 @@ class MyMenuPage extends StatefulWidget {
 
 class _MyMenuPageState extends State<MyMenuPage> {
 
-    Color mealTypeColor(String mealType){
+  Color mealTypeColor(String mealType){
     switch(mealType){
       case 'breakfast':
         return Colors.orange;
@@ -153,11 +153,13 @@ class _MyMenuPageState extends State<MyMenuPage> {
   List<Dish> dishes = [];
   List<int> menuIdxs = [];
 
+  Function eq = const DeepCollectionEquality.unordered().equals;
 
   Future<List<Dish>> loadUserMenu () async {
-    dishes.clear();
 
     final data = await dbHelper.filterDishes(filterState.mealTypeFilter.keys.where((key) => filterState.mealTypeFilter[key] == true).toList() , filterState.filterQuery);
+
+    if (eq(data.map((e) => e.name).toList(), dishes.map((e) => e.name).toList())) return dishes;
 
     final menu = await dbHelper.menuIds();
     menuIdxs = menu;
@@ -182,6 +184,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
 
     return data;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -254,12 +257,12 @@ class _MyMenuPageState extends State<MyMenuPage> {
                           Text('${i+1} / ${dishes.length}', style: TextStyle(color: Colors.grey), ), // index of the dish
                           IconButton(
                             onPressed: (){
-                              setState((){
                                 menuIdxs.contains(dishes[i].id) ? {menuIdxs.remove(dishes[i].id), dbHelper.deleteMenu(dishes[i].id!) }: {menuIdxs.add(dishes[i].id!), dbHelper.insertMenu(dishes[i].id!, 1)};
-                              });
+                            setState((){});
                             },
                             icon: menuIdxs.contains(dishes[i].id) ? Icon(Icons.done) : Icon(Icons.add),
-                            color: menuIdxs.contains(dishes[i].id)  ? const Color.fromARGB(255, 5, 117, 9) : Colors.black,
+                            color: menuIdxs.contains(dishes[i].id)  ? Colors.green.shade900 : Colors.black,
+                            
                             
                           ),
                         ],
@@ -448,9 +451,6 @@ class _MyMenuPageState extends State<MyMenuPage> {
               ),
             ],
           ),
-
-
-
         );
       }
     );
@@ -514,27 +514,30 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton.extended(
-        label: const Text("Create\nShoplist", textAlign: TextAlign.center,),
-        onPressed: () async {
-          var fname = await showDialog(
-            context: context,
-            builder: (BuildContext context) => FileNameDialog(),
-          );
-          if (fname != null){
-            // Generate product list and save it to a file
-            var (List<String> dishes, List<Ingredient> products) = getProductList();
-            Map<String, dynamic> shopList = {
-              'dishes': dishes,
-              // convert the list of ingredients to a list of maps
-              'products': products.map((ing) => ing.toMap()).toList(),
-            };
-            writeShopList(fname, shopList);
-          }
-        },
+        floatingActionButton: Visibility(
+          visible: selectedDishes.isNotEmpty,
+          child: FloatingActionButton.extended(
+          label: const Text("Create\nShoplist", textAlign: TextAlign.center,),
+          onPressed: () async {
+            var fname = await showDialog(
+              context: context,
+              builder: (BuildContext context) => FileNameDialog(),
+            );
+            if (fname != null){
+              // Generate product list and save it to a file
+              var (List<String> dishes, List<Ingredient> products) = getProductList();
+              Map<String, dynamic> shopList = {
+                'dishes': dishes,
+                // convert the list of ingredients to a list of maps
+                'products': products.map((ing) => ing.toMap()).toList(),
+              };
+              writeShopList(fname, shopList);
+            }
+          },
         ),
+      ),
       body: ListView(
-          children: [
+          children: selectedDishes.isNotEmpty ? [
             for (var index = 0; index < selectedDishes.length; index++) 
             ListTile(
               leading: const Icon(Icons.dining),
@@ -562,7 +565,7 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
               title: Text(selectedDishes[index][0].name),
             ),
             SizedBox(height: 80,)
-          ],
+          ] : const [Center(child: Text("No dishes selected"))],
         ),
     );
   }
@@ -596,8 +599,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // todo: if shoplist is empty, show a message to add new shoplist
-      body: ListView.builder(
+      body: shopLists.isNotEmpty ? ListView.builder(
           itemCount: shopLists.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
@@ -628,7 +630,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                   loadShopList();
                 },
                 );
-          }),
+          }): const Center(child: Text("No shopping lists found")),
     );
   }
 
