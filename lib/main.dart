@@ -533,35 +533,37 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
           }
         },
         ),
-      body: ListView.builder(
-          itemCount: selectedDishes.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              // todo: add empty position at the end of list to prevent superimposing of the floating buttona and position counter 
-                leading: const Icon(Icons.dining),
-                trailing: Row(    
-                  mainAxisSize: MainAxisSize.min,      
-                  children: <Widget>[
-                  IconButton(onPressed: (){
-                    dbHelper.deleteMenu(selectedDishes[index][0].id);
-                    loadMenu();
-                  }, icon:  Icon(
-                    Icons.delete,
-                    color: Colors.red,  )
-                    ),
-                    InputQty.int(
-                      maxVal: 99,
-                      initVal: selectedDishes[index][1],
-                      minVal: 1,
-                      steps: 1,
-                      onQtyChanged: (val) {
-                        dbHelper.updateMenu(selectedDishes[index][0].id, val);
-                      },
-                    ),
-                  ]
-                ),
-                title: Text(selectedDishes[index][0].name),);
-          }),
+      body: ListView(
+          children: [
+            for (var index = 0; index < selectedDishes.length; index++) 
+            ListTile(
+              leading: const Icon(Icons.dining),
+              trailing: Row(    
+                mainAxisSize: MainAxisSize.min,      
+                children: <Widget>[
+                IconButton(onPressed: (){
+                  dbHelper.deleteMenu(selectedDishes[index][0].id);
+                  loadMenu();
+                }, icon:  Icon(
+                  Icons.delete,
+                  color: Colors.red,  )
+                  ),
+                  InputQty.int(
+                    maxVal: 99,
+                    initVal: selectedDishes[index][1],
+                    minVal: 1,
+                    steps: 1,
+                    onQtyChanged: (val) {
+                      dbHelper.updateMenu(selectedDishes[index][0].id, val);
+                    },
+                  ),
+                ]
+              ),
+              title: Text(selectedDishes[index][0].name),
+            ),
+            SizedBox(height: 80,)
+          ],
+        ),
     );
   }
 }
@@ -758,11 +760,10 @@ class _ViewShoppingList extends State<ViewShoppingList> {
           },
           child: const Icon(Icons.add_shopping_cart),
         ),
-        body: ListView.builder(
-            // todo: add empty position at the end of list to prevent superimposing of the floating buttona and position counter
-            itemCount: products.length,
-            itemBuilder: (BuildContext context, int index) {
-              return  ListTile(
+        body: ListView(
+          children: [
+            for (var index = 0; index < products.length; index++)
+              ListTile(
                   horizontalTitleGap: 0,
                   contentPadding: const EdgeInsets.fromLTRB(4, 0, 6, 0),
                   dense: true,
@@ -826,10 +827,12 @@ class _ViewShoppingList extends State<ViewShoppingList> {
                           child: Text(products[index].unit.padRight(4, ' '), style: const TextStyle(fontSize: 12),),
                         ),
                       ]
-                    ),
-                  title: Text(products[index].name, textAlign: TextAlign.start, style: TextStyle(fontSize: 14, fontWeight: products[index].checked ? FontWeight.normal : FontWeight.bold ),),
-              );
-            }),
+                  ),
+                title: Text(products[index].name, textAlign: TextAlign.start, style: TextStyle(fontSize: 14, fontWeight: products[index].checked ? FontWeight.normal : FontWeight.bold ),),
+            ),
+            SizedBox(height: 65,),
+          ],
+        ),
       ),
     );
   }
