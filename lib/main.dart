@@ -13,8 +13,6 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:path/path.dart';
-
 
 final dbHelper = DatabaseHelper();
 
@@ -270,8 +268,21 @@ class _MyMenuPageState extends State<MyMenuPage> {
                         ],
                       ), // add/remove to/from selected menu
                     ),
-                    TextButton(
-                      onPressed: (){
+                    Text(
+                        dishes[i].name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    SizedBox(height: 5),
+                    // Image button
+                    GestureDetector(
+                      onTap: (){
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -310,21 +321,22 @@ class _MyMenuPageState extends State<MyMenuPage> {
                           },
                         );
                       },
-                      // todo: make the text looks like a button
-                      child: Text(
-                        dishes[i].name,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.0,
-                          color: Colors.black,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: SizedBox(
+                          height: 100,
+                          width: 100,
+                          child: Image.asset(
+                            'assets/dish.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      )
-                    ), // dish name with button function to show recipe
+                      ),
+                    ),
+                    SizedBox(height: 5),
                     SizedBox(
                     height: 40,
+                    width: 100,
                       child: TextButton(
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.grey[200],
