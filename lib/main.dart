@@ -13,6 +13,8 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:path/path.dart';
+
 
 final dbHelper = DatabaseHelper();
 
@@ -342,51 +344,67 @@ class _MyMenuPageState extends State<MyMenuPage> {
                     ),
                     Spacer(),
                     Wrap(
+                      spacing: 2,
                         children: (dishes[i].tags.length > 3)
                         ? [
-                          // todo: make tags look better (not like a button, or make it as an active filter)
                             for (var t in dishes[i].tags.getRange(0, 3))
-                              Chip(
-                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                label: Text('#$t', style: TextStyle(fontSize: 10),),
-                                backgroundColor: Colors.lightGreen[500],
-                                padding: EdgeInsets.all(0),
+                              DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: Colors.lightGreen[500],
+                                borderRadius: BorderRadius.circular(8),
+                                ),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(2, 1, 2, 1),
+                                child: Text('#$t', style: TextStyle(fontSize: 14),),
                               ),
-                            ActionChip(
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              label: Text('...', style: TextStyle(fontSize: 10),),
-                              backgroundColor: Colors.lightGreen[500],
-                              padding: EdgeInsets.all(0),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('Tags:', textAlign: TextAlign.center,),
-                                      content: Wrap(
-                                        children: [
-                                          for (var t in dishes[i].tags)
-                                            Chip(
-                                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                              label: Text('#$t', style: TextStyle(fontSize: 10),),
-                                              backgroundColor: Colors.lightGreen[500],
-                                              padding: EdgeInsets.all(0),
-                                            ),
-                                        ],
-                                      ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(2, 1, 2, 1),
+                              child: SizedBox(
+                                height:20,
+                                width: 30,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Colors.lightGreen[500],
+                                    padding: EdgeInsets.all(0),
+                                  ),
+                                  child: Text('...', style: TextStyle(fontSize: 14),),
+                                  onPressed:() {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Tags:', textAlign: TextAlign.center,),
+                                          content: Wrap(
+                                            children: [
+                                              for (var t in dishes[i].tags)
+                                                Chip(
+                                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                  label: Text('#$t', style: TextStyle(fontSize: 10),),
+                                                  backgroundColor: Colors.lightGreen[500],
+                                                  padding: EdgeInsets.all(0),
+                                                ),
+                                            ],
+                                          ),
+                                        );
+                                      }
                                     );
-                                  }
-                                );
-                              },
-                            )
+                                  },
+                                ),
+                              ),
+                            ),
                           ] 
                         : [
-                        for (var t in dishes[i].tags)
-                            Chip(
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              label: Text('#$t', style: TextStyle(fontSize: 10),),
-                              backgroundColor: Colors.lightGreen[500],
-                              padding: EdgeInsets.all(0),
+                          for (var t in dishes[i].tags)
+                          DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.lightGreen[500],
+                              borderRadius: BorderRadius.circular(8),
+                              ),
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(2, 1, 2, 1),
+                              child: Text('#$t', style: TextStyle(fontSize: 14),),
+                            ),
                           ),
                         ]
                     ), // tags
@@ -536,8 +554,8 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
           },
         ),
       ),
-      body: ListView(
-          children: selectedDishes.isNotEmpty ? [
+      body: selectedDishes.isNotEmpty ? ListView(
+          children:  [
             for (var index = 0; index < selectedDishes.length; index++) 
             ListTile(
               leading: const Icon(Icons.dining),
@@ -565,8 +583,8 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
               title: Text(selectedDishes[index][0].name),
             ),
             SizedBox(height: 80,)
-          ] : const [Center(child: Text("No dishes selected"))],
-        ),
+          ] ,
+        ) : const Center(child: Text("No dishes selected", style: TextStyle(fontSize: 20),), ),
     );
   }
 }
@@ -762,7 +780,7 @@ class _ViewShoppingList extends State<ViewShoppingList> {
           },
           child: const Icon(Icons.add_shopping_cart),
         ),
-        body: ListView(
+        body: products.isNotEmpty ? ListView(
           children: [
             for (var index = 0; index < products.length; index++)
               ListTile(
@@ -833,8 +851,8 @@ class _ViewShoppingList extends State<ViewShoppingList> {
                 title: Text(products[index].name, textAlign: TextAlign.start, style: TextStyle(fontSize: 14, fontWeight: products[index].checked ? FontWeight.normal : FontWeight.bold ),),
             ),
             SizedBox(height: 65,),
-          ],
-        ),
+          ]
+        ) : Align(child: Text("Shopping list is empty!", style: TextStyle(fontSize: 20),)),
       ),
     );
   }
