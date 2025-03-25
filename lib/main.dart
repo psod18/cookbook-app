@@ -1,17 +1,18 @@
-import 'package:cookery_book/widgets/product_form.dart';
-import 'package:flutter/services.dart';
-import 'package:cookery_book/widgets/filename_dialog.dart';
-import 'package:cookery_book/widgets/filters.dart';
-import 'package:flutter/material.dart';
-import 'package:cookery_book/utils/db_helper.dart';
-import 'package:cookery_book/utils/filemanager.dart';
-import 'package:cookery_book/models/data.dart';
-import 'package:input_quantity/input_quantity.dart';
-import 'package:collection/collection.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:collection/collection.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:input_quantity/input_quantity.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:cookery_book/models/data.dart';
+import 'package:cookery_book/utils/db_helper.dart';
+import 'package:cookery_book/utils/filemanager.dart';
+import 'package:cookery_book/widgets/product_form.dart';
+import 'package:cookery_book/widgets/filename_dialog.dart';
+import 'package:cookery_book/widgets/filters.dart';
+import 'package:cookery_book/widgets/confirmation_dialog.dart';
 
 
 final dbHelper = DatabaseHelper();
@@ -637,13 +638,20 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                 trailing: Row(    
                   mainAxisSize: MainAxisSize.min,      
                   children: <Widget>[
-                  IconButton(onPressed: (){
-                    // todo: show 'are you sure?' dialog
-                    deleteShopList(shopLists[index]);
-                    setState(() {
-                      shopLists.removeAt(index);
-                    });
-                  }, icon:  Icon(
+                  IconButton(
+                    onPressed: () async {
+                    var ans = await showDialog(
+                      context: context,
+                      builder: (BuildContext context) => ConfirmationDialog(item: shopLists[index]),
+                    );
+                    if (ans){
+                      deleteShopList(shopLists[index]);
+                      setState(() {
+                        shopLists.removeAt(index);
+                      });
+                    }
+                  },
+                   icon:  Icon(
                     Icons.delete,
                     color: Colors.red,  )
                     ),
@@ -823,12 +831,19 @@ class _ViewShoppingList extends State<ViewShoppingList> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                      IconButton(onPressed: (){
-                        // todo: show 'are you sure?' dialog
-                        setState(() {
-                          products.removeAt(index);
-                        });
-                      }, icon:  Icon(
+                      IconButton(
+                        onPressed: () async {
+                          var ans = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) => ConfirmationDialog(item: products[index].name),
+                          );
+                          if (ans){
+                            setState(() {
+                              products.removeAt(index);
+                            });
+                          }
+                        },
+                        icon:  Icon(
                         Icons.delete,
                         color: Colors.red,  )
                         ),
@@ -873,10 +888,8 @@ class _ViewShoppingList extends State<ViewShoppingList> {
 // -------------------------- Edit Dish -------------------------
 
 class DishForm extends StatefulWidget {
-  // Dish? dish;
   final int? dishId;
 
-  // DishForm({super.key, this.dish});
   DishForm({super.key, this.dishId});
 
 
