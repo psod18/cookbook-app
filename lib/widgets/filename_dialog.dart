@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 
-String get datestamp => DateFormat('ddMMyyyy').format(DateTime.now());
+String get datestamp => DateFormat('ddMMyyyyHHmmSS').format(DateTime.now());
 
 final validCharacters = RegExp(r'^[a-zA-Z0-9_\-]+$');
 

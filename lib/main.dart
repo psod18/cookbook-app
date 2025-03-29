@@ -45,6 +45,33 @@ class QuickFilter {
   }
 }
 
+const mealTypes = ['breakfast', 'lunch', 'dinner', 'dessert', 'snack'];
+
+const mealTypeIcons = {
+  'breakfast': Icons.breakfast_dining,
+  'lunch': Icons.lunch_dining,
+  'dinner': Icons.dinner_dining,
+  'dessert': Icons.icecream,
+  'snack': Icons.fastfood,
+};
+
+Color mealTypeColor(String mealType){
+  switch(mealType){
+    case 'breakfast':
+      return Colors.orange;
+    case 'lunch':
+      return Colors.green;
+    case 'dinner':
+      return Colors.brown.shade300;
+    case 'dessert':
+      return Colors.purple.shade300;
+    case 'snack':
+      return Colors.blue.shade300;
+    default:
+      return Colors.black;
+  }
+}
+
 // todo: for future use
 String unitsConverter(String unit) {
   switch (unit) {
@@ -143,21 +170,6 @@ class MyMenuPage extends StatefulWidget {
 }
 
 class _MyMenuPageState extends State<MyMenuPage> {
-
-  Color mealTypeColor(String mealType){
-    switch(mealType){
-      case 'breakfast':
-        return Colors.orange;
-      case 'lunch':
-        return Colors.green;
-      case 'dinner':
-        return Colors.brown.shade300;
-        case 'dessert':
-        return Colors.purple.shade300;
-      default:
-        return Colors.black;
-    }
-  }
 
   FilterState filterState = FilterState();
   QuickFilter quickFilter = QuickFilter();
@@ -927,7 +939,8 @@ class _DishFormState extends State<DishForm>{
     ),
   );
 
-  static const mealTypes = ['breakfast', 'lunch', 'dinner', 'dessert'];
+  // static const mealTypes = ['breakfast', 'lunch', 'dinner', 'dessert'];
+
   String? dropdownValue;
 
   Dish? dish;
