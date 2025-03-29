@@ -45,6 +45,17 @@ class QuickFilter {
   }
 }
 
+// todo: for future use
+String unitsConverter(String unit) {
+  switch (unit) {
+    case 'g':
+      return "kg";
+    case 'ml':
+      return 'l';
+    default:
+      return unit;
+  }
+}
 
 void main() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -201,10 +212,9 @@ class _MyMenuPageState extends State<MyMenuPage> {
               FloatingActionButton(
                 child: quickFilter.currenIcon,
                 onPressed: () {
-                  setState(() {
                     dishes.clear();
-                  });
                   quickFilter.step();
+                  setState(() {});
                 }
               ),
               SizedBox(height: 5.0,),
@@ -259,7 +269,10 @@ class _MyMenuPageState extends State<MyMenuPage> {
                           IconButton(
                             onPressed: (){
                                 menuIdxs.contains(dishes[i].id) ? {menuIdxs.remove(dishes[i].id), dbHelper.deleteMenu(dishes[i].id!) }: {menuIdxs.add(dishes[i].id!), dbHelper.insertMenu(dishes[i].id!, 1)};
-                            setState((){});
+                              if (quickFilter.current != "all"){
+                                dishes.clear();
+                              }
+                              setState((){});
                             },
                             icon: menuIdxs.contains(dishes[i].id) ? Icon(Icons.done) : Icon(Icons.add),
                             color: menuIdxs.contains(dishes[i].id)  ? Colors.green.shade900 : Colors.black,
@@ -523,18 +536,10 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
     for (var dish in selectedDishes){
       dishes.add(dish[0].name);
       for (var ing in dish[0].ingredients){
-        if (products.isEmpty){
+        if (products.contains(ing)){
+          products.firstWhere((element) => element.name == ing.name).quantity += ing.quantity * dish[1];
+        } else {
           products.add(ing * dish[1]);
-        }
-        else {
-          final thisIng = products.firstWhereOrNull((Ingredient element) => element.name == ing.name);
-          if (thisIng != null){
-            ing = ing * dish[1] + thisIng;
-            products.remove(thisIng);
-            products.add(ing);
-          } else {
-            products.add(ing * dish[1]);
-          }
         }
       }
     }
@@ -1155,9 +1160,8 @@ class _DishFormState extends State<DishForm>{
                           ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.white, // background color
-                              backgroundColor: Colors.green, // text color
-                              // padding: EdgeInsets.all(10.0),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.green,
                               side: BorderSide(color: Colors.orange, width: 2),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4.0),

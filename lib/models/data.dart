@@ -9,7 +9,6 @@ class Ingredient{
     bool checked;
     
     Ingredient({required this.name, required this.quantity, required this.unit, this.checked = false});
-    // todo: convert main units to kg or l, if vallue is bigger then 1000
     // Convert to a map
     Map<String, dynamic> toMap(){
         return {
@@ -25,6 +24,12 @@ class Ingredient{
         return '$name - $quantity ($unit)';
     }
 
+    bool operator ==(Object other){
+        if (other is Ingredient){
+            return name == other.name;
+        }
+        return false;
+    }
 
     Ingredient operator +(Ingredient other){
         if (name == other.name && unit == other.unit){
