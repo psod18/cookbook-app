@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="cookery_book"
+        android:label="Cookery Book"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

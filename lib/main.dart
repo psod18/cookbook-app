@@ -347,16 +347,10 @@ class _MyMenuPageState extends State<MyMenuPage> {
                           },
                         );
                       },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20.0),
-                        child: SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: Image.asset(
-                            'assets/dish.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                      child: Icon(
+                        mealTypeIcons[dishes[i].mealType],
+                        size: 100,
+                        color: mealTypeColor(dishes[i].mealType),
                       ),
                     ),
                     SizedBox(height: 5),
