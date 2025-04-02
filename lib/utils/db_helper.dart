@@ -19,18 +19,17 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();
-    // workaround to delete the last row in the database
-    // _database!.execute("""DELETE FROM dishes WHERE id = (SELECT MAX(id) FROM dishes);""");s
     return _database!;
   }
   
   Future<Database> _initDatabase() async {
     String dbPath = await getDatabasesPath();
     String path = join(dbPath, 'cookery_book.db');
-    
+    // Create the database and the tables
+    // await deleteDatabase(path); // Uncomment this line to delete the database every time the app starts
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
     );
   }

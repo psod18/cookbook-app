@@ -1,7 +1,7 @@
 [
   {
     "name": "Kanapka z awokado i łososiem",
-    "meal_type": "breakfast",
+    "mealType": "breakfast",
     "recipe": "Na chlebie ułożyć awokado i plasterki łososia (skropić sokiem z cytryny), ogórka pokroić w słupki, oprószyć pieprzem, jeść do kanapek.",
     "tags": ["heva"],
     "ingredients": [
@@ -14,7 +14,7 @@
   },
   {
     "name": "Szakszuka", 
-    "meal_type": "breakfast",
+    "mealType": "breakfast",
     "recipe": "Na patelni o średnicy do 20 cm podsmażyć na oliwie wyciśnięty przez praskę czosnek. Dodać pomidory, porwane listki bazylii, doprawić. Po 2-3 min wbić jajka, przykryć na czas ścięcia jajek.",
     "tags": ["heva"],
     "ingredients": [
@@ -26,7 +26,7 @@
   },
   {
     "name": "Kanapki z pastą z makreli",
-    "meal_type": "breakfast",
+    "mealType": "breakfast",
     "recipe": "Ogórka pokroić w drobną kostkę, szczypior posiekać, składniki wymieszać - pastę przygotować wieczorem.",
     "tags": ["heva"],
     "ingredients": [
@@ -38,7 +38,7 @@
   },
   {
     "name": "Musli z mlekiem",
-    "meal_type": "breakfast",
+    "mealType": "breakfast",
     "recipe": "Musli zalać mlekiem i podawać do stołu. :)",
     "tags": [],
     "ingredients": [
@@ -48,7 +48,7 @@
   },
   {
     "name": "Koktajl ze szpinakiem",
-    "meal_type": "snack",
+    "mealType": "snack",
     "recipe": "Wszystko zmiksować na gładko i dodać wodę do odpowiedniej konsystencji.",
     "tags": ["heva"],
     "ingredients": [
@@ -59,8 +59,8 @@
     ]
   },
   {
-    "name": "Koktajl \"Szarlotka\"",
-    "meal_type": "snack",
+    "name": "Koktajl 'Szarlotka'",
+    "mealType": "snack",
     "recipe": "Wszystko zmiksować na gładko.",
     "tags": ["heva"],
     "ingredients": [
@@ -73,7 +73,7 @@
   },
   {
     "name": "Koktajl kakaowy",
-    "meal_type": "snack",
+    "mealType": "snack",
     "recipe": "Zmiksować na gładki krem.",
     "tags": ["heva"],
     "ingredients": [
@@ -85,7 +85,7 @@
   },
   {
     "name": "Ciastka domowe",
-    "meal_type": "dessert",
+    "mealType": "dessert",
     "recipe": "Jabłka zetrzeć na grubych oczkach, zęściowo odcisnąć sok. Wszystkie składniki wyrobić ręką w misce, forować ciasteczka (5cm/1 cm), układać na  papierze do pieczenia, piec ok 15 min w temp. 180 st. Porcję stanowią małe ciastka.",
     "tags": ["heva", "porcja nieznana"],
     "ingredients": [
@@ -103,7 +103,7 @@
   },
   {
     "name": "Owsiane muffiny z malinami",
-    "meal_type": "dessert",
+    "mealType": "dessert",
     "recipe": "Wszystkie składniki dokładnie wymieszać i przełożyć najlepiej do silikonowych papilotek. Piec w temperaturze 180 stopni przez ok. 25-30 minut.",
     "tags": ["heva"],
     "ingredients": [
@@ -117,7 +117,7 @@
   },
   {
     "name": "Łosoś pieczony z fasolką, cukinią i ryżem",
-    "meal_type": "lunch",
+    "mealType": "lunch",
     "recipe": "Rybę umyć, przyprawić, zamarynować (sok z cytryny, sos sojowy, pieprz). W tym czasie pokroić cukinię w kostkę, wymieszać w reszcie marynaty, piec w naczyniu żaroodpornym z łososiem. Fasolkę ugotować na półtwardo. Ryż ugotować z dodatkiem soli i dużą szczyptą kurkumy. Po upieczeniu łososia obrać, gotowe składniki wymieszać.",
     "tags": ["heva"],
     "ingredients": [
@@ -132,7 +132,7 @@
   },
   {
     "name": "Burgery mięsno-warzywne",
-    "meal_type": "lunch",
+    "mealType": "lunch",
     "recipe": "Grill/piekarnik rozgrzać do temp. ok 160 st., marchewkę zetrzeć na drobnych oczkach, pieczarki na grubych*, czosnek przecisnąć przez praskę, wszystkie składniki wymieszać dokładnie w misce. Można obtoczyć w sezamie. Formować płaskie okrągłe kotleciki, piec ok 15-20 min, obracając w połowie pieczenia. Jeść z porcją świeżych lub gotowanych/pieczonych razem z burgerami warzyw (200g warzyw).    *pieczarek nie trzeba obierać, ale należy dokładnie oczyścić pod bieżącą wodą.",
     "tags": ["heva"],
     "ingredients": [
@@ -146,7 +146,7 @@
   },
   {
     "name": "Sałatka z kurczakiem i pomarańczą",
-    "meal_type": "lunch",
+    "mealType": "lunch",
     "recipe": "Filet podzielić na pół, przyprawić mieszanką ziół i oliwą, smażyć na patelni grillowej (ok 3-4 min z każdej strony). Orzechy w tym czasie połamać na mniejsze kawałki, podprażyć na suchej patelni. Przygotować sałatkę.",
     "tags": ["heva"],
     "ingredients": [
@@ -158,7 +158,7 @@
   },
   {
     "name": "Leczo",
-    "meal_type": "lunch",
+    "mealType": "lunch",
     "recipe": "Pokrojoną w kostkę cebulę z paskami papryki dusić w garnku z 1 łyżeczką masła klarowanego i kilkoma łyżkami wody. Dodać pokrojoną cukinię i dusić pod przykryciem. Na koniec dodać pomidory i opłukaną na sitku ciecierzycę. Doprawić. Posypać natką pietruszki, pokruszonym serem i nasionami słonecznika. Porcję stanowi ok. ok. 350 g leczo + kasza +     plaster sera pokruszonego.",
     "tags": ["heva", "porcja nieznana"],
     "ingredients": [
@@ -173,7 +173,7 @@
   },
   {
     "name": "Zupa z soczewicą",
-    "meal_type": "dinner",
+    "mealType": "dinner",
     "recipe": "Soczewicę wypłukać, zagotować z przyprawami. Marchewkę i pietruszkę zetrzeć na grubych oczkach, cebulę posiekać w kostkę i zeszklić na oliwie. Do cebuli na patelnię dodać starte warzywa i czosnek przeciśnięty przez praskę, dusić kilka minut i dodać do soczewicy. Całość gotować 10 min na małym ogniu. Pod koniec dodać passatę. Posypać posiekaną natką pietruszki. Jedną porcję na kolację stanowi 1 duży talerz zupy posypanej pestkami słonecznika i zieleniną.",
     "tags": ["heva", "porcja nieznana"],
     "ingredients": [
@@ -188,7 +188,7 @@
   },
   {
     "name": "Zupa krem z dyni",
-    "meal_type": "dinner",
+    "mealType": "dinner",
     "recipe": "Przy okazji pieczenia np. ryby upiec dynię pokrojoną w duże kawałki*, pozostałe warzywa obrać. W garnku z grubym dnem rozgrzać oliwę, dodać pokrojoną cebulę, czosnek i przyprawy, smażyć chwilę, mieszając. Zalać wrzątkiem z czajnika, dodać pokrojone warzywa z włoszczyzny. Po ok 10 min dodać upieczoną dynię i kawałki jabłka. Gotować chwilę, wyłączyć źródło ciepła, nadmiar wody odlać do naczynia (zachować). Wszystko zmiksować na krem, ewentualnie rozcieńczyć pozostawionym wywarem. *nie obierając ze skóry.",
     "tags": ["heva", "porcja nieznana"],
     "ingredients": [
@@ -205,7 +205,7 @@
   },
   {
     "name": "Zupa krem z brokuła",
-    "meal_type": "dinner",
+    "mealType": "dinner",
     "recipe": "Zagotować 1l wody w czajniku. Warzywa obrać, pokroić na kawałki. Brokuła podzielić na różyczki. W garnku z grubym dnem rozgrzać oliwę, podsmażyć warzywa (oprócz brokuła), dodać przyprawy, zalać wrzątkiem, gotować ok 10 min, dodać brokuła, gotować ok 8 min, zmiksować na gładki krem. Jeść z jogurtem i nasionami słonecznika/dyni.",
     "tags": ["heva", "porcja nieznana"],
     "ingredients": [
@@ -220,7 +220,7 @@
   },
   {
     "name": "Pomidorowa soczewica na rukoli",
-    "meal_type": "dinner",
+    "mealType": "dinner",
     "recipe": "Ugotować soczewicę. Rozgrzać oliwę i zeszklić cebulę, po czym dodać passatę oraz czosnek, chwilę podsmażyć. Odcedzoną soczewicę dodać do sosu i przyprawić. Wyłożyć na rukolę i posypać serem. Pporcję można zabrać kolejnego dnia na obiad dodając 30 g kaszy gryczanej/makaronu razowego/ryżu basmati lub komosy ryżowej.",
     "tags": ["heva"],
     "ingredients": [
@@ -237,7 +237,7 @@
   },
   {
     "name": "Pieczony pstrąg",
-    "meal_type": "lunch",
+    "mealType": "lunch",
     "recipe": "Farsz - natkę i koperek posiekać, wymieszać z pesto i przyprawami. Pstrąga umyć, nafaszerować, można ponacinać w krzyżyki i upiec. Jeść z gotowanym na półtwardo brokułem.",
     "tags": ["heva"],
     "ingredients": [
@@ -250,7 +250,7 @@
   },
   {
       "name": "Pieczone tłuczone ziemniaki z tsatsiki",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Najpierw ugotuj ziemniaki. Następnie połóż je na blasze do pieczenia i rozgnieć kubkiem. Posmaruj ziemniaki olejem, przyprawami i wstaw do piekarnika na około 30 minut. Podczas pieczenia ziemniaków połącz jogurt z koperkiem, dodaj sól i wymieszaj. Do podania weź 3 pieczone ziemniaki i połóż je na wierzchu sosu.",
       "tags": ["vege", "porcja nieznana"],
       "ingredients": [
@@ -262,7 +262,7 @@
   },
   {
       "name": "Vege burgers with fries",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Grill buns, cutlets. Then combine all ingridients togethr. Remember to cook the fries as it is said on the package.",
       "tags": ["vege", "porcja nieznana"],
       "ingredients": [
@@ -277,7 +277,7 @@
   },
   {
       "name": "A-la shepards pie",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Ugotuj ziemniaki i rozgnieć je. Następnie dodaj jajko do rozdrobnionych ziemniaków, sól i ulubione przyprawy. Zacznij smażyć mięso. W międzyczasie pokrój wszystkie warzywa. Następnie wymieszaj wszystko razem na patelni, dodaj koncentrat pomidorowy i gotuj, aż będą gotowe. Następnie weź naczynie żaroodporne i ułóż warstwy: mięso i ziemniaki na wierzchu. Piecz w 190 stopniach przez około 30 minut.",
       "tags": ["porcja nieznana"],
       "ingredients": [
@@ -292,7 +292,7 @@
   },
   {
       "name": "Gulasz",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Weź patelnię i rozgrzej ją olejem. Włóż wołowinę pokrojoną w małe plasterki. Kiedy wołowina będzie prawie gotowa, dodaj pokrojone warzywa i smaż, aż cebula zmięknie. Kiedy będzie gotowa, dodaj koncentrat pomidorowy i odrobinę wody i pozostaw na małej temperaturze, aż mięso zmięknie.",
       "tags": ["with meat", "porcja nieznana"],
       "ingredients": [
@@ -304,7 +304,7 @@
   },
   {
       "name": "Kanapka z hummusem i ogórkami kiszonymi",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Rozsmaruj hummus na bochenku chleba i posyp ogórkami kiszonymi.",
       "tags": ["vege"],
       "ingredients": [
@@ -316,7 +316,7 @@
     },
 	{
       "name": "Owsianka z bananem",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Wlać wodę, dodać płatki, gotować na małym ogniu przez około 2-3 minuty. Zostawić na noc. Rano dodać mleko, można podgrzać razem z mlekiem. Banana obrać, pokroić lub zblendować. Owsiankę przelać do miseczki, dodać skyr i banana.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -329,7 +329,7 @@
 	},
 	{
       "name": "Indyk z warzywami i kaszą jaglaną",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Warzywa umyć i osuszyć. Marchew i cukinię pokroić w słupki. Mięso umyć, osuszyć i ugotować. Mięso przełożyć na patelnię z dodatkiem niewielkiej ilości wody, do mięsa dodać pokrojone warzywa, doprawić i dusić przez kilka minut. Gotowe danie podawać z ugotowaną kaszą jaglaną. Całość polać oliwą z oliwek.",
 	  "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -343,7 +343,7 @@
 	},
 	{
       "name": "Sałatka ryżowa",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Ryż ugotuj. Szpinak sparz, aby liście lekko uwiędły. Pomidora obierz i pokrój. Wszystkie składniki dokładnie wymieszaj i dopraw do smaku.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -356,7 +356,7 @@
 	},
 	{
       "name": "Kanapka z jajkiem na miękko",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Ugotować jajka na miękko (ok 5 min). Na chleb położyć posiekany szpinak, wędlinę i obranego pomidora.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -370,7 +370,7 @@
 	},
 	{
       "name": "Dorsz z puree",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Do garnka z wodą wrzucamy obrane ziemniaki. Gotujemy, aż zrobią się miękkie. Piekarnik rozgrzewamy do temperatury 200 stopni Celsjusza. Dorsza myjemy, a następnie smarujemy ziołami. Gotowego dorsza wkładamy do piekarnika na 20 min. Ziemniaki odcedzamy i rozdrabniamy (np. widelcem, blenderem) na gładką masę razem z oliwą. Dorsza kładziemy na talerzu z puree i tartą marchewką.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -384,7 +384,7 @@
 	},
 	{
       "name": "Sałatka szpinakowa z makaronem",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Mięso z kurczaka ugotować. Oddzielnie ugotować makaron. Wrzucić do miski, dodać zioła. Szpinak poszatkować, sparzyć, aby lekko zwiądł. Paprykę obrać, pokroić. Całość wymieszać i polać olejem lnianym.",
 	  "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -397,7 +397,7 @@
 	},
 	{
       "name": "Malinowa jaglanka",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Kaszę jaglaną ugotować tak, jak jest napisane na opakowaniu. Następnie chwilę podgotować ją w mleku, dodając maliny i cynamon. Na koniec dodać Skyr i banana.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -410,7 +410,7 @@
 	},
 	{
       "name": "Kurczak caprese z piekarnika",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Piekarnik nagrzać do 190 stopni C. Filety naciąć w 4 - 5 miejscach na głębokość ok. 2 cm, nie przecinając mięsa do końca, w nacięcia włożyć kawałki pomidora. Doprawić ziołami, natrzeć oliwą. Na dnie dużego żaroodpornego naczynia ułożyć filety. Mozzarellę pokroić na cienkie plasterki (tyle plasterków ile nacięć) i włożyć ją w nacięcia w filetach razem z pomidorami. Wstawić do piekarnika i piec bez przykrycia przez ok. 35 minut. Podawać z uprzednio ugotowanym ryżem i poszatkownym szpinakiem.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -424,7 +424,7 @@
 	},
 	{
       "name": "Pancakes a la leśny mech",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Płatki zmielić w blenderze kielichowym na mąkę. Następnie dodać resztę składników (prócz skyru i borówek) i wszystko razem zblendować na gęstą, zieloną masę. Pozostawić ją na 5 minut. Na nieprzywierającej patelni lub na parze, smażyć placki na wolnym ogniu około 2 minut z każdej strony. Przełożyć placki serkiem skyr i posypać borówkami.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -440,7 +440,7 @@
 	},
 	{
       "name": "Kanapka z twarogiem, koperkiem, szynką i olejem lnianym",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Twaróg wymieszać z jogurtem, olejem lnianym i koperkiem. Twarożkiem posmarować chleb, na kanapkę położyć szynkę.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -454,7 +454,7 @@
 	},
 	{
       "name": "Makaron z bakłażanem, pomidorami i natką",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Ugotować makaron wg przepisu na opakowaniu. Bakłażana pokroić w słupki, posolić i odstawić na 5-6 minut. Przygotować warzywa: pomidory pokroić w plasterki lub kostkę, natkę drobno posiekać. Bakłażana ugotować w wodzie i odłożyć. Wrzucić na chwilę na patelnię pomidory i trzymać 2-3 minuty. Dodać bakłażana, posiekana natkę i makaron. Chwilę gotować, wymieszać, doprawić do smaku.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -468,7 +468,7 @@
 	},
 	{
       "name": "Chrupiąca sałatka z tuńczykiem",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Ugotować makaron, ostudzić i przełożyć do misy. Umytą i osuszoną sałatę poszarpać na małe kawałki, ogórka obrać i drobno pokroić, dodać tuńczyka i olej lniany.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -482,7 +482,7 @@
 	},
 	{
       "name": "Koktajl jagodowy",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Wszystkie składniki zmiksować i przelać do szklanki.",
       "tags": ["jadłospis", "part1", "small portion"],
       "ingredients": [
@@ -494,7 +494,7 @@
 	},
 	{
       "name": "Klasyczny tost z serem",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Na kanapkę ułożyć plastry sera i przykryć drugą kromką. Włożyć do tostera do momentu aż chleb się zarumieni. Podawać z pomidorem z koperkiem.",
       "tags": ["jadłospis", "part1", "small portion"],
       "ingredients": [
@@ -506,7 +506,7 @@
 	},
 	{
       "name": "Dorsz zapiekany w ziołach",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Filet z dorsza i obraną, pokrojoną paprykę natrzeć oliwą (10 ml), przyprawić ziołami. Następnie piec na folii aluminiowej lub w naczyniu żaroodpornym przez 20 min. w temperaturze do 180 C. Upieczoną w ziołach rybę podawać z tartą marchewką i ugotowaną kaszą. Całość polać resztą oliwy.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -519,7 +519,7 @@
 	},
 	{
       "name": "Kanapki z mozzarellą i pomidorem",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Na chlebie ułożyć plastry pomidora, sera mozzarella i posypać ziołami.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -530,7 +530,7 @@
 	},
 	{
       "name": "Owsianka z borówkami",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Płatki ugotować dzień wcześniej. Do płatków dolać mleko i podgrzać. Dodać jogurt, a następnie borówki.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -542,7 +542,7 @@
 	},
 	{
       "name": "Wegańskie spaghetti bolognese z tofu",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Marchew zetrzeć na tarce i zalać lekko wodą, a następnie ugotować. Tofu rozgnieść widelcem. Do garnka przełożyć marchewkę, tofu, przyprawy, odrobinę oliwy. Gotować wszystko około 10-12 minut. Pod koniec dodać koncentrat pomidorowy — dokładnie wymieszać i zagotować. Sos bolognese podawać z makaronem (ugotowanym według przepisu).",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -555,7 +555,7 @@
 	},
 	{
       "name": "Shake proteinowy z bananem i twarogiem",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Twaróg, banana pokroić na mniejsze kawałki i wrzucić do blendera. Wlać mleko, jogurt i blendować do uzyskania płynnej konsystencji.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -567,7 +567,7 @@
 	},
 	{
       "name": "Twaróg z tuńczykiem",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Twaróg rozdrobnić i wymieszać z kawałkami tuńczyka. Można zblendować. Dodać natkę, jogurt, doprawić i wymieszać. Podawać z pieczywem.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -580,7 +580,7 @@
 	},
 	{
       "name": "Lekkostrawna potrawka z indyka",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Pierś pokroić na kawałeczki i podsmażyć na teflonowej patelni bez tłuszczu, jak z mięsa wyjdzie sos wrzucić pokrojoną marchewkę, paprykę i cukinię, całość doprawić do smaku. Wlać pół szklanki wody i dusić pod przykryciem pół godziny. Przełożyć na talerz. Podawać z ugotowanym ryżem. Całość polać oliwą z oliwek.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -594,7 +594,7 @@
 	},
 	{
       "name": "Sałatka z dyni i twarogu",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Obraną dynię pokroić w dużą kostkę. Foremkę wyłożyć papierem do pieczenia. Położyć dynię i posypać ziołami. Piec w nagrzanym piekarniku przez 15-20 minut w 180 stopniach. Szpinak wyłożyć na talerz i dodać upieczoną dynię. Na wierzchu posypać pokruszonym serem i skropić olejem lnianym. Chleb upiec w tosterze. Podawać z sałatką.",
       "tags": ["jadłospis", "part1"],
       "ingredients": [
@@ -607,7 +607,7 @@
 	},
 	{
       "name": "Ryż z bananem",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Ryż ugotować na mleku. Następnie dodać banana pokrojonego w plasterki i łyżkę oleju lnianego.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -619,7 +619,7 @@
 	},
 	{
       "name": "Kasza jaglana z truskawkami i twarogiem",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Kaszę jaglaną ugotować według wskazówek na opakowaniu. Kaszę zostawić do wystygnięcia. Truskawki umyć, pozbawić szypułek i rozgnieść widelcem. Kaszę wymieszać z truskawkami i serem. Całość polać oliwą i wymieszać raz jeszcze.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -632,7 +632,7 @@
 	},
 	{
       "name": "SAŁATKA Z MAKARONEM",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Makaron ugotować. Mięso pokroić na kawałki, przyprawić ulubionymi ziołami i poddusić na wodzie. Do makaronu dodać pomidorki koktajlowe, salatę, mięso oraz oliwę. Całość wymieszać.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -645,7 +645,7 @@
 	},
 	{
       "name": "Kanapka z szynką i papryką",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Na chlebie skropionym oliwą ułożyć szynkę i paprykę.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -657,7 +657,7 @@
 	},
 	{
       "name": "Dorsz z warzywami na parze w sosie koperkowym",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Rybę umyć i osuszyć. Natrzeć ziołami, skropić sokiem z cytryny. Odstawić na 30 minut. Warzywa umyć i pokroić. W pojemniku do gotowania na parze ułożyć warzywa, a na nich położyć rybę. Gotować 10-15 minut (parowar można zastąpić głęboką patelnią i dusić z niewielką ilością wody). W tym czasie przygotować sos: w rondelku podgrzać oliwę, dodać zioła oraz drobno posiekany koperek. Ugotowane warzywa wraz z rybą przełożyć na talerz i polać sosem koperkowym. Danie podawać z ryżem.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -674,7 +674,7 @@
 	},
 	{
       "name": "SAŁATKA OGRODOWA",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Sałatę opłukać, porozrywać na małe kawałki, umieścić w dużej misie. Paprykę pokroić w grubą kostkę. Dodać do sałaty. Na końcu dodać pomidorki i ser. Całość delikatnie wymieszać i przyprawić. Spożywać z pieczywem.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -688,7 +688,7 @@
 	},
 	{
       "name": "Kanapka z szynką i surówką z pomidorów",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Pomidory i paprykę pokroić, sałatę poszarpać. Dodać oliwę z ziołami Dokładnie wymieszać. Na chlebie położyć szynkę. Podawać z sałatką.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -702,7 +702,7 @@
 	},
 	{
       "name": "Sałatka z makaronem i tuńczykiem",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Makaron ugotować, przełożyć do miski, dodać tuńczyka, ogórka, paprykę, oliwę. Wszystko razem wymieszać.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -716,7 +716,7 @@
 	},
 	{
       "name": "Pierś kurczaka z pomidorami",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "W piersi kurczaka zrób dziurę w kształcie kieszonki. Pomidory pokrój w plastry i włóż do środka kurczaka. Wszystko zamarynuj w oleju z dodatkiem ziół. Pierś z kurczaka upiecz na grillu w piekarniku. Podawaj z papryką. Jedz z chlebem/ w formie grzanki.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -729,7 +729,7 @@
 	},
 	{
       "name": "Ryż na mleku z cynamonem i bananem",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Ryż przygotować zgodnie z instrukcją na opakowaniu. Do ugotowanego ryżu, wlać od razu mleko i zaczekać aż się całość zagotuje. Gotować jeszcze chwilę do uzyskania pożądanej konsystencji. Wyłączyć ognień pod garnkiem, dodać\ncynamon, wymieszać i przełożyć do miski. Na koniec pokroić banana i dodać zmielone siemię lniane.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -742,7 +742,7 @@
 	},
 	{
       "name": "Makaron z tuńczykiem i oliwkami",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Makaron ugotować. Ser mozzarella zetrzeć na tarce o średnich oczkach. Oliwki odsączyć z zalewy i pokroić w plasterki. Dodać pomidory, mozzarellę, tuńczyka. Wsypać zioła i pokrojone w plasterki oliwki. Wszystko gotować na średnim ogniu około 10 minut. Przyprawić do smaku. Wymieszać z ugotowanym makaronem i olejem.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -756,7 +756,7 @@
 	},
 	{
       "name": "Kurczak w warzywach",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Paprykę pokroić w paski. Mięso pokroić na bardzo cienkie paseczki, doprawić. Ugotować mięso w wodzie, następnie włożyć je do miski. Paprykę pokroić, sałatę poszarpać. Dodać mięso do warzyw, doprawić przyprawami. Podawać z ugotowanym ryżem.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -769,7 +769,7 @@
 	},
 	{
       "name": "Sałatka z tuńczykiem i warzywami",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Paprykę i pomidora pokroić na małe kawałki. Tuńczyka połączyć z jogurtem oraz doprawić. Na talerzach ułożyć sałatę wraz z pomidorami oraz papryką. Na wierzch rozłożyć rozdrobnionego tuńczyka. Całość skropić olejem lnianym. Spożywać z pieczywem.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -784,7 +784,7 @@
 	},
 	{
       "name": "Kurczak z kaszą",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Ugotować kaszę. Kurczaka pokroić w kostkę i obtoczyć w przyprawach, następnie ugotować. Ugotować cukinię i dodać kurczaka. Wszystko wymieszać z ugotowaną kaszą i pokrojoną natką pietruszki. Podawać z pomidorem skropionym olejem lnianym.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -799,7 +799,7 @@
 	},
 	{
       "name": "Ryż ze szpinakiem",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Ryż ugotować zgodnie z instrukcją na opakowaniu. Szpinak bardzo dokładnie wypłukać, posiekać. W rondlu lub dużej patelni zagotować 1/2 szklanki wody. Dodać szpinak, paprykę, ogórka i zioła. Dusić na wolnym ogniu pod przykryciem do miękkości około 5 minut. Doprawić do smaku. Gotowy szpinak wymieszać z ugotowanym ryżem. Wymieszać z oliwą.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -812,7 +812,7 @@
 	},
 	{
       "name": "Owsianka z musem malinowym",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Mleko ugotować z płatkami owsianymi, maliny rozgnieść i podgrzać, aż będą miękkie. Owsiankę podać z ciepłym musem, skyrem i zmielonymi nasionami lnu.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -825,7 +825,7 @@
 	},
 	{
       "name": "Pieczony dorsz i frytki z batatów",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Bataty obrać i pokroić jak frytki. Dać je do miski, dodać oliwę z oliwek, przyprawy, wymieszać. Wyłożyć na papier do pieczenia i piec w 180 stopniach przez 30-40 minut. Rybę przyprawić i włożyć do piekarnika po 20-25 min od pieczenia się batatów. Warzywa pokroić i podawać wraz z rybą i frytkami.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -839,7 +839,7 @@
 	},
 	{
       "name": "Kanapka z twarożkiem, koperkiem i papryką",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Bułkę skropić olejem lnianym. Ułożyć na nią twarożek, sałatę i paprykę. Posypać koperkiem.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -853,7 +853,7 @@
 	},
 	{
       "name": "Kanapka z pastą jajeczną",
-      "meal_type": "breakfast",
+      "mealType": "breakfast",
       "recipe": "Jajko ugotować na twardo i zmiksować z posiekanym ogórkiem, oliwą i jogurtem naturalnym. Tak przygotowaną pastę rozsmarować na kanapce.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -866,7 +866,7 @@
 	},
 	{
       "name": "Wege quesadilla",
-      "meal_type": "lunch",
+      "mealType": "lunch",
       "recipe": "Cukinię pokroić w słupki, chwilę podsmażyć na suchej patelni, na końcu dodać odrobinę wody, aby całość lekko się poddusiła. Po kilku minutach dodać pokrojone na kawałki tofu. Doprawić i odparować wodę z cukinii. W międzyczasie pokroić paprykę i pomidora na mniejsze kawałki. Na rozgrzanej patelni położyć placek tortilli, ułożyć na nim plastry sera, a następnie na jedną połowę wyłożyć wszystkie pozostałe składniki. Gdy ser zacznie się lekko topić, złożyć placek na pół. Trzymać jeszcze chwilę na ogniu, a następnie przewrócić na drugą stronę. Gotową quesadillę przełożyć na deskę lub talerz i pokroić na 4–6 trójkątów.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
@@ -881,7 +881,7 @@
 	},
 	{
       "name": "Leśny koktajl",
-      "meal_type": "dinner",
+      "mealType": "dinner",
       "recipe": "Wszystkie składniki ze sobą zmiksować.",
       "tags": ["jadłospis", "part2"],
       "ingredients": [
