@@ -520,7 +520,9 @@ class SelectedMenuPage extends StatefulWidget {
 
 class _SelectedMenuPageState extends State<SelectedMenuPage> {
 
-  List<List<dynamic>> selectedDishes = []; // List to store the dishes
+  // make map {dish: protion}
+  Map<Dish, int> selectedDishes = {};
+  // List<List<dynamic>> selectedDishes = []; // List to store the dishes
 
   @override
   void initState() {
@@ -532,20 +534,21 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
   void loadMenu () async {
     final data = await dbHelper.menu();
     setState(() {
-      selectedDishes = data;
+      for (var dish in data){
+        selectedDishes[dish[0]] = dish[1];
+      }
     });
   }
 
   (List<String>, List<Ingredient>) getProductList(){
+    List<String> dishes = selectedDishes.keys.map((e) => e.name).toList();
     List<Ingredient> products = [];
-    List<String> dishes = [];
-    for (var dish in selectedDishes){
-      dishes.add(dish[0].name);
-      for (var ing in dish[0].ingredients){
+    for (var dish in selectedDishes.entries){
+      for (var ing in dish.key.ingredients){
         if (products.contains(ing)){
-          products.firstWhere((element) => element.name == ing.name).quantity += ing.quantity * dish[1];
+          products.firstWhere((element) => element.name == ing.name).quantity += (ing.quantity * dish.value);
         } else {
-          products.add(ing * dish[1]);
+          products.add(ing * dish.value);
         }
       }
     }
@@ -580,31 +583,34 @@ class _SelectedMenuPageState extends State<SelectedMenuPage> {
       ),
       body: selectedDishes.isNotEmpty ? ListView(
           children:  [
-            for (var index = 0; index < selectedDishes.length; index++) 
+            for (var item in selectedDishes.entries) 
             ListTile(
               leading: const Icon(Icons.dining),
               trailing: Row(    
                 mainAxisSize: MainAxisSize.min,      
                 children: <Widget>[
                 IconButton(onPressed: (){
-                  dbHelper.deleteMenu(selectedDishes[index][0].id);
-                  loadMenu();
+                  dbHelper.deleteMenu(item.key.id!);
+                  setState(() {
+                    selectedDishes.remove(item.key);
+                  });
                 }, icon:  Icon(
                   Icons.delete,
                   color: Colors.red,  )
                   ),
                   InputQty.int(
                     maxVal: 99,
-                    initVal: selectedDishes[index][1],
+                    initVal: item.value,
                     minVal: 1,
                     steps: 1,
                     onQtyChanged: (val) {
-                      dbHelper.updateMenu(selectedDishes[index][0].id, val);
+                      dbHelper.updateMenu(item.key.id!, val);
+                      selectedDishes[item.key] = val;
                     },
                   ),
                 ]
               ),
-              title: Text(selectedDishes[index][0].name),
+              title: Text(item.key.name),
             ),
             SizedBox(height: 80,)
           ] ,
@@ -1218,6 +1224,7 @@ class _DishFormState extends State<DishForm>{
             ),
 
           // ----------------------
+          SizedBox(height: 10,),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white, // background color

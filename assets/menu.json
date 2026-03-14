@@ -879,6 +879,69 @@
         {"name": "Tortilla pszenna", "quantity": 2, "unit": "unit"}
       ]
 	},
+  {
+    "name": "Szybka pizza na cieście ucieranym",
+    "mealType": "snack",
+    "recipe": "Nastaw piekarnik na 180’C z termoobiegiem. Przygotuj ciasto. Do miski wsyp mąkę, dodaj proszek do pieczenia, mozzarellę i przyprawy – zamieszaj. Wbij jajka, dodaj mleko, oliwę i zmiksuj. Blaszkę o długości około 25 cm wyłóż papierem do pieczenia i wylej na nią ciasto. Będzie dość gęste. Ser, szynkę i paprykę pokrój w drobną kostkę (ser możesz zetrzeć na tarce, jeśli to mozzarella wystarczy porwać). Szpinak posiekaj. Passatę przełóż do miseczki, wciśnij do nie czosnek, zamieszaj. Sosem pomidorowym posmaruj wierzch ciasta, na to wyłóż ser i pozostałe składniki. Piecz 40 min na środkowym poziomie piekarnika. Możesz użyć dowolnych składników na wierzch pizzy, np. salami, ananasa, kukurydzę. Pizza jest otagowania 12+ z względu na dodatki. Jeśli chcesz podać pizzę niemowlakowi, oczywiście nie rób tego na starcie rozszerzania diety. Starszym niemowlętom pomiń szynkę i ser żółty, możesz w to miejsce pokruszyć twaróg, dodać drobno pokrojone kawałki kurczaka. ",
+    "tags": ["alantkowe", "blw"],
+    "ingredients": [
+      {"name": "Mąka orkiszowa", "quantity": 300.0, "unit": "g"},
+      {"name": "Mleko", "quantity": 250.0, "unit": "ml"},
+      {"name": "Jajka", "quantity": 2, "unit": "unit"},
+      {"name": "Oliwa z oliwek", "quantity": 20, "unit": "ml"},
+      {"name": "Szynka", "quantity": 100.0, "unit": "g"},
+      {"name": "Ser mozzarella, bez tłuszczu", "quantity": 100.0, "unit": "g"},
+      {"name": "Passatta", "quantity": 75, "unit": "ml"}
+    ]
+  },
+  {
+    "name": "Zupa ogórkowa",
+    "mealType": "dinner",
+    "recipe": "Obierz warzywa. Mięso przełóż do garnka, zalej wodą, dodaj ziele angielskie, listki laurowe, marchewkę, pietruszkę, cebulę i seler. Przykryj i gotuj około godziny (aż mięso zmięknie). Wyjmij mięso i warzywa z bulionu. Ogórki obierz i zetrzyj na grubych oczkach tarki. Następnie dodaj masło i duś w rondelku, na małym ogniu około 10 minut, aż zmiękną. Ziemniaki obierz, pokrój w kostkę i ugotuj w małej ilości wody przez 10 min. Koperek drobno posiekaj. Ugotowane marchewki, seler i pietruszkę z rosołu zetrzyj na grubych oczkach tarki. Wywar z rosołu zagotuj, dodaj szklankę wody po ogórkach, starte warzywa (włoszczyzna i ogórki) posiekany koperek, ugotowane ziemniaki wraz z wodą i całość doprowadź do wrzenia. Zupę podawaj z kleksem jogurtu. Taką delikatną zupę ogórkową możesz zaserwować już 8 m. dziecku, jeśli uważasz, że jest zbyt słona, nie podawaj jej lub dodaj więcej wody by rozcieńczyć.",
+    "tags": ["alantkowe", "blw", "soup"],
+    "ingredients": [
+      {"name": "Udo z kurczaka", "quantity": 1, "unit": "unit"},
+      {"name": "Machewka", "quantity": 3, "unit": "unit"},
+      {"name": "Pietruszka", "quantity": 1, "unit": "unit"},
+      {"name": "Seler", "quantity": 0.25, "unit": "unit"},
+      {"name": "Cebula", "quantity": 1, "unit": "unit"},
+      {"name": "Ogórki kiszone", "quantity": 6, "unit": "unit"},
+      {"name": "Koperek", "quantity": 1, "unit": "unit"},
+      {"name": "Ziemniak", "quantity": 2, "unit": "unit"},
+      {"name": "Jogurt naturalny", "quantity": 100, "unit": "g"}
+    ]
+  },
+  {
+    "name": "Jesienna zupa z pieczonych pomidorów (z kluseczkami)",
+    "mealType": "dinner",
+    "recipe": "Nastaw piekarnik na 200 'C z termoobiegiem. Pomidory pozbaw szypułek,  natnij skórkę na krzyż  (jak w bułce ;)). Przełóż do dużego naczynia żaroodpornego, polej oliwą i wstaw do nagrzanego piekarnika. Piecz bez przykrycia ok. 40 minut, aż zaczną się rozpadać. Wyjmij z piekarnika.W tym samym czasie wstaw garnek z wodą, dodaj mięso (możesz podzielić 2 nogi na 4 części). Doprowadź do wrzenia, zdejmij szumowiny (dodaj 1 łyżeczkę soli jeśli dziecko ma powyżej 12m). Obraną włoszczyznę dodaj do mięsa. Cebulę obierz i podpraż na suchej patelni i również dodaj do zupy. Dodaj pęczek natki pietruszki i gotuj całość na małym ogniu 1,5 h, aż warzywa zmiękną. Odcedź wszystkie warzywa i mięso. Pozostaw w garnku tylko rosół.Do naczynia z pomidorami przełóż wszystkie ugotowane warzywa (marchew, por, seler, pietruszkę). Cebulę oraz natkę pietruszki wyrzuć. Zblenduj całość na gładki krem. Spróbuj! Jest pyszny!Przygotuj kluseczki. W miseczce dokładnie rozbełtaj dwa jajka, dodaj mąkę, wymieszaj. Rosół doprowadź do wrzenia, zmniejsz trochę ogień i za pomocą łyżki wlewaj powoli cienką strużką ciasto. Zwiększ ogień i wlewaj kolejne partie kluseczek. Gotuj ok. 3 minut od wypłynięcia. Wyłącz palnik. Dodaj zblendowane warzywa i wymieszaj. Posyp drobno posiekaną bazylią i podaj rodzince:)",
+    "tags": ["alantkowe", "blw", "soup"],
+    "ingredients": [
+      {"name": "Udko z kurczaka", "quantity": 2, "unit": "unit"},
+      {"name": "Machewka", "quantity": 3, "unit": "unit"},
+      {"name": "Pietruszka", "quantity": 1, "unit": "unit"},
+      {"name": "Seler", "quantity": 0.25, "unit": "unit"},
+      {"name": "Cebula", "quantity": 1, "unit": "unit"},
+      {"name": "Pomidor", "quantity": 8, "unit": "unit"},
+      {"name": "Oliwa z oliwek", "quantity": 20, "unit": "ml"},
+      {"name": "Jajka", "quantity": 2, "unit": "unit"},
+      {"name": "Mąka pszenna", "quantity": 50.0, "unit": "g"}
+    ]
+  },
+  {
+    "name": "Gulasz drobiowy z warzywami",
+    "mealType": "lunch",
+    "recipe": "Mięso pokrój w kostkę. Rozgrzej patelnię, polaną olejem i przełóż na nią mięso. Posyp je papryką w proszku i pieprzem. Smaż chwilę, by zarumieniło się z każdej strony. W tym czasie pokrój cebulę w wieksze kawalki, np. w piórka, marchewkę w plasterki, a paprykę w drobne paski. Dodaj do zrumienionego mięsa marchewkę i cebulę, i obsmażaj nadal przez około 5 minut, mieszając. Zalej wszystko wodą, dodaj lubczyk, przykryj pokrywką i duś około 20 minut. Odkryj gulasz i dodaj paprykę, oraz czosnek wycisnięty przez praskę. Duś dalej pod przykryciem kolejne 15 minut. Jeśli trzeba, dolej odrobinę wody. Przed podaniem posyp koperkiem i szczypiorkiem. Możesz gulasz zabielić śmietaną lub jogurtem. Do 1 łyżki śmietany/jogurtu dodaj 2 łyżki gorącego sosu gulaszowego, zamieszaj i wlej zawartość do gulaszu, mieszając.",
+    "tags": ["alantkowe", "blw", "soup"],
+    "ingredients": [
+      {"name": "Mięso z indyka", "quantity": 400, "unit": "g"},
+      {"name": "Papryka czerwona", "quantity": 1, "unit": "unit"},
+      {"name": "Machewka", "quantity": 1, "unit": "unit"},
+      {"name": "Czosnek", "quantity": 1, "unit": "unit"},
+      {"name": "Szczypiorek", "quantity": 1, "unit": "unit"},
+      {"name": "Jogurt naturalny", "quantity": 100, "unit": "g"}
+    ]
+  },
 	{
       "name": "Leśny koktajl",
       "mealType": "dinner",
@@ -892,5 +955,48 @@
         {"name": "Płatki owsiane", "quantity": 20.0, "unit": "g"},
         {"name": "Ser twarogowy, chudy", "quantity": 200.0, "unit": "g"}
       ]
-	}
+	},
+  {
+    "name": "Szybkie pierożki z serka i manny",
+    "mealType": "dinner",
+    "recipe": "W dużej misce połącz: jajka, serki, rozgniecionego na papkę banana, dodaj kaszkę, całość porządnie wymieszaj. W dużym, szerokim garnku zagotuj wodę, gdy zacznie wrzeć, nabieraj na łyżeczkę do herbaty, porcję ciasta i kładź na wrzątek. Zacznij od jednej porcji, jeśli widzisz, że pierożek jest ”luźny” i rozpada się, dodaj do ciasta więcej manny (czasem producenci serka dodają do niego wodę i inne polepszacze, przez co konsystencja się zmienia). Gdy wykorzystasz całe ciasto, a kluski zaczną się unosić, zmniejsz ogień i gotuj bez przykrycia, co jakiś czas, delikatnie mieszając, maksymalnie 5 minut. Wyjmij delikatnie łyżką cedzakową, przełóż na talerze, polej olejem i miodem (miód można podawać dzieciom po 12 m) i zajadaj ze smakiem:)",
+    "tags": ["alantkowe", "blw"],
+    "ingredients": [
+      {"name": "Serek homogenizowany naturalny", "quantity": 400, "unit": "g"},
+      {"name": "Jajka", "quantity": 2, "unit": "unit"},
+      {"name": "Kasza manna", "quantity": 250, "unit": "g"},
+      {"name": "Olej lniany", "quantity": 10.0, "unit": "ml"},
+      {"name": "Banan", "quantity": 1, "unit": "unit"}
+    ]
+  },
+  {
+    "name": "Kotlety z surowej dyni z mozzarellą",
+    "mealType": "lunch",
+    "recipe": "Zetrzyj surową dynię i mozzarellę na grubych oczkach tarki, przełóż do miski, wbij jajka, dodaj bułkę tartą i przyprawy. Zamieszaj. Formuj kotlety dłońmi zwilżonymi wodą i panieruj w bułce tartej. Smaż na niewielkiej ilości oliwy z obu stron do zrumienienia. Podawaj z frytkami z batata lub ziemniaka i surówką, np. z marchewki. Kotlety dobrze smakują podane z sosem czosnkowym. Do panierki możesz dodać jasny sezam. To dobra opcja do śniadaniówki.",
+    "tags": ["alantkowe", "blw"],
+    "ingredients": [
+      {"name": "Dynia", "quantity": 500, "unit": "g"},
+      {"name": "Mozzarella", "quantity": 100, "unit": "g"},
+      {"name": "jajka", "quantity": 2, "unit": "unit"},
+      {"name": "bułka tarta", "quantity": 75, "unit": "g"},
+      {"name": "czosnek", "quantity": 2, "unit": "unit"},
+      {"name": "czarnuszka", "quantity": 10, "unit": "g"},      
+      {"name": "Oliwa z oliwek", "quantity": 20, "unit": "ml"}
+    ]
+  },
+  {
+    "name": "Domowe paluszki rybne w panierce z jogurtu",
+    "mealType": "lunch",
+    "recipe": "Piekarnik nastaw na 200’C z termoobiegiem. Blachę wyłóż papierem do pieczenia i posmaruj oliwą. Filet z dorsza umyj, osusz i przejrzyj pod kątem ości. Pokrój rybę na kawałki wielkości małego palca (jeśli nadal obawiasz się ości, zblenduj mięso na papkę, a następnie dodaj do niego pozostałe składniki  i formuj paluszki rybne z porcji zmielonego mięsa). Rozłóż kawałki ryby na desce, obficie skrop sokiem z cytryny, posyp tymiankiem i posiekaną  drobno natką pietruszki. Możesz również doprawić kawałki ryby solą i pieprzem, jeśli danie jest dla starszaków. Do misy blendera przesyp płatki kukurydziane i zblenduj na drobne. Przesyp do miski. Panieruj rybę: maczaj z każdej strony w mące, następnie w jogurcie, a na końcu w płatkach kukurydzianych. Układaj paluszki na blasze. Wstaw do rozgrzanego piekarnika na środkowy poziom i piecz 10 min. Następnie przewróć delikatnie paluszki rybne na drugą stronę i piecz jeszcze 7-10 minut. ",
+    "tags": ["alantkowe", "blw"],
+    "ingredients": [
+      { "name": "Filet z dorsza", "quantity": 400, "unit": "g" },
+      { "name": "Jogurt naturalny", "quantity": 400, "unit": "g" },
+      {"name": "Mąka pszenna", "quantity": 50.0, "unit": "g"},
+      { "name": "Płatki kukurydziane", "quantity": 400, "unit": "g" },
+      { "name": "Natka pietruszki", "quantity": 2, "unit": "unit" },
+      { "name": "Sok z cytryny", "quantity": 10, "unit": "ml" },
+      { "name": "Tymianek", "quantity": 5, "unit": "g" }
+    ]
+  }
 ]
