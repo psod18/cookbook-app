@@ -4,6 +4,15 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'dart:io';
 
+final _validFilename = RegExp(r'^[a-zA-Z0-9_\-]+$');
+
+String _sanitizeFilename(String name) {
+  if (!_validFilename.hasMatch(name)) {
+    throw ArgumentError('Invalid filename: $name');
+  }
+  return name;
+}
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -22,7 +31,8 @@ import 'dart:io';
 
   Future<File> _localShopList(String fname) async {
   final String path = await _localPath;
-  File f = File('$path/shoplists/$fname.json');
+  final safeName = _sanitizeFilename(fname);
+  File f = File('$path/shoplists/$safeName.json');
   if (!f.existsSync()) {
     f.createSync(recursive: true);
   }
@@ -40,7 +50,8 @@ import 'dart:io';
   Future<String> readShopList(String filename) async {
     try {
       final String path = await _localPath;
-      final File file = File('$path/shoplists/$filename.json');
+      final safeName = _sanitizeFilename(filename);
+      final File file = File('$path/shoplists/$safeName.json');
 
       // Read the file
       String contents = await file.readAsString();
@@ -53,7 +64,8 @@ import 'dart:io';
 
   Future<void> deleteShopList(String filename) async {
     final String path = await _localPath;
-    final File file = File('$path/shoplists/$filename.json');
+    final safeName = _sanitizeFilename(filename);
+    final File file = File('$path/shoplists/$safeName.json');
     file.deleteSync();
   }
 

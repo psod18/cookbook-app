@@ -27,7 +27,7 @@ class QuickFilter {
 
   get current => values.elementAt(currentIndex);
 
-  get currenIcon{
+  get currentIcon{
     switch(current){
       case "all":
         return Icon(Icons.list_alt);
@@ -176,8 +176,21 @@ class _MyMenuPageState extends State<MyMenuPage> {
 
   List<Dish> dishes = [];
   List<int> menuIdxs = [];
+  late Future<List<Dish>> _menuFuture;
 
   Function eq = const DeepCollectionEquality.unordered().equals;
+
+  @override
+  void initState() {
+    super.initState();
+    _menuFuture = loadUserMenu();
+  }
+
+  void _refreshMenu() {
+    dishes.clear();
+    _menuFuture = loadUserMenu();
+    setState(() {});
+  }
 
   Future<List<Dish>> loadUserMenu () async {
 
@@ -214,7 +227,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
   Widget build(BuildContext context) {
 
     return FutureBuilder(
-      future: loadUserMenu(),
+      future: _menuFuture,
       builder: (BuildContext context, AsyncSnapshot<List<Dish>> snapshot) {
         return Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -222,11 +235,10 @@ class _MyMenuPageState extends State<MyMenuPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               FloatingActionButton(
-                child: quickFilter.currenIcon,
+                child: quickFilter.currentIcon,
                 onPressed: () {
-                    dishes.clear();
                   quickFilter.step();
-                  setState(() {});
+                  _refreshMenu();
                 }
               ),
               SizedBox(height: 5.0,),
@@ -237,10 +249,8 @@ class _MyMenuPageState extends State<MyMenuPage> {
                     await showDialog(
                       context: context,
                       builder: (BuildContext context) => SetFilterDialog(),
-                    );
-                  setState(() {
-                    dishes.clear();
-                  });
+                    );                  
+                  _refreshMenu();
                 },
               ),
             ]        
@@ -282,9 +292,10 @@ class _MyMenuPageState extends State<MyMenuPage> {
                             onPressed: (){
                                 menuIdxs.contains(dishes[i].id) ? {menuIdxs.remove(dishes[i].id), dbHelper.deleteMenu(dishes[i].id!) }: {menuIdxs.add(dishes[i].id!), dbHelper.insertMenu(dishes[i].id!, 1)};
                               if (quickFilter.current != "all"){
-                                dishes.clear();
+                                _refreshMenu();
+                              } else {
+                                setState((){});
                               }
-                              setState((){});
                             },
                             icon: menuIdxs.contains(dishes[i].id) ? Icon(Icons.done) : Icon(Icons.add),
                             color: menuIdxs.contains(dishes[i].id)  ? Colors.green.shade900 : Colors.black,
@@ -323,12 +334,12 @@ class _MyMenuPageState extends State<MyMenuPage> {
                                     Text(dishes[i].recipe, textAlign: TextAlign.justify, style: TextStyle(fontSize: 16),),
                                     SizedBox(height: 15.0,),
                                     Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                                    for (var i in dishes[i].ingredients)
+                                    for (var ingredient in dishes[i].ingredients)
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Expanded(
-                                          child: Text(i.toString(), style: TextStyle(fontStyle: FontStyle.italic),),
+                                          child: Text(ingredient.toString(), style: TextStyle(fontStyle: FontStyle.italic),),
                                           ),
                                         ],
                                       ),
@@ -368,9 +379,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
                           // set filter to show only this meal type
                           filterState.mealTypeFilter.updateAll((name, value) => value = false);
                           filterState.mealTypeFilter[dishes[i].mealType] = true;
-                          setState(() {
-                            dishes.clear();
-                          });
+                          _refreshMenu();
                         },
                       ),
                     ),
@@ -460,9 +469,7 @@ class _MyMenuPageState extends State<MyMenuPage> {
                               );
                               }),
                             );
-                            setState(() {
-                              dishes.clear();
-                            });
+                            _refreshMenu();
                           },
                         ),
                         IconButton(
@@ -477,10 +484,10 @@ class _MyMenuPageState extends State<MyMenuPage> {
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        // navigaet pop
-                                        setState(() {
-                                          dbHelper.deleteDish(dishes[i].id!);
-                                        });
+                                        dbHelper.deleteDish(dishes[i].id!);
+                                        Navigator.of(context).pop();
+                                        dishes.clear();
+                                        _refreshMenu();
                                       },
                                       child: const Text('Yes')),
                                     TextButton(
@@ -661,7 +668,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                       context: context,
                       builder: (BuildContext context) => ConfirmationDialog(item: shopLists[index]),
                     );
-                    if (ans){
+                    if (ans == true){
                       deleteShopList(shopLists[index]);
                       setState(() {
                         shopLists.removeAt(index);
@@ -753,9 +760,10 @@ class _ViewShoppingList extends State<ViewShoppingList> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvokedWithResult: (result, resultData) {
-        _onBackPressed();
-        Navigator.maybePop(context);
+      onPopInvokedWithResult: (didPop, resultData) {
+        if (didPop) {
+          _onBackPressed();
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -796,8 +804,7 @@ class _ViewShoppingList extends State<ViewShoppingList> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              _onBackPressed();
-              Navigator.maybePop(context);
+              Navigator.pop(context);
             },
           ),
           backgroundColor: const Color.fromARGB(255, 114, 189, 108),
@@ -854,7 +861,7 @@ class _ViewShoppingList extends State<ViewShoppingList> {
                             context: context,
                             builder: (BuildContext context) => ConfirmationDialog(item: products[index].name),
                           );
-                          if (ans){
+                          if (ans == true){
                             setState(() {
                               products.removeAt(index);
                             });
@@ -968,6 +975,18 @@ class _DishFormState extends State<DishForm>{
     getDish();
   }
 
+  @override
+  void dispose() {
+    textRecognizer.close();
+    nameController.dispose();
+    recipeController.dispose();
+    tagsController.dispose();
+    newIngredientNameController.dispose();
+    newIngredientQuantityController.dispose();
+    newIngredientUnitControler.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -1065,7 +1084,7 @@ class _DishFormState extends State<DishForm>{
                     },
                     alignment: Alignment.centerLeft,
                   ),
-                  Text("Scan recipe via camerae", style: TextStyle(fontSize: 14, color: Colors.green),),
+                  Text("Scan recipe via camera", style: TextStyle(fontSize: 14, color: Colors.green),),
                 ],
               ),
               TextFormField(
@@ -1149,10 +1168,11 @@ class _DishFormState extends State<DishForm>{
                                 if (value == null || value.isEmpty) {
                                   return 'Quantity is required';
                                 }
-                                if (double.tryParse(value) == null && int.tryParse(value) == null){
+                                final parsed = double.tryParse(value);
+                                if (parsed == null) {
                                   return 'Provide a number';
                                 }
-                                if (double.tryParse(value)! <= 0 && int.tryParse(value)! <= 0){
+                                if (parsed <= 0) {
                                   return 'Should be positive';
                                 }
                                 return null;

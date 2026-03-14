@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 
-String get datestamp => DateFormat('ddMMyyyyHHmmSS').format(DateTime.now());
+String get datestamp => DateFormat('ddMMyyyyHHmmss').format(DateTime.now());
 
 final validCharacters = RegExp(r'^[a-zA-Z0-9_\-]+$');
 
@@ -17,6 +17,12 @@ class _FileNameDialogState extends State<FileNameDialog> {
   TextEditingController _fileName = TextEditingController(text: 'shoplist_$datestamp');
   
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _fileName.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

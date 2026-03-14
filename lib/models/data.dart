@@ -24,12 +24,16 @@ class Ingredient{
         return '$name - $quantity ($unit)';
     }
 
+    @override
     bool operator ==(Object other){
         if (other is Ingredient){
             return name == other.name;
         }
         return false;
     }
+
+    @override
+    int get hashCode => name.hashCode;
 
     Ingredient operator +(Ingredient other){
         if (name == other.name && unit == other.unit){
@@ -83,8 +87,14 @@ class Dish{
             name: map['name'],
             mealType: map['mealType'],
             recipe: map['recipe'],
-            tags: jsonDecode(map['tags']),
-            ingredients: jsonDecode(map['ingredients']),
+            tags: (jsonDecode(map['tags']) as List).cast<String>(),
+            ingredients: (jsonDecode(map['ingredients']) as List)
+                .map((ing) => Ingredient(
+                      name: ing['name'] as String,
+                      quantity: ing['quantity'] as num,
+                      unit: ing['unit'] as String,
+                    ))
+                .toList(),
         );
     }
 

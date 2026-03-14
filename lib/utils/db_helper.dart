@@ -15,7 +15,26 @@ class DatabaseHelper {
   }
   
   DatabaseHelper._internal();
-  
+
+  Dish _dishFromMap(Map<String, Object?> map) {
+    return Dish(
+      id: map['id'] as int,
+      name: map['name'] as String,
+      mealType: map['mealType'] as String,
+      recipe: map['recipe'] as String,
+      tags: (jsonDecode(map['tags'] as String) as List)
+          .map((tag) => (tag as String).toLowerCase())
+          .toList(),
+      ingredients: (jsonDecode(map['ingredients'] as String) as List)
+          .map((ing) => Ingredient(
+                name: ing['name'] as String,
+                quantity: ing['quantity'] as num,
+                unit: ing['unit'] as String,
+              ))
+          .toList(),
+    );
+  }
+
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();
@@ -31,6 +50,7 @@ class DatabaseHelper {
       path,
       version: 2,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
   
@@ -79,57 +99,35 @@ class DatabaseHelper {
     }
   }
 
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // Add migration logic for future schema changes
+  }
+
   // CRUD operations for dishes
   Future<int> insertDish(Dish dish) async {
     final db = await database;
-    // return await db.insert('dishes', dish.toMap(),
-    // conflictAlgorithm: ConflictAlgorithm.replace,
-    final _dish = dish.toMap();
+    final dishMap = dish.toMap();
     return await db.rawInsert('''
           INSERT INTO dishes (name, mealType, recipe, tags, ingredients)
           VALUES (?, ?, ?, ?, ?);
         ''', [
-          _dish['name'],
-          _dish['mealType'],
-          _dish['recipe'],
-          _dish['tags'],
-          _dish['ingredients'],
+          dishMap['name'],
+          dishMap['mealType'],
+          dishMap['recipe'],
+          dishMap['tags'],
+          dishMap['ingredients'],
         ]);
   }
 
   Future<List<Dish>> filterDishes(List<String> mealTypes, String query) async {
-    List<Dish> dishes = [];
     final db = await database;
-    String mts = mealTypes.map((e) => "'$e'").join(',');
+    final placeholders = List.filled(mealTypes.length, '?').join(',');
     final cursor = await db.rawQuery(
-      """SELECT * FROM dishes WHERE mealType IN ($mts)
-        AND (name LIKE '%$query%' OR tags LIKE '%$query%' OR ingredients LIKE '%$query%')"""
-);
-
-    for (var dishMap in cursor){
-      List<Ingredient> ingredients = [];
-      for (var ing in jsonDecode(dishMap['ingredients'] as String)){
-        Ingredient _ing = Ingredient(
-          name: ing['name'] as String,
-          quantity: ing['quantity'] as num,
-          unit: ing['unit'] as String,
-        );
-        ingredients.add(_ing);
-      }
-      List<String> tags = [];
-        for (var tag in jsonDecode(dishMap['tags'] as String)){
-            tags.add(tag.toLowerCase());
-        }  
-      dishes.add(Dish(
-        id: dishMap['id'] as int,
-        name: dishMap['name'] as String,
-        mealType: dishMap['mealType'] as String,
-        recipe: dishMap['recipe'] as String,
-        tags: tags,
-        ingredients: ingredients,
-      ));
-    }
-    return dishes;
+      "SELECT * FROM dishes WHERE mealType IN ($placeholders) "
+      "AND (name LIKE ? OR tags LIKE ? OR ingredients LIKE ?)",
+      [...mealTypes, '%$query%', '%$query%', '%$query%'],
+    );
+    return cursor.map(_dishFromMap).toList();
   }
 
   Future<Dish> dish(int id) async {
@@ -139,59 +137,13 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
-    List<Ingredient> ingredients = [];
-    for (var ing in jsonDecode(dishMaps.first['ingredients'] as String)){
-      Ingredient _ing = Ingredient(
-        name: ing['name'] as String,
-        quantity: ing['quantity'] as num,
-        unit: ing['unit'] as String,
-      );
-      ingredients.add(_ing);
-    }
-    List<String> tags = [];
-      for (var tag in jsonDecode(dishMaps.first['tags'] as String)){
-          tags.add(tag.toLowerCase());
-      }  
-    return Dish(
-      id: dishMaps[0]['id'] as int,
-      name: dishMaps[0]['name'] as String,
-      mealType: dishMaps[0]['mealType'] as String,
-      recipe: dishMaps[0]['recipe'] as String,
-      tags: tags,
-      ingredients: ingredients,
-    );
+    return _dishFromMap(dishMaps.first);
   }
 
   Future<List<Dish>> dishes() async {
     final db = await database;
     final List<Map<String, Object?>> dishMaps = await db.query('dishes');
-    List<Dish> dishes = [];
-
-    for (var dishMap in dishMaps){
-
-      List<Ingredient> ingredients = [];
-      for (var ing in jsonDecode(dishMap['ingredients'] as String)){
-        Ingredient _ing = Ingredient(
-          name: ing['name'] as String,
-          quantity: ing['quantity'] as num,
-          unit: ing['unit'] as String,
-        );
-        ingredients.add(_ing);
-      }
-      List<String> tags = [];
-        for (var tag in jsonDecode(dishMap['tags'] as String)){
-            tags.add(tag.toLowerCase());
-        }  
-      dishes.add(Dish(
-        id: dishMap['id'] as int,
-        name: dishMap['name'] as String,
-        mealType: dishMap['mealType'] as String,
-        recipe: dishMap['recipe'] as String,
-        tags: tags,
-        ingredients: ingredients,
-      ));
-    }
-    return dishes;
+    return dishMaps.map(_dishFromMap).toList();
   }
 
   Future<int> updateDish(Dish dish) async {
@@ -232,34 +184,10 @@ class DatabaseHelper {
       FROM dishes
       JOIN menu ON dishes.id = menu.dish_id
     ''');
-    List<List<dynamic>> menu = [];
-    for (var menuMap in menuMaps){
-      List<Ingredient> ingredients = [];
-      for (var ing in jsonDecode(menuMap['ingredients'] as String)){
-        Ingredient _ing = Ingredient(
-          name: ing['name'] as String,
-          quantity: ing['quantity'] as num,
-          unit: ing['unit'] as String,
-        );
-        ingredients.add(_ing);
-      }
-      List<String> tags = [];
-        for (var tag in jsonDecode(menuMap['tags'] as String)){
-            tags.add(tag.toLowerCase());
-        }  
-      menu.add([
-        Dish(
-          id: menuMap['id'] as int,
-          name: menuMap['name'] as String,
-          mealType: menuMap['mealType'] as String,
-          recipe: menuMap['recipe'] as String,
-          tags: tags,
-          ingredients: ingredients,
-        ),
-        menuMap['quantity'] as int
-      ]);
-    }
-    return menu;
+    return menuMaps.map((menuMap) => [
+      _dishFromMap(menuMap),
+      menuMap['quantity'] as int,
+    ]).toList();
   }
   
   // get only the dish ids from the menu
